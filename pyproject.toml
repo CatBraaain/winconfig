@@ -61,3 +61,9 @@ combine-as-imports = true
     "PLR2004", # Pylint-Refactor[magic-value-comparison]
     "S101",    # flake8-bandit[assert]
 ]
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28.1",
+    "pyyaml>=6.0.3",
+]
