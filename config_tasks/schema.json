@@ -1,0 +1,178 @@
+{
+  "$defs": {
+    "ConfigTask": {
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": ["registries"]
+        },
+        {
+          "required": ["scheduled_tasks"]
+        },
+        {
+          "required": ["services"]
+        },
+        {
+          "required": ["script"]
+        }
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "registries": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Registry"
+          },
+          "type": "array"
+        },
+        "scheduled_tasks": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ScheduledTask"
+          },
+          "type": "array"
+        },
+        "services": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Service"
+          },
+          "type": "array"
+        },
+        "script": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Script"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": ["name", "description"],
+      "type": "object"
+    },
+    "Registry": {
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/$defs/RegistryValueKind"
+        },
+        "old_value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "new_value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": ["path", "name", "type", "old_value", "new_value"],
+      "type": "object"
+    },
+    "RegistryValueKind": {
+      "enum": [
+        "String",
+        "ExpandString",
+        "Binary",
+        "DWord",
+        "MultiString",
+        "QWord"
+      ],
+      "type": "string"
+    },
+    "ScheduledTask": {
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "old_state": {
+          "$ref": "#/$defs/ScheduledTaskState"
+        },
+        "new_state": {
+          "$ref": "#/$defs/ScheduledTaskState"
+        }
+      },
+      "required": ["path", "old_state", "new_state"],
+      "type": "object"
+    },
+    "ScheduledTaskState": {
+      "enum": ["enabled", "disabled"],
+      "title": "ScheduledTaskState",
+      "type": "string"
+    },
+    "Script": {
+      "properties": {
+        "apply": {
+          "type": "string"
+        },
+        "revert": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": ["apply", "revert"],
+      "type": "object"
+    },
+    "Service": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "old_startup_type": {
+          "$ref": "#/$defs/ServiceStartupType"
+        },
+        "new_startup_type": {
+          "$ref": "#/$defs/ServiceStartupType"
+        }
+      },
+      "required": ["name", "old_startup_type", "new_startup_type"],
+      "type": "object"
+    },
+    "ServiceStartupType": {
+      "enum": [
+        "Automatic",
+        "AutomaticDelayedStart",
+        "Disabled",
+        "InvalidValue",
+        "Manual"
+      ],
+      "type": "string"
+    }
+  },
+  "default": [],
+  "items": {
+    "$ref": "#/$defs/ConfigTask"
+  },
+  "type": "array"
+}
