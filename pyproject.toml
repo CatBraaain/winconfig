@@ -1,0 +1,63 @@
+[project]
+name = "winconfig"
+version = "0.0.0"
+requires-python = ">=3.13"
+dependencies = [
+    "pydantic>=2.11.9",
+    "pywin32>=311",
+]
+
+[tool.uv]
+package = true
+
+[tool.pyright]
+include = [
+    "src",
+    "tests",
+]
+venvPath = "."
+venv = ".venv"
+reportPrivateImportUsage = false
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+
+[tool.ruff]
+include = [ "pyproject.toml", "src/**/*.py", "tests/**/*.py" ]
+
+[tool.ruff.format]
+docstring-code-format = true
+
+[tool.ruff.lint]
+select = [ "ALL" ]
+ignore = [
+    "ERA",    # eradicate[comment-out-code]
+    "S110",   # flake8-bandit[try-except-pass]
+    "S112",   # flake8-bandit[try-except-continue]
+    "BLE",    # flake8-blind-except[bare-exception]
+    "COM",    # flake8-commas[trailing-comma]
+    "DTZ",    # flake8-datetimez
+    "EM",     # flake8-errmsg
+    "INP",    # flake8-no-pep420[implicit-namespace-package]
+    "RET",    # flake8-return
+    "D",      # pydocstyle
+    "TC006",  # runtime-cast-value
+    "TRY",    # tryceratops
+    "RUF001", # Ruff[unicode-character-in-string]
+    "RUF002", # Ruff[unicode-character-in-docstring]
+    "RUF003", # Ruff[unicode-character-in-comment]
+]
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+
+[tool.ruff.lint.per-file-ignores]
+"!{src,tests}/**.py" = [
+    "T201", # flake8-print
+    "E501", # pycodestyle[line-too-long]
+]
+"tests/**.py" = [
+    "ANN201",  # flake8-annotations[missing-return-type-undocumented-public-function]
+    "PLR2004", # Pylint-Refactor[magic-value-comparison]
+    "S101",    # flake8-bandit[assert]
+]
