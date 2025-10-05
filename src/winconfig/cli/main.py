@@ -5,7 +5,9 @@ from typing import Annotated
 import typer
 import yaml
 
+from winconfig.cli.apply_tasks import apply_tasks
 from winconfig.model.config import Config
+from winconfig.model.definition import Definitions
 
 app = typer.Typer()
 
@@ -14,14 +16,21 @@ app = typer.Typer()
 def apply(
     path: Annotated[str, typer.Option()],
 ) -> None:
-    print(yaml.safe_load(Path(path).read_text()))
+    config_elements = Config.model_validate(yaml.safe_load(Path(path).read_text())).root
+    definitions = Definitions.model_validate(
+        yaml.safe_load(
+            Path("src/winconfig/definitions/winutil_definitions.yaml").read_text()
+        )
+    )
+    tasks = definitions.generate_tasks(config_elements)
+    result = apply_tasks(tasks)
 
 
-@app.command()
-def revert(
-    path: Annotated[str, typer.Option()],
-) -> None:
-    print(yaml.safe_load(Path(path).read_text()))
+# @app.command()
+# def revert(
+#     path: Annotated[str, typer.Option()],
+# ) -> None:
+#     print(yaml.safe_load(Path(path).read_text()))
 
 
 @app.command()

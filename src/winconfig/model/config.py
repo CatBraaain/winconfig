@@ -1,14 +1,17 @@
-from pydantic import BaseModel, ConfigDict, RootModel
+from pydantic import RootModel
 
 
-class Task(BaseModel):
-    task_name: str
-    revert: bool = False
+class ConfigElement(RootModel):
+    root: str
 
-    model_config = ConfigDict(
-        extra="forbid",
-    )
+    @property
+    def name(self) -> str:
+        return self.root
+
+    @property
+    def revert(self) -> bool:
+        return False
 
 
 class Config(RootModel):
-    root: list[Task] = []
+    root: list[ConfigElement] = []
