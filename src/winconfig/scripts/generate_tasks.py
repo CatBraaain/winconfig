@@ -22,7 +22,6 @@ def create_winutil_tasks() -> None:
         + x.group(3),
         res.text,
     )
-
     config_task_dict = yaml.safe_load(valid_json)
     config_tasks = [
         {
