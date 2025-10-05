@@ -45,15 +45,11 @@
           "type": "array"
         },
         "script": {
-          "anyOf": [
-            {
-              "$ref": "#/$defs/Script"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null
+          "$ref": "#/$defs/Script",
+          "default": {
+            "apply": null,
+            "revert": null
+          }
         }
       },
       "required": ["name", "description"],
@@ -121,14 +117,20 @@
       "type": "object"
     },
     "ScheduledTaskState": {
-      "enum": ["enabled", "disabled"],
-      "title": "ScheduledTaskState",
+      "enum": ["Enabled", "Disabled"],
       "type": "string"
     },
     "Script": {
       "properties": {
         "apply": {
-          "type": "string"
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
         },
         "revert": {
           "anyOf": [

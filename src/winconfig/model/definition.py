@@ -21,9 +21,7 @@ class Registry(BaseModel):
     new_value: str | None
 
 
-class ScheduledTaskState(StrEnum):
-    Enabled = auto()
-    Disabled = auto()
+type ScheduledTaskState = Literal["Enabled", "Disabled"]
 
 
 class ScheduledTask(BaseModel):
@@ -48,7 +46,7 @@ class Service(BaseModel):
 
 
 class Script(BaseModel):
-    apply: str
+    apply: str | None
     revert: str | None
 
 
@@ -58,7 +56,7 @@ class Definition(BaseModel):
     registries: list[Registry] = []
     scheduled_tasks: list[ScheduledTask] = []
     services: list[Service] = []
-    script: Script | None = None
+    script: Script = Script(apply=None, revert=None)
 
     model_config = ConfigDict(
         # use_enum_values=False,

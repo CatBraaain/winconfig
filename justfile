@@ -2,5 +2,5 @@ _:
   @just --list --unsorted
 
 json:
-  uv run src/winconfig/scripts/generate_schema.py
-  uv run src/winconfig/scripts/generate_definitions.py
+  uv run scripts/generate_schema.py
+  uv run scripts/generate_definitions.py
