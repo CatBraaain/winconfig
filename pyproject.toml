@@ -43,6 +43,7 @@ ignore = [
     "S112",   # flake8-bandit[try-except-continue]
     "S6",     # flake8-bandit[subprocess]
     "BLE",    # flake8-blind-except[bare-exception]
+    "FBT",    # flake8-boolean-trap
     "COM",    # flake8-commas[trailing-comma]
     "DTZ",    # flake8-datetimez
     "EM",     # flake8-errmsg
