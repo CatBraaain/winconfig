@@ -1,4 +1,5 @@
 import re
+import subprocess
 from pathlib import Path
 from typing import Any
 
@@ -83,9 +84,9 @@ def create_winutil_definitions() -> None:
         + yaml.dump(config_tasks, allow_unicode=True, sort_keys=False)
     )
 
-    Path("src/winconfig/definitions/winutil_definitions.yaml").write_text(
-        yaml_str, encoding="utf-8"
-    )
+    dist = "src/winconfig/definitions/winutil_definitions.yaml"
+    Path(dist).write_text(yaml_str, encoding="utf-8")
+    subprocess.run(["bunx", "prettier", "--write", f'"{dist}"'], check=True)
 
 
 main()

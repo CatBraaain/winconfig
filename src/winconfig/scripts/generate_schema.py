@@ -1,4 +1,5 @@
 import json
+import subprocess
 from pathlib import Path
 from typing import Any
 
@@ -21,6 +22,6 @@ class GenerateJsonSchemaNoTitles(GenerateJsonSchema):
 
 schema_json = Definitions.model_json_schema(schema_generator=GenerateJsonSchemaNoTitles)
 
-Path("src/winconfig/definitions/schema.json").write_text(
-    json.dumps(schema_json, indent=2) + "\n"
-)
+dist = "src/winconfig/definitions/schema.json"
+Path(dist).write_text(json.dumps(schema_json, indent=2) + "\n")
+subprocess.run(["bunx", "prettier", "--write", f'"{dist}"'], check=True)
