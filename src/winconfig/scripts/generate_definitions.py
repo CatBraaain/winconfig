@@ -7,10 +7,10 @@ import yaml
 
 
 def main() -> None:
-    create_winutil_tasks()
+    create_winutil_definitions()
 
 
-def create_winutil_tasks() -> None:
+def create_winutil_definitions() -> None:
     url = "https://raw.githubusercontent.com/ChrisTitusTech/winutil/refs/heads/main/config/tweaks.json"
     res = httpx.get(url)
     res.raise_for_status()

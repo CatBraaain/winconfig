@@ -52,7 +52,7 @@ class Script(BaseModel):
     revert: str | None
 
 
-class ConfigTask(BaseModel):
+class Definition(BaseModel):
     name: str
     description: str
     registries: list[Registry] = []
@@ -74,5 +74,5 @@ class ConfigTask(BaseModel):
     )
 
 
-class ConfigTaskList(RootModel):
-    root: list[ConfigTask] = []
+class Definitions(RootModel):
+    root: list[Definition] = []

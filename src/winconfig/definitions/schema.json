@@ -1,6 +1,6 @@
 {
   "$defs": {
-    "ConfigTask": {
+    "Definition": {
       "additionalProperties": false,
       "anyOf": [
         {
@@ -172,7 +172,7 @@
   },
   "default": [],
   "items": {
-    "$ref": "#/$defs/ConfigTask"
+    "$ref": "#/$defs/Definition"
   },
   "type": "array"
 }

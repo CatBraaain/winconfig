@@ -1,7 +1,7 @@
 from pydantic import BaseModel, ConfigDict, RootModel
 
 
-class WinConfig(BaseModel):
+class Task(BaseModel):
     task_name: str
     revert: bool = False
 
@@ -10,5 +10,5 @@ class WinConfig(BaseModel):
     )
 
 
-class ConfigTaskList(RootModel):
-    root: list[WinConfig] = []
+class Config(RootModel):
+    root: list[Task] = []
