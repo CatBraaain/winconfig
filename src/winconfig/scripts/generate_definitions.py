@@ -83,7 +83,7 @@ def create_winutil_tasks() -> None:
         + yaml.dump(config_tasks, allow_unicode=True, sort_keys=False)
     )
 
-    Path("src/winconfig/config_tasks/winutil_tasks.yaml").write_text(
+    Path("src/winconfig/definitions/winutil_definitions.yaml").write_text(
         yaml_str, encoding="utf-8"
     )
 
