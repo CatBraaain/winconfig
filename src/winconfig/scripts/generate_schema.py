@@ -23,4 +23,6 @@ schema_json = ConfigTaskList.model_json_schema(
     schema_generator=GenerateJsonSchemaNoTitles
 )
 
-Path("config_tasks/schema.json").write_text(json.dumps(schema_json, indent=2) + "\n")
+Path("src/winconfig/config_tasks/schema.json").write_text(
+    json.dumps(schema_json, indent=2) + "\n"
+)

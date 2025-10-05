@@ -3,8 +3,8 @@ _:
 
 json:
   uv run src/winconfig/scripts/generate_tasks.py
-  bunx prettier --write config_tasks/*_tasks.yaml
+  bunx prettier --write src/winconfig/config_tasks/*_tasks.yaml
 
 jsonschema:
   uv run src/winconfig/scripts/generate_schema.py
-  bunx prettier --write config_tasks/schema.json
+  bunx prettier --write src/winconfig/config_tasks/schema.json
