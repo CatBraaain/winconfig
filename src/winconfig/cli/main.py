@@ -5,7 +5,7 @@ from typing import Annotated
 import typer
 import yaml
 
-from winconfig.model.config import Task
+from winconfig.model.config import Config
 
 app = typer.Typer()
 
@@ -28,7 +28,7 @@ def revert(
 def schema(
     output: Annotated[str, typer.Option()],
 ) -> None:
-    schema = Task.model_json_schema()
+    schema = Config.model_json_schema()
     Path(output).write_text(
         json.dumps(schema, ensure_ascii=False, indent=2),
         encoding="utf-8",
