@@ -25,7 +25,7 @@ def create_winutil_tasks() -> None:
     config_task_dict = yaml.safe_load(valid_json)
     config_tasks = [
         {
-            "name": name.replace("WPF", ""),
+            "name": re.sub(r"WPFToggle|WPFTweaks", "", name),
             "description": config_task["Description"],
             "registries": [
                 {
