@@ -36,11 +36,7 @@ class Registry(BaseModel):
         ) + (
             f'Set-ItemProperty -Path "{self.path}" -Name {self.name} -Type {self.type} -Value {self.new_value} -Force -ErrorAction SilentlyContinue | Out-Null'
             if value != "<RemoveEntry>"
-            else (
-                f'if (Get-ItemProperty -Path "{self.path}" -Name {self.name} -ErrorAction SilentlyContinue) {{'
-                f'    Remove-ItemProperty -Path "{self.path}" -Name {self.name} -Force -ErrorAction SilentlyContinue | Out-Null'
-                f"}}"
-            )
+            else f'Remove-ItemProperty -Path "{self.path}" -Name {self.name} -Force -ErrorAction SilentlyContinue | Out-Null'
         )
         return script
 
