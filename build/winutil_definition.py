@@ -5,7 +5,7 @@ from pydantic import BaseModel, RootModel
 
 from winconfig.model.definition import (
     Definition,
-    Definitions,
+    DefinitionContainer,
     Registry,
     RegistryValueKind,
     ScheduledTask,
@@ -45,11 +45,11 @@ class WinutilDefinition(BaseModel):
     UndoScript: list[str] | None = None
 
 
-class WinutilDefinitions(RootModel):
+class WinutilDefinitionContainer(RootModel):
     root: dict[str, WinutilDefinition]
 
-    def to_definitions(self) -> Definitions:
-        return Definitions(
+    def to_definitions(self) -> DefinitionContainer:
+        return DefinitionContainer(
             [
                 Definition(
                     name=re.sub(r"WPFToggle|WPFTweaks", "", name),

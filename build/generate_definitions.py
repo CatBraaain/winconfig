@@ -5,7 +5,7 @@ from typing import Any
 
 import httpx
 import yaml
-from winutil_definition import WinutilDefinitions
+from winutil_definition import WinutilDefinitionContainer
 
 
 def main() -> None:
@@ -24,8 +24,9 @@ def create_winutil_definitions() -> None:
         + x.group(3),
         res.text,
     )
-    winutil_def_dict = yaml.safe_load(valid_json)
-    definitions = WinutilDefinitions.model_validate(winutil_def_dict).to_definitions()
+    definitions = WinutilDefinitionContainer.model_validate(
+        yaml.safe_load(valid_json)
+    ).to_definitions()
 
     def str_presenter(dumper: Any, data: Any) -> Any:  # noqa: ANN401
         if len(data.splitlines()) > 1:
