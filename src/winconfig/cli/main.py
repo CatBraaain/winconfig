@@ -4,7 +4,7 @@ from typing import Annotated
 
 import typer
 
-from winconfig.cli.apply_tasks import apply_config
+from winconfig.cli.config_applier import ConfigApplier
 from winconfig.model.config import ConfigContainer
 
 app = typer.Typer()
@@ -14,14 +14,14 @@ app = typer.Typer()
 def apply(
     path: Annotated[str, typer.Option()],
 ) -> None:
-    apply_config(path, mode="auto")
+    ConfigApplier(config_path=path).apply(mode="auto")
 
 
 @app.command()
 def revert(
     path: Annotated[str, typer.Option()],
 ) -> None:
-    apply_config(path, mode="revert")
+    ConfigApplier(config_path=path).apply(mode="revert")
 
 
 @app.command()
