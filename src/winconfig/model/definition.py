@@ -22,7 +22,7 @@ class Registry(BaseModel):
     old_value: str | Literal["<RemoveEntry>"]  # noqa: PYI051
     new_value: str | Literal["<RemoveEntry>"]  # noqa: PYI051
 
-    def generate_script(self, revert: bool) -> str:
+    def generate_execution_script(self, revert: bool) -> str:
         value = self.new_value if not revert else self.old_value
         # script = (
         #     f"reg add {self.path} /v {self.name} /t {self.type} /d {self.new_value} /f"
@@ -49,7 +49,7 @@ class ScheduledTask(BaseModel):
     old_state: ScheduledTaskState
     new_state: ScheduledTaskState
 
-    def generate_script(self, revert: bool) -> str:
+    def generate_execution_script(self, revert: bool) -> str:
         state = self.new_state if not revert else self.old_state
         # script = (
         #     f"sc config {self.path} start= {self.new_state}"
@@ -78,7 +78,7 @@ class Service(BaseModel):
     old_startup_type: ServiceStartupType
     new_startup_type: ServiceStartupType
 
-    def generate_script(self, revert: bool) -> str:
+    def generate_execution_script(self, revert: bool) -> str:
         startup_type = self.new_startup_type if not revert else self.old_startup_type
         # script = f"sc config {self.name} start= {state}"
         script = f'Set-Service -Name "{self.name}" -StartupType {startup_type} -ErrorAction SilentlyContinue'
@@ -89,7 +89,7 @@ class Script(BaseModel):
     apply: str | None
     revert: str | None
 
-    def generate_script(self, revert: bool) -> str:
+    def generate_execution_script(self, revert: bool) -> str:
         script = (self.apply if not revert else self.revert) or ""
         return script
 
@@ -115,10 +115,10 @@ class Definition(BaseModel):
         },
     )
 
-    def generate_task(self, revert: bool) -> Task:
-        script = "\n".join(
+    def generate_execution_script(self, revert: bool) -> str:
+        return "\n".join(
             [
-                e.generate_script(revert)
+                e.generate_execution_script(revert)
                 for e in (
                     self.registries
                     + self.scheduled_tasks
@@ -127,21 +127,10 @@ class Definition(BaseModel):
                 )
             ]
         )
-        return Task(
-            name=self.name,
-            revert=revert,
-            script_code=script,
-        )
 
 
 class DefinitionContainer(RootModel):
     root: list[Definition] = []
-
-    def generate_tasks(self, config_container: ConfigContainer) -> list[Task]:
-        return [
-            self.get_definition(config.name).generate_task(config.revert)
-            for config in config_container.root
-        ]
 
     def get_definition(self, task_name: str) -> Definition:
         definition = next((x for x in self.root if x.name == task_name), None)
