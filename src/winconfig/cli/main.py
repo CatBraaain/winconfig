@@ -7,7 +7,7 @@ import yaml
 
 from winconfig.cli.apply_tasks import apply_tasks
 from winconfig.model.config import Config
-from winconfig.model.definition import Definitions
+from winconfig.model.definition import DefinitionContainer
 
 app = typer.Typer()
 
@@ -17,12 +17,12 @@ def apply(
     path: Annotated[str, typer.Option()],
 ) -> None:
     config_elements = Config.model_validate(yaml.safe_load(Path(path).read_text())).root
-    definitions = Definitions.model_validate(
+    definition_container = DefinitionContainer.model_validate(
         yaml.safe_load(
             Path("src/winconfig/definitions/winutil_definitions.yaml").read_text()
         )
     )
-    tasks = definitions.generate_tasks(config_elements)
+    tasks = definition_container.generate_tasks(config_elements)
     result = apply_tasks(tasks)
 
 

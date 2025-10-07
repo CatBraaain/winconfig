@@ -134,7 +134,7 @@ class Definition(BaseModel):
         )
 
 
-class Definitions(RootModel):
+class DefinitionContainer(RootModel):
     root: list[Definition] = []
 
     def generate_tasks(self, config_elements: list[ConfigElement]) -> list[Task]:
