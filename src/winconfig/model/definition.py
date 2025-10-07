@@ -2,9 +2,6 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, RootModel
 
-from .config import ConfigContainer
-from .task import Task
-
 type RegistryValueKind = Literal[
     "String",
     "ExpandString",
