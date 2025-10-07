@@ -1,3 +1,5 @@
+set unstable
+
 _:
   @just --list --unsorted
 
@@ -7,3 +9,6 @@ json:
 
 apply:
   uv run src/winconfig/cli/main.py apply --path winconfig.config.yaml
+
+test:
+  powershell.exe -ExecutionPolicy Bypass -File tests/run_wsb.ps1 -Headless false
