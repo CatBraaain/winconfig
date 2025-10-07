@@ -1,7 +1,7 @@
 from pydantic import RootModel
 
 
-class ConfigElement(RootModel):
+class Config(RootModel):
     root: str
 
     @property
@@ -13,5 +13,5 @@ class ConfigElement(RootModel):
         return False
 
 
-class Config(RootModel):
-    root: list[ConfigElement] = []
+class ConfigContainer(RootModel):
+    root: list[Config] = []

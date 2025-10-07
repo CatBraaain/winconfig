@@ -2,7 +2,7 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, RootModel
 
-from .config import ConfigElement
+from .config import ConfigContainer
 from .task import Task
 
 type RegistryValueKind = Literal[
@@ -137,12 +137,10 @@ class Definition(BaseModel):
 class DefinitionContainer(RootModel):
     root: list[Definition] = []
 
-    def generate_tasks(self, config_elements: list[ConfigElement]) -> list[Task]:
+    def generate_tasks(self, config_container: ConfigContainer) -> list[Task]:
         return [
-            self.get_definition(config_element.name).generate_task(
-                config_element.revert
-            )
-            for config_element in config_elements
+            self.get_definition(config.name).generate_task(config.revert)
+            for config in config_container.root
         ]
 
     def get_definition(self, task_name: str) -> Definition:

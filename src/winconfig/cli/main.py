@@ -6,7 +6,7 @@ import typer
 import yaml
 
 from winconfig.cli.apply_tasks import apply_tasks
-from winconfig.model.config import Config
+from winconfig.model.config import ConfigContainer
 from winconfig.model.definition import DefinitionContainer
 
 app = typer.Typer()
@@ -16,13 +16,15 @@ app = typer.Typer()
 def apply(
     path: Annotated[str, typer.Option()],
 ) -> None:
-    config_elements = Config.model_validate(yaml.safe_load(Path(path).read_text())).root
+    config_container = ConfigContainer.model_validate(
+        yaml.safe_load(Path(path).read_text())
+    )
     definition_container = DefinitionContainer.model_validate(
         yaml.safe_load(
             Path("src/winconfig/definitions/winutil_definitions.yaml").read_text()
         )
     )
-    tasks = definition_container.generate_tasks(config_elements)
+    tasks = definition_container.generate_tasks(config_container)
     result = apply_tasks(tasks)
 
 
@@ -37,7 +39,7 @@ def apply(
 def schema(
     output: Annotated[str, typer.Option()],
 ) -> None:
-    schema = Config.model_json_schema()
+    schema = ConfigContainer.model_json_schema()
     Path(output).write_text(
         json.dumps(schema, ensure_ascii=False, indent=2),
         encoding="utf-8",
