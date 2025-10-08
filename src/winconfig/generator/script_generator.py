@@ -77,7 +77,9 @@ class ScriptGenerator:
     @staticmethod
     def generate_get_schtask_script(schtask: ScheduledTask) -> str:
         get_task = f"""
-            Get-ScheduledTask | ? {{$_.TaskPath + $_.TaskName -eq "\" + "{schtask.path}"}} | % {{$_.State}}
+            $taskState = Get-ScheduledTask | ? {{$_.TaskPath + $_.TaskName -eq "\\" + "{schtask.path}"}} | % {{$_.State}}
+            $taskState = if ($taskState) {{ $taskState }} else {{ "<NotExist>" }}
+            $taskState
         """
         return dedent(get_task)
 
@@ -98,7 +100,7 @@ class ScriptGenerator:
                 (Get-Service -Name "{service.name}" -ErrorAction Stop).StartType
             }}
             catch [Microsoft.PowerShell.Commands.ServiceCommandException] {{
-                "<NotExists>"
+                "<NotExist>"
             }}
         """
         return dedent(script)

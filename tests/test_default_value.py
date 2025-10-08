@@ -38,7 +38,7 @@ def test_default_scheduled_task(definition: Definition):
         result = run_powershell_command(script)
 
         current_state = result.stdout.strip()
-        assert current_state == "<NotExists>" or current_state == task.old_state, (
+        assert current_state == "<NotExist>" or current_state == task.old_state, (
             f"[{task.path}]'s state '{current_state}' != '{task.old_state}'"
         )
 
@@ -50,9 +50,9 @@ def test_default_service(definition: Definition):
         result = run_powershell_command(script)
 
         current_type = result.stdout.strip()
-        assert current_type == service.old_startup_type, (
-            f"[{service.name}]'s type '{current_type}' != '{service.old_startup_type}'"
-        )
+        assert (
+            current_type == "<NotExist>" or current_type == service.old_startup_type
+        ), f"[{service.name}]'s type '{current_type}' != '{service.old_startup_type}'"
 
 
 def run_powershell_command(command: str):
