@@ -27,9 +27,6 @@ venvPath = "."
 venv = ".venv"
 reportPrivateImportUsage = false
 
-[tool.pytest.ini_options]
-asyncio_mode = "auto"
-
 [tool.ruff]
 include = [ "pyproject.toml", "src/**/*.py", "tests/**/*.py" ]
 
