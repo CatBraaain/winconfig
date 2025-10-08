@@ -1,3 +1,4 @@
+from textwrap import dedent
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, RootModel
@@ -30,16 +31,20 @@ class Registry(BaseModel):
 
     def generate_execution_script(self, revert: bool) -> str:
         value = self.new_value if not revert else self.old_value
-        script = (
-            f'If (!(Test-Path "{self.path}")) {{'
-            f'    New-Item -Path "{self.path}" -Force -ErrorAction Stop | Out-Null'
-            f"}}"
-        ) + (
-            f'Set-ItemProperty -Path "{self.path}" -Name {self.name} -Type {self.type} -Value {self.new_value} -Force -ErrorAction SilentlyContinue | Out-Null'
-            if value != "<RemoveEntry>"
-            else f'Remove-ItemProperty -Path "{self.path}" -Name {self.name} -Force -ErrorAction SilentlyContinue | Out-Null'
-        )
-        return script
+
+        ensure_key = rf"""\
+            If (!(Test-Path "{self.path}")) {{
+                New-Item -Path "{self.path}" -Force -ErrorAction Stop | Out-Null
+            }}
+        """
+        set_entry = rf"""\
+            Set-ItemProperty -Path "{self.path}" -Name {self.name} -Type {self.type} -Value {self.new_value} -Force -ErrorAction SilentlyContinue | Out-Null
+        """
+        remove_entry = rf"""\
+            Remove-ItemProperty -Path "{self.path}" -Name {self.name} -Force -ErrorAction SilentlyContinue | Out-Null
+        """
+        script = ensure_key + (set_entry if value != "<RemoveEntry>" else remove_entry)
+        return dedent(script)
 
 
 type ScheduledTaskState = Literal["Enabled", "Disabled"]
@@ -52,12 +57,14 @@ class ScheduledTask(BaseModel):
 
     def generate_execution_script(self, revert: bool) -> str:
         state = self.new_state if not revert else self.old_state
-        script = (
-            f'Enable-ScheduledTask -TaskName "{self.path}" -ErrorAction SilentlyContinue'
-            if state == "Enabled"
-            else f'Disable-ScheduledTask -TaskName "{self.path}" -ErrorAction SilentlyContinue'
-        )
-        return script
+        enable_task = f"""
+            Enable-ScheduledTask -TaskName "{self.path}" -ErrorAction SilentlyContinue
+        """
+        disable_task = f"""
+            Disable-ScheduledTask -TaskName "{self.path}" -ErrorAction SilentlyContinue
+        """
+        script = enable_task if state == "Enabled" else disable_task
+        return dedent(script)
 
 
 type ServiceStartupType = Literal[
@@ -76,8 +83,10 @@ class Service(BaseModel):
 
     def generate_execution_script(self, revert: bool) -> str:
         startup_type = self.new_startup_type if not revert else self.old_startup_type
-        script = f'Set-Service -Name "{self.name}" -StartupType {startup_type} -ErrorAction SilentlyContinue'
-        return script
+        script = f"""
+            Set-Service -Name "{self.name}" -StartupType {startup_type} -ErrorAction SilentlyContinue
+        """
+        return dedent(script)
 
 
 class Script(BaseModel):
