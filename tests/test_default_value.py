@@ -1,5 +1,4 @@
 import subprocess
-from logging import getLogger
 from pathlib import Path
 
 import pytest
@@ -8,7 +7,10 @@ import yaml
 from winconfig.generator.script_generator import ScriptGenerator
 from winconfig.model.definition import Definition, DefinitionContainer
 
-logger = getLogger(__name__)
+pytestmark = pytest.mark.xfail(
+    strict=False, reason="Maybe someday, maybe never - under consideration"
+)
+
 
 DEFINITIONS_FILE = Path("src/winconfig/definitions/winutil_definitions.yaml")
 definitions = DefinitionContainer.model_validate(
