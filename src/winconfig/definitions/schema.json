@@ -72,7 +72,8 @@
               "type": "string"
             },
             {
-              "type": "null"
+              "const": "<RemoveEntry>",
+              "type": "string"
             }
           ]
         },
@@ -82,7 +83,8 @@
               "type": "string"
             },
             {
-              "type": "null"
+              "const": "<RemoveEntry>",
+              "type": "string"
             }
           ]
         }
