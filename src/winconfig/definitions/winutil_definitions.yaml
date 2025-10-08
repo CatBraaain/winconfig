@@ -6,17 +6,17 @@
     - path: HKLM\SOFTWARE\Policies\Microsoft\Windows\System
       name: EnableActivityFeed
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "0"
     - path: HKLM\SOFTWARE\Policies\Microsoft\Windows\System
       name: PublishUserActivities
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "0"
     - path: HKLM\SOFTWARE\Policies\Microsoft\Windows\System
       name: UploadUserActivities
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "0"
 - name: Hiber
   description:
@@ -946,22 +946,22 @@
     - path: HKLM\SOFTWARE\Policies\BraveSoftware\Brave
       name: BraveRewardsDisabled
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "1"
     - path: HKLM\SOFTWARE\Policies\BraveSoftware\Brave
       name: BraveWalletDisabled
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "1"
     - path: HKLM\SOFTWARE\Policies\BraveSoftware\Brave
       name: BraveVPNDisabled
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "1"
     - path: HKLM\SOFTWARE\Policies\BraveSoftware\Brave
       name: BraveAIChatEnabled
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "0"
 - name: EdgeDebloat
   description:
@@ -971,92 +971,92 @@
     - path: HKLM\SOFTWARE\Policies\Microsoft\EdgeUpdate
       name: CreateDesktopShortcutDefault
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "0"
     - path: HKLM\SOFTWARE\Policies\Microsoft\Edge
       name: PersonalizationReportingEnabled
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "0"
     - path: HKLM\SOFTWARE\Policies\Microsoft\Edge
       name: ShowRecommendationsEnabled
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "0"
     - path: HKLM\SOFTWARE\Policies\Microsoft\Edge
       name: HideFirstRunExperience
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "1"
     - path: HKLM\SOFTWARE\Policies\Microsoft\Edge
       name: UserFeedbackAllowed
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "0"
     - path: HKLM\SOFTWARE\Policies\Microsoft\Edge
       name: ConfigureDoNotTrack
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "1"
     - path: HKLM\SOFTWARE\Policies\Microsoft\Edge
       name: AlternateErrorPagesEnabled
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "0"
     - path: HKLM\SOFTWARE\Policies\Microsoft\Edge
       name: EdgeCollectionsEnabled
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "0"
     - path: HKLM\SOFTWARE\Policies\Microsoft\Edge
       name: EdgeShoppingAssistantEnabled
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "0"
     - path: HKLM\SOFTWARE\Policies\Microsoft\Edge
       name: MicrosoftEdgeInsiderPromotionEnabled
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "0"
     - path: HKLM\SOFTWARE\Policies\Microsoft\Edge
       name: PersonalizationReportingEnabled
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "0"
     - path: HKLM\SOFTWARE\Policies\Microsoft\Edge
       name: ShowMicrosoftRewards
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "0"
     - path: HKLM\SOFTWARE\Policies\Microsoft\Edge
       name: WebWidgetAllowed
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "0"
     - path: HKLM\SOFTWARE\Policies\Microsoft\Edge
       name: DiagnosticData
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "0"
     - path: HKLM\SOFTWARE\Policies\Microsoft\Edge
       name: EdgeAssetDeliveryServiceEnabled
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "0"
     - path: HKLM\SOFTWARE\Policies\Microsoft\Edge
       name: EdgeCollectionsEnabled
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "0"
     - path: HKLM\SOFTWARE\Policies\Microsoft\Edge
       name: CryptoWalletEnabled
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "0"
     - path: HKLM\SOFTWARE\Policies\Microsoft\Edge
       name: WalletDonationEnabled
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "0"
 - name: ConsumerFeatures
   description:
@@ -1067,7 +1067,7 @@
     - path: HKLM\SOFTWARE\Policies\Microsoft\Windows\CloudContent
       name: DisableWindowsConsumerFeatures
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "1"
 - name: Tele
   description:
@@ -1077,12 +1077,12 @@
     - path: HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection
       name: AllowTelemetry
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "0"
     - path: HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection
       name: AllowTelemetry
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "0"
     - path: HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager
       name: ContentDeliveryAllowed
@@ -1142,22 +1142,22 @@
     - path: HKCU\SOFTWARE\Microsoft\Siuf\Rules
       name: PeriodInNanoSeconds
       type: QWord
-      old_value: <RemoveEntry>
-      new_value: <RemoveEntry>
+      old_value: <NotExist>
+      new_value: <NotExist>
     - path: HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection
       name: DoNotShowFeedbackNotifications
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "1"
     - path: HKCU\SOFTWARE\Policies\Microsoft\Windows\CloudContent
       name: DisableTailoredExperiencesWithDiagnosticData
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "1"
     - path: HKLM\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo
       name: DisabledByGroupPolicy
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "1"
     - path: HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting
       name: Disabled
@@ -1172,7 +1172,7 @@
     - path: HKLM\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization
       name: DODownloadMode
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "0"
     - path: HKLM\SYSTEM\CurrentControlSet\Control\Remote Assistance
       name: fAllowToGetHelp
@@ -1237,7 +1237,7 @@
     - path: HKCU\SOFTWARE\Policies\Microsoft\Windows\Windows Feeds
       name: EnableFeeds
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "0"
     - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Feeds
       name: ShellFeedsTaskbarViewMode
@@ -1247,7 +1247,7 @@
     - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer
       name: HideSCAMeetNow
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "1"
     - path: HKCU\Software\Microsoft\Windows\CurrentVersion\UserProfileEngagement
       name: ScoobeSystemSettingEnabled
@@ -1589,12 +1589,12 @@
     - path: HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsCopilot
       name: TurnOffWindowsCopilot
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "1"
     - path: HKCU\Software\Policies\Microsoft\Windows\WindowsCopilot
       name: TurnOffWindowsCopilot
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "1"
     - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
       name: ShowCopilotButton
@@ -1604,27 +1604,27 @@
     - path: HKLM\SOFTWARE\Microsoft\Windows\Shell\Copilot
       name: IsCopilotAvailable
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "0"
     - path: HKLM\SOFTWARE\Microsoft\Windows\Shell\Copilot
       name: CopilotDisabledReason
       type: String
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: IsEnabledForGeographicRegionFailed
     - path: HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsCopilot
       name: AllowCopilotRuntime
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "0"
     - path: HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked
       name: "{CB3B0003-8088-4EDE-8769-8B354AB2FF8C}"
       type: String
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: ""
     - path: HKLM\SOFTWARE\Microsoft\Windows\Shell\Copilot\BingChat
       name: IsUserEligible
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "0"
   script:
     apply: |-
@@ -1642,17 +1642,17 @@
     - path: HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsAI
       name: DisableAIDataAnalysis
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "1"
     - path: HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsAI
       name: AllowRecallEnablement
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "0"
     - path: HKLM\SYSTEM\CurrentControlSet\Control\CI\Policy
       name: VerifiedAndReputablePolicyState
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "0"
   script:
     apply: |-
@@ -1721,7 +1721,7 @@
     - path: HKLM\SYSTEM\CurrentControlSet\Control\Session Manager
       name: DisableWpbtExecution
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "1"
 - name: RemoveOnedrive
   description: Moves OneDrive files to Default Home Folders and Uninstalls it.
@@ -1853,7 +1853,7 @@
     - path: HKCU\Software\Policies\Microsoft\Windows\Explorer
       name: DisableNotificationCenter
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "1"
     - path: HKCU\Software\Microsoft\Windows\CurrentVersion\PushNotifications
       name: ToastEnabled
@@ -2132,7 +2132,7 @@
     - path: HKLM\SOFTWARE\Policies\Microsoft\Windows\GameDVR
       name: AllowGameDVR
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "0"
 - name: IPv46
   description:
@@ -2361,7 +2361,7 @@
     - path: HKCU\Software\Policies\Microsoft\Office\16.0\Outlook\Preferences
       name: NewOutlookMigrationUserSetting
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "0"
 - name: MultiplaneOverlay
   description:
@@ -2371,7 +2371,7 @@
     - path: HKLM\SOFTWARE\Microsoft\Windows\Dwm
       name: OverlayTestMode
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "5"
 - name: HiddenFiles
   description: If Enabled then Hidden Files will be shown.
@@ -2450,7 +2450,7 @@
     - path: HKLM\SYSTEM\CurrentControlSet\Control\Power
       name: PlatformAoAcOverride
       type: DWord
-      old_value: <RemoveEntry>
+      old_value: <NotExist>
       new_value: "0"
 - name: DisableExplorerAutoDiscovery
   description:

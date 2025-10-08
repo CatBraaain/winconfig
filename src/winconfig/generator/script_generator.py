@@ -43,7 +43,7 @@ class ScriptGenerator:
         remove_entry = rf"""
             Remove-ItemProperty -Path "{registry.path}" -Name {registry.name} -Force -ErrorAction SilentlyContinue | Out-Null
         """
-        script = ensure_key + (set_entry if value != "<RemoveEntry>" else remove_entry)
+        script = ensure_key + (set_entry if value != "<NotExist>" else remove_entry)
 
         return dedent(script)
 
@@ -54,10 +54,10 @@ class ScriptGenerator:
                 Get-ItemPropertyValue -Path "{registry.path}" -Name {registry.name} -ErrorAction Stop
             }}
             catch [System.Management.Automation.ItemNotFoundException] {{
-                "<RemoveEntry>"
+                "<NotExist>"
             }}
             catch [System.Management.Automation.PSArgumentException] {{
-                "<RemoveEntry>"
+                "<NotExist>"
             }}
         """
         return dedent(get_entry)

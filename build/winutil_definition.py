@@ -56,11 +56,15 @@ class WinutilDefinitionContainer(RootModel):
                     description=winutil_def.Description,
                     registries=[
                         Registry(
-                            path=registry.Path.replace(":", "", 1),
+                            path=registry.Path,
                             name=registry.Name,
                             type=registry.Type,
-                            old_value=registry.OriginalValue,
-                            new_value=registry.Value,
+                            old_value=registry.OriginalValue.replace(
+                                "<RemoveEntry>", "<NotExist>"
+                            ),
+                            new_value=registry.Value.replace(
+                                "<RemoveEntry>", "<NotExist>"
+                            ),
                         )
                         for registry in winutil_def.registry
                     ],
