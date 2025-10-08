@@ -2,6 +2,15 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, RootModel
 
+# Why use PowerShell instead of reg.exe, sc.exe, or schtasks.exe?
+# ---------------------------------------------------------------
+# Tools like reg.exe, sc.exe, and schtasks.exe are effective for setting values
+# but not for retrieving them in a structured format.
+# PowerShell, on the other hand, allows reading and modifying system configuration
+# objects (e.g., registry entries, services, scheduled tasks) as native objects.
+# This makes it easier to verify that the expected values were applied correctly
+# during automated testing.
+
 type RegistryValueKind = Literal[
     "String",
     "ExpandString",
@@ -21,11 +30,6 @@ class Registry(BaseModel):
 
     def generate_execution_script(self, revert: bool) -> str:
         value = self.new_value if not revert else self.old_value
-        # script = (
-        #     f"reg add {self.path} /v {self.name} /t {self.type} /d {self.new_value} /f"
-        #     if value is not None
-        #     else f"reg delete {self.path} /v {self.name} /f"
-        # )
         script = (
             f'If (!(Test-Path "{self.path}")) {{'
             f'    New-Item -Path "{self.path}" -Force -ErrorAction Stop | Out-Null'
@@ -48,11 +52,6 @@ class ScheduledTask(BaseModel):
 
     def generate_execution_script(self, revert: bool) -> str:
         state = self.new_state if not revert else self.old_state
-        # script = (
-        #     f"sc config {self.path} start= {self.new_state}"
-        #     if state == "Enabled"
-        #     else f"sc config {self.path} start= {self.new_state}"
-        # )
         script = (
             f'Enable-ScheduledTask -TaskName "{self.path}" -ErrorAction SilentlyContinue'
             if state == "Enabled"
@@ -77,7 +76,6 @@ class Service(BaseModel):
 
     def generate_execution_script(self, revert: bool) -> str:
         startup_type = self.new_startup_type if not revert else self.old_startup_type
-        # script = f"sc config {self.name} start= {state}"
         script = f'Set-Service -Name "{self.name}" -StartupType {startup_type} -ErrorAction SilentlyContinue'
         return script
 
