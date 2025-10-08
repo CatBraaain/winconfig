@@ -56,7 +56,7 @@ class WinutilDefinitionContainer(RootModel):
                     description=winutil_def.Description,
                     registries=[
                         Registry(
-                            path=registry.Path,
+                            path=registry.Path.replace(":", "", 1),
                             name=registry.Name,
                             type=registry.Type,
                             old_value=registry.OriginalValue,

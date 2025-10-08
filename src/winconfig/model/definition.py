@@ -1,7 +1,13 @@
-from textwrap import dedent
-from typing import Literal
+import re
+from typing import Annotated, Literal
 
-from pydantic import BaseModel, ConfigDict, RootModel
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    PlainSerializer,
+    RootModel,
+    field_validator,
+)
 
 # Why use PowerShell instead of reg.exe, sc.exe, or schtasks.exe?
 # ---------------------------------------------------------------
@@ -23,11 +29,31 @@ type RegistryValueKind = Literal[
 
 
 class Registry(BaseModel):
-    path: str
+    path: Annotated[str, PlainSerializer(lambda x: x.replace("Registry::", ""))]
     name: str
     type: RegistryValueKind
     old_value: str | Literal["<RemoveEntry>"]  # noqa: PYI051
     new_value: str | Literal["<RemoveEntry>"]  # noqa: PYI051
+
+    @field_validator("path", mode="after")
+    @staticmethod
+    def normalize_path(value: str) -> str:
+        mapping = {
+            r"(HKEY_CLASSES_ROOT|HKCR):?\\": r"HKCR\\",
+            r"(HKEY_CURRENT_CONFIG|HKCC):?\\": r"HKCC\\",
+            r"(HKEY_CURRENT_USER|HKCU):?\\": r"HKCU\\",
+            r"(HKEY_LOCAL_MACHINE|HKLM):?\\": r"HKLM\\",
+            r"(HKEY_USERS|HKU):?\\": r"HKU\\",
+        }
+
+        for pattern, repl in mapping.items():
+            value = re.sub(
+                "^(Registry::)?" + pattern,
+                "Registry::" + repl,
+                value,
+                flags=re.IGNORECASE,
+            )
+        return value
 
 
 type ScheduledTaskState = Literal["Enabled", "Disabled"]

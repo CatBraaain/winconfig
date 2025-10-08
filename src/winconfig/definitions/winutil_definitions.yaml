@@ -3,17 +3,17 @@
 - name: AH
   description: This erases recent docs, clipboard, and run history.
   registries:
-    - path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\System
+    - path: HKLM\SOFTWARE\Policies\Microsoft\Windows\System
       name: EnableActivityFeed
       type: DWord
       old_value: <RemoveEntry>
       new_value: "0"
-    - path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\System
+    - path: HKLM\SOFTWARE\Policies\Microsoft\Windows\System
       name: PublishUserActivities
       type: DWord
       old_value: <RemoveEntry>
       new_value: "0"
-    - path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\System
+    - path: HKLM\SOFTWARE\Policies\Microsoft\Windows\System
       name: UploadUserActivities
       type: DWord
       old_value: <RemoveEntry>
@@ -24,12 +24,12 @@
     before turning the pc off. It really should never be used, but some people are
     lazy and rely on it. Don't be like Bob. Bob likes hibernation.
   registries:
-    - path: HKLM:\System\CurrentControlSet\Control\Session Manager\Power
+    - path: HKLM\System\CurrentControlSet\Control\Session Manager\Power
       name: HibernateEnabled
       type: DWord
       old_value: "1"
       new_value: "0"
-    - path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FlyoutMenuSettings
+    - path: HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FlyoutMenuSettings
       name: ShowHibernateOption
       type: DWord
       old_value: "1"
@@ -43,12 +43,12 @@
     battery, this sets hibernation as default which will not drain the battery. See
     issue https://github.com/ChrisTitusTech/winutil/issues/1399
   registries:
-    - path: HKLM:\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\238C9FA8-0AAD-41ED-83F4-97BE242C8F20\7bc4a2f9-d8fc-4469-b07b-33eb785aaca0
+    - path: HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\238C9FA8-0AAD-41ED-83F4-97BE242C8F20\7bc4a2f9-d8fc-4469-b07b-33eb785aaca0
       name: Attributes
       type: DWord
       old_value: "1"
       new_value: "2"
-    - path: HKLM:\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\abfc2519-3608-4c2a-94ea-171b0ed546ab\94ac6d29-73ce-41a6-809f-6363ba21b47e
+    - path: HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\abfc2519-3608-4c2a-94ea-171b0ed546ab\94ac6d29-73ce-41a6-809f-6363ba21b47e
       name: "Attributes "
       type: DWord
       old_value: "0"
@@ -87,22 +87,22 @@
 - name: Loc
   description: Disables Location Tracking...DUH!
   registries:
-    - path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location
+    - path: HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location
       name: Value
       type: String
       old_value: Allow
       new_value: Deny
-    - path: HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Sensor\Overrides\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}
+    - path: HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Sensor\Overrides\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}
       name: SensorPermissionState
       type: DWord
       old_value: "1"
       new_value: "0"
-    - path: HKLM:\SYSTEM\CurrentControlSet\Services\lfsvc\Service\Configuration
+    - path: HKLM\SYSTEM\CurrentControlSet\Services\lfsvc\Service\Configuration
       name: Status
       type: DWord
       old_value: "1"
       new_value: "0"
-    - path: HKLM:\SYSTEM\Maps
+    - path: HKLM\SYSTEM\Maps
       name: AutoUpdateEnabled
       type: DWord
       old_value: "1"
@@ -943,22 +943,22 @@
     Disables various annoyances like Brave Rewards,Leo AI,Crypto Wallet
     and VPN
   registries:
-    - path: HKLM:\SOFTWARE\Policies\BraveSoftware\Brave
+    - path: HKLM\SOFTWARE\Policies\BraveSoftware\Brave
       name: BraveRewardsDisabled
       type: DWord
       old_value: <RemoveEntry>
       new_value: "1"
-    - path: HKLM:\SOFTWARE\Policies\BraveSoftware\Brave
+    - path: HKLM\SOFTWARE\Policies\BraveSoftware\Brave
       name: BraveWalletDisabled
       type: DWord
       old_value: <RemoveEntry>
       new_value: "1"
-    - path: HKLM:\SOFTWARE\Policies\BraveSoftware\Brave
+    - path: HKLM\SOFTWARE\Policies\BraveSoftware\Brave
       name: BraveVPNDisabled
       type: DWord
       old_value: <RemoveEntry>
       new_value: "1"
-    - path: HKLM:\SOFTWARE\Policies\BraveSoftware\Brave
+    - path: HKLM\SOFTWARE\Policies\BraveSoftware\Brave
       name: BraveAIChatEnabled
       type: DWord
       old_value: <RemoveEntry>
@@ -968,92 +968,92 @@
     Disables various telemetry options, popups, and other annoyances in
     Edge.
   registries:
-    - path: HKLM:\SOFTWARE\Policies\Microsoft\EdgeUpdate
+    - path: HKLM\SOFTWARE\Policies\Microsoft\EdgeUpdate
       name: CreateDesktopShortcutDefault
       type: DWord
       old_value: <RemoveEntry>
       new_value: "0"
-    - path: HKLM:\SOFTWARE\Policies\Microsoft\Edge
+    - path: HKLM\SOFTWARE\Policies\Microsoft\Edge
       name: PersonalizationReportingEnabled
       type: DWord
       old_value: <RemoveEntry>
       new_value: "0"
-    - path: HKLM:\SOFTWARE\Policies\Microsoft\Edge
+    - path: HKLM\SOFTWARE\Policies\Microsoft\Edge
       name: ShowRecommendationsEnabled
       type: DWord
       old_value: <RemoveEntry>
       new_value: "0"
-    - path: HKLM:\SOFTWARE\Policies\Microsoft\Edge
+    - path: HKLM\SOFTWARE\Policies\Microsoft\Edge
       name: HideFirstRunExperience
       type: DWord
       old_value: <RemoveEntry>
       new_value: "1"
-    - path: HKLM:\SOFTWARE\Policies\Microsoft\Edge
+    - path: HKLM\SOFTWARE\Policies\Microsoft\Edge
       name: UserFeedbackAllowed
       type: DWord
       old_value: <RemoveEntry>
       new_value: "0"
-    - path: HKLM:\SOFTWARE\Policies\Microsoft\Edge
+    - path: HKLM\SOFTWARE\Policies\Microsoft\Edge
       name: ConfigureDoNotTrack
       type: DWord
       old_value: <RemoveEntry>
       new_value: "1"
-    - path: HKLM:\SOFTWARE\Policies\Microsoft\Edge
+    - path: HKLM\SOFTWARE\Policies\Microsoft\Edge
       name: AlternateErrorPagesEnabled
       type: DWord
       old_value: <RemoveEntry>
       new_value: "0"
-    - path: HKLM:\SOFTWARE\Policies\Microsoft\Edge
+    - path: HKLM\SOFTWARE\Policies\Microsoft\Edge
       name: EdgeCollectionsEnabled
       type: DWord
       old_value: <RemoveEntry>
       new_value: "0"
-    - path: HKLM:\SOFTWARE\Policies\Microsoft\Edge
+    - path: HKLM\SOFTWARE\Policies\Microsoft\Edge
       name: EdgeShoppingAssistantEnabled
       type: DWord
       old_value: <RemoveEntry>
       new_value: "0"
-    - path: HKLM:\SOFTWARE\Policies\Microsoft\Edge
+    - path: HKLM\SOFTWARE\Policies\Microsoft\Edge
       name: MicrosoftEdgeInsiderPromotionEnabled
       type: DWord
       old_value: <RemoveEntry>
       new_value: "0"
-    - path: HKLM:\SOFTWARE\Policies\Microsoft\Edge
+    - path: HKLM\SOFTWARE\Policies\Microsoft\Edge
       name: PersonalizationReportingEnabled
       type: DWord
       old_value: <RemoveEntry>
       new_value: "0"
-    - path: HKLM:\SOFTWARE\Policies\Microsoft\Edge
+    - path: HKLM\SOFTWARE\Policies\Microsoft\Edge
       name: ShowMicrosoftRewards
       type: DWord
       old_value: <RemoveEntry>
       new_value: "0"
-    - path: HKLM:\SOFTWARE\Policies\Microsoft\Edge
+    - path: HKLM\SOFTWARE\Policies\Microsoft\Edge
       name: WebWidgetAllowed
       type: DWord
       old_value: <RemoveEntry>
       new_value: "0"
-    - path: HKLM:\SOFTWARE\Policies\Microsoft\Edge
+    - path: HKLM\SOFTWARE\Policies\Microsoft\Edge
       name: DiagnosticData
       type: DWord
       old_value: <RemoveEntry>
       new_value: "0"
-    - path: HKLM:\SOFTWARE\Policies\Microsoft\Edge
+    - path: HKLM\SOFTWARE\Policies\Microsoft\Edge
       name: EdgeAssetDeliveryServiceEnabled
       type: DWord
       old_value: <RemoveEntry>
       new_value: "0"
-    - path: HKLM:\SOFTWARE\Policies\Microsoft\Edge
+    - path: HKLM\SOFTWARE\Policies\Microsoft\Edge
       name: EdgeCollectionsEnabled
       type: DWord
       old_value: <RemoveEntry>
       new_value: "0"
-    - path: HKLM:\SOFTWARE\Policies\Microsoft\Edge
+    - path: HKLM\SOFTWARE\Policies\Microsoft\Edge
       name: CryptoWalletEnabled
       type: DWord
       old_value: <RemoveEntry>
       new_value: "0"
-    - path: HKLM:\SOFTWARE\Policies\Microsoft\Edge
+    - path: HKLM\SOFTWARE\Policies\Microsoft\Edge
       name: WalletDonationEnabled
       type: DWord
       old_value: <RemoveEntry>
@@ -1064,7 +1064,7 @@
     or application links from the Windows Store for the signed-in user. Some default
     Apps will be inaccessible (eg. Phone Link)
   registries:
-    - path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\CloudContent
+    - path: HKLM\SOFTWARE\Policies\Microsoft\Windows\CloudContent
       name: DisableWindowsConsumerFeatures
       type: DWord
       old_value: <RemoveEntry>
@@ -1074,182 +1074,182 @@
     "Disables Microsoft Telemetry. Note: This will lock many Edge Browser
     settings. Microsoft spies heavily on you when using the Edge browser."
   registries:
-    - path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection
+    - path: HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection
       name: AllowTelemetry
       type: DWord
       old_value: <RemoveEntry>
       new_value: "0"
-    - path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection
+    - path: HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection
       name: AllowTelemetry
       type: DWord
       old_value: <RemoveEntry>
       new_value: "0"
-    - path: HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager
+    - path: HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager
       name: ContentDeliveryAllowed
       type: DWord
       old_value: "1"
       new_value: "0"
-    - path: HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager
+    - path: HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager
       name: OemPreInstalledAppsEnabled
       type: DWord
       old_value: "1"
       new_value: "0"
-    - path: HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager
+    - path: HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager
       name: PreInstalledAppsEnabled
       type: DWord
       old_value: "1"
       new_value: "0"
-    - path: HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager
+    - path: HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager
       name: PreInstalledAppsEverEnabled
       type: DWord
       old_value: "1"
       new_value: "0"
-    - path: HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager
+    - path: HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager
       name: SilentInstalledAppsEnabled
       type: DWord
       old_value: "1"
       new_value: "0"
-    - path: HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager
+    - path: HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager
       name: SubscribedContent-338387Enabled
       type: DWord
       old_value: "1"
       new_value: "0"
-    - path: HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager
+    - path: HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager
       name: SubscribedContent-338388Enabled
       type: DWord
       old_value: "1"
       new_value: "0"
-    - path: HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager
+    - path: HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager
       name: SubscribedContent-338389Enabled
       type: DWord
       old_value: "1"
       new_value: "0"
-    - path: HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager
+    - path: HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager
       name: SubscribedContent-353698Enabled
       type: DWord
       old_value: "1"
       new_value: "0"
-    - path: HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager
+    - path: HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager
       name: SystemPaneSuggestionsEnabled
       type: DWord
       old_value: "1"
       new_value: "0"
-    - path: HKCU:\SOFTWARE\Microsoft\Siuf\Rules
+    - path: HKCU\SOFTWARE\Microsoft\Siuf\Rules
       name: NumberOfSIUFInPeriod
       type: DWord
       old_value: "0"
       new_value: "0"
-    - path: HKCU:\SOFTWARE\Microsoft\Siuf\Rules
+    - path: HKCU\SOFTWARE\Microsoft\Siuf\Rules
       name: PeriodInNanoSeconds
       type: QWord
       old_value: <RemoveEntry>
       new_value: <RemoveEntry>
-    - path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection
+    - path: HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection
       name: DoNotShowFeedbackNotifications
       type: DWord
       old_value: <RemoveEntry>
       new_value: "1"
-    - path: HKCU:\SOFTWARE\Policies\Microsoft\Windows\CloudContent
+    - path: HKCU\SOFTWARE\Policies\Microsoft\Windows\CloudContent
       name: DisableTailoredExperiencesWithDiagnosticData
       type: DWord
       old_value: <RemoveEntry>
       new_value: "1"
-    - path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo
+    - path: HKLM\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo
       name: DisabledByGroupPolicy
       type: DWord
       old_value: <RemoveEntry>
       new_value: "1"
-    - path: HKLM:\SOFTWARE\Microsoft\Windows\Windows Error Reporting
+    - path: HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting
       name: Disabled
       type: DWord
       old_value: "0"
       new_value: "1"
-    - path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config
+    - path: HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config
       name: DODownloadMode
       type: DWord
       old_value: "1"
       new_value: "0"
-    - path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization
+    - path: HKLM\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization
       name: DODownloadMode
       type: DWord
       old_value: <RemoveEntry>
       new_value: "0"
-    - path: HKLM:\SYSTEM\CurrentControlSet\Control\Remote Assistance
+    - path: HKLM\SYSTEM\CurrentControlSet\Control\Remote Assistance
       name: fAllowToGetHelp
       type: DWord
       old_value: "1"
       new_value: "0"
-    - path: HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\OperationStatusManager
+    - path: HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\OperationStatusManager
       name: EnthusiastMode
       type: DWord
       old_value: "0"
       new_value: "1"
-    - path: HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+    - path: HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced
       name: ShowTaskViewButton
       type: DWord
       old_value: "1"
       new_value: "0"
-    - path: HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People
+    - path: HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People
       name: PeopleBand
       type: DWord
       old_value: "1"
       new_value: "0"
-    - path: HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+    - path: HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced
       name: LaunchTo
       type: DWord
       old_value: "1"
       new_value: "1"
-    - path: HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem
+    - path: HKLM\SYSTEM\CurrentControlSet\Control\FileSystem
       name: LongPathsEnabled
       type: DWord
       old_value: "0"
       new_value: "1"
-    - path: HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile
+    - path: HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile
       name: SystemResponsiveness
       type: DWord
       old_value: "1"
       new_value: "0"
-    - path: HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile
+    - path: HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile
       name: NetworkThrottlingIndex
       type: DWord
       old_value: "1"
       new_value: "4294967295"
-    - path: HKCU:\Control Panel\Desktop
+    - path: HKCU\Control Panel\Desktop
       name: AutoEndTasks
       type: DWord
       old_value: "1"
       new_value: "1"
-    - path: HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management
+    - path: HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management
       name: ClearPageFileAtShutdown
       type: DWord
       old_value: "0"
       new_value: "0"
-    - path: HKLM:\SYSTEM\ControlSet001\Services\Ndu
+    - path: HKLM\SYSTEM\ControlSet001\Services\Ndu
       name: Start
       type: DWord
       old_value: "1"
       new_value: "2"
-    - path: HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters
+    - path: HKLM\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters
       name: IRPStackSize
       type: DWord
       old_value: "20"
       new_value: "30"
-    - path: HKCU:\SOFTWARE\Policies\Microsoft\Windows\Windows Feeds
+    - path: HKCU\SOFTWARE\Policies\Microsoft\Windows\Windows Feeds
       name: EnableFeeds
       type: DWord
       old_value: <RemoveEntry>
       new_value: "0"
-    - path: HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds
+    - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Feeds
       name: ShellFeedsTaskbarViewMode
       type: DWord
       old_value: "1"
       new_value: "2"
-    - path: HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer
+    - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer
       name: HideSCAMeetNow
       type: DWord
       old_value: <RemoveEntry>
       new_value: "1"
-    - path: HKCU:\Software\Microsoft\Windows\CurrentVersion\UserProfileEngagement
+    - path: HKCU\Software\Microsoft\Windows\CurrentVersion\UserProfileEngagement
       name: ScoobeSystemSettingEnabled
       type: DWord
       old_value: "1"
@@ -1333,12 +1333,12 @@
     Wi-Fi Sense is a spying service that phones home all nearby scanned
     Wi-Fi networks and your current geographic location.
   registries:
-    - path: HKLM:\Software\Microsoft\PolicyManager\default\WiFi\AllowWiFiHotSpotReporting
+    - path: HKLM\Software\Microsoft\PolicyManager\default\WiFi\AllowWiFiHotSpotReporting
       name: Value
       type: DWord
       old_value: "1"
       new_value: "0"
-    - path: HKLM:\Software\Microsoft\PolicyManager\default\WiFi\AllowAutoConnectToWiFiSenseHotspots
+    - path: HKLM\Software\Microsoft\PolicyManager\default\WiFi\AllowAutoConnectToWiFiSenseHotspots
       name: Value
       type: DWord
       old_value: "1"
@@ -1348,7 +1348,7 @@
     Essential for computers that are dual booting. Fixes the time sync
     with Linux Systems.
   registries:
-    - path: HKLM:\SYSTEM\CurrentControlSet\Control\TimeZoneInformation
+    - path: HKLM\SYSTEM\CurrentControlSet\Control\TimeZoneInformation
       name: RealTimeIsUniversal
       type: DWord
       old_value: "0"
@@ -1376,67 +1376,67 @@
     Sets the system preferences to performance. You can do this manually
     with sysdm.cpl as well.
   registries:
-    - path: HKCU:\Control Panel\Desktop
+    - path: HKCU\Control Panel\Desktop
       name: DragFullWindows
       type: String
       old_value: "1"
       new_value: "0"
-    - path: HKCU:\Control Panel\Desktop
+    - path: HKCU\Control Panel\Desktop
       name: MenuShowDelay
       type: String
       old_value: "400"
       new_value: "200"
-    - path: HKCU:\Control Panel\Desktop\WindowMetrics
+    - path: HKCU\Control Panel\Desktop\WindowMetrics
       name: MinAnimate
       type: String
       old_value: "1"
       new_value: "0"
-    - path: HKCU:\Control Panel\Keyboard
+    - path: HKCU\Control Panel\Keyboard
       name: KeyboardDelay
       type: DWord
       old_value: "1"
       new_value: "0"
-    - path: HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+    - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
       name: ListviewAlphaSelect
       type: DWord
       old_value: "1"
       new_value: "0"
-    - path: HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+    - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
       name: ListviewShadow
       type: DWord
       old_value: "1"
       new_value: "0"
-    - path: HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+    - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
       name: TaskbarAnimations
       type: DWord
       old_value: "1"
       new_value: "0"
-    - path: HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects
+    - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects
       name: VisualFXSetting
       type: DWord
       old_value: "1"
       new_value: "3"
-    - path: HKCU:\Software\Microsoft\Windows\DWM
+    - path: HKCU\Software\Microsoft\Windows\DWM
       name: EnableAeroPeek
       type: DWord
       old_value: "1"
       new_value: "0"
-    - path: HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+    - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
       name: TaskbarMn
       type: DWord
       old_value: "1"
       new_value: "0"
-    - path: HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+    - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
       name: TaskbarDa
       type: DWord
       old_value: "1"
       new_value: "0"
-    - path: HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+    - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
       name: ShowTaskViewButton
       type: DWord
       old_value: "1"
       new_value: "0"
-    - path: HKCU:\Software\Microsoft\Windows\CurrentVersion\Search
+    - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Search
       name: SearchboxTaskbarMode
       type: DWord
       old_value: "1"
@@ -1586,42 +1586,42 @@
 - name: RemoveCopilot
   description: Disables MS Copilot AI built into Windows since 23H2.
   registries:
-    - path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsCopilot
+    - path: HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsCopilot
       name: TurnOffWindowsCopilot
       type: DWord
       old_value: <RemoveEntry>
       new_value: "1"
-    - path: HKCU:\Software\Policies\Microsoft\Windows\WindowsCopilot
+    - path: HKCU\Software\Policies\Microsoft\Windows\WindowsCopilot
       name: TurnOffWindowsCopilot
       type: DWord
       old_value: <RemoveEntry>
       new_value: "1"
-    - path: HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+    - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
       name: ShowCopilotButton
       type: DWord
       old_value: "1"
       new_value: "0"
-    - path: HKLM:\SOFTWARE\Microsoft\Windows\Shell\Copilot
+    - path: HKLM\SOFTWARE\Microsoft\Windows\Shell\Copilot
       name: IsCopilotAvailable
       type: DWord
       old_value: <RemoveEntry>
       new_value: "0"
-    - path: HKLM:\SOFTWARE\Microsoft\Windows\Shell\Copilot
+    - path: HKLM\SOFTWARE\Microsoft\Windows\Shell\Copilot
       name: CopilotDisabledReason
       type: String
       old_value: <RemoveEntry>
       new_value: IsEnabledForGeographicRegionFailed
-    - path: HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsCopilot
+    - path: HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsCopilot
       name: AllowCopilotRuntime
       type: DWord
       old_value: <RemoveEntry>
       new_value: "0"
-    - path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked
+    - path: HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked
       name: "{CB3B0003-8088-4EDE-8769-8B354AB2FF8C}"
       type: String
       old_value: <RemoveEntry>
       new_value: ""
-    - path: HKLM:\SOFTWARE\Microsoft\Windows\Shell\Copilot\BingChat
+    - path: HKLM\SOFTWARE\Microsoft\Windows\Shell\Copilot\BingChat
       name: IsUserEligible
       type: DWord
       old_value: <RemoveEntry>
@@ -1639,17 +1639,17 @@
 - name: RecallOff
   description: Turn Recall off
   registries:
-    - path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsAI
+    - path: HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsAI
       name: DisableAIDataAnalysis
       type: DWord
       old_value: <RemoveEntry>
       new_value: "1"
-    - path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsAI
+    - path: HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsAI
       name: AllowRecallEnablement
       type: DWord
       old_value: <RemoveEntry>
       new_value: "0"
-    - path: HKLM:\SYSTEM\CurrentControlSet\Control\CI\Policy
+    - path: HKLM\SYSTEM\CurrentControlSet\Control\CI\Policy
       name: VerifiedAndReputablePolicyState
       type: DWord
       old_value: <RemoveEntry>
@@ -1718,7 +1718,7 @@
     software drivers, or a software program conveniently. This could also be a security
     risk.
   registries:
-    - path: HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager
+    - path: HKLM\SYSTEM\CurrentControlSet\Control\Session Manager
       name: DisableWpbtExecution
       type: DWord
       old_value: <RemoveEntry>
@@ -1824,12 +1824,12 @@
     "Blocks ALL Razer Software installations. The hardware works fine without
     any software. WARNING: this will also block all Windows third-party driver installations."
   registries:
-    - path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DriverSearching
+    - path: HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DriverSearching
       name: SearchOrderConfig
       type: DWord
       old_value: "1"
       new_value: "0"
-    - path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Device Installer
+    - path: HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Device Installer
       name: DisableCoInstallers
       type: DWord
       old_value: "0"
@@ -1850,12 +1850,12 @@
 - name: DisableNotifications
   description: Disables all Notifications INCLUDING Calendar
   registries:
-    - path: HKCU:\Software\Policies\Microsoft\Windows\Explorer
+    - path: HKCU\Software\Policies\Microsoft\Windows\Explorer
       name: DisableNotificationCenter
       type: DWord
       old_value: <RemoveEntry>
       new_value: "1"
-    - path: HKCU:\Software\Microsoft\Windows\CurrentVersion\PushNotifications
+    - path: HKCU\Software\Microsoft\Windows\CurrentVersion\PushNotifications
       name: ToastEnabled
       type: DWord
       old_value: "1"
@@ -2109,27 +2109,27 @@
     GameDVR is a Windows App that is a dependency for some Store Games.
     I've never met someone that likes it, but it's there for the XBOX crowd.
   registries:
-    - path: HKCU:\System\GameConfigStore
+    - path: HKCU\System\GameConfigStore
       name: GameDVR_FSEBehavior
       type: DWord
       old_value: "1"
       new_value: "2"
-    - path: HKCU:\System\GameConfigStore
+    - path: HKCU\System\GameConfigStore
       name: GameDVR_Enabled
       type: DWord
       old_value: "1"
       new_value: "0"
-    - path: HKCU:\System\GameConfigStore
+    - path: HKCU\System\GameConfigStore
       name: GameDVR_HonorUserFSEBehaviorMode
       type: DWord
       old_value: "0"
       new_value: "1"
-    - path: HKCU:\System\GameConfigStore
+    - path: HKCU\System\GameConfigStore
       name: GameDVR_EFSEFeatureFlags
       type: DWord
       old_value: "1"
       new_value: "0"
-    - path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\GameDVR
+    - path: HKLM\SOFTWARE\Policies\Microsoft\Windows\GameDVR
       name: AllowGameDVR
       type: DWord
       old_value: <RemoveEntry>
@@ -2139,7 +2139,7 @@
     To set the IPv4 preference can have latency and security benefits on
     private networks where IPv6 is not configured.
   registries:
-    - path: HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters
+    - path: HKLM\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters
       name: DisabledComponents
       type: DWord
       old_value: "0"
@@ -2149,7 +2149,7 @@
     Teredo network tunneling is a ipv6 feature that can cause additional
     latency, but may cause problems with some games
   registries:
-    - path: HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters
+    - path: HKLM\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters
       name: DisabledComponents
       type: DWord
       old_value: "0"
@@ -2160,7 +2160,7 @@
 - name: Disableipsix
   description: Disables IPv6.
   registries:
-    - path: HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters
+    - path: HKLM\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters
       name: DisabledComponents
       type: DWord
       old_value: "0"
@@ -2173,7 +2173,7 @@
     Disables all Microsoft Store apps from running in the background, which
     has to be done individually since Win11
   registries:
-    - path: HKCU:\Software\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications
+    - path: HKCU\Software\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications
       name: GlobalUserDisabled
       type: DWord
       old_value: "0"
@@ -2183,7 +2183,7 @@
     "Disables FSO in all applications. NOTE: This will disable Color Management
     in Exclusive Fullscreen"
   registries:
-    - path: HKCU:\System\GameConfigStore
+    - path: HKCU\System\GameConfigStore
       name: GameDVR_DXGIHonorFSEWindowsCompatible
       type: DWord
       old_value: "0"
@@ -2191,12 +2191,12 @@
 - name: DarkMode
   description: Enable/Disable Dark Mode.
   registries:
-    - path: HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize
+    - path: HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize
       name: AppsUseLightTheme
       type: DWord
       old_value: "1"
       new_value: "0"
-    - path: HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize
+    - path: HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize
       name: SystemUsesLightTheme
       type: DWord
       old_value: "1"
@@ -2217,7 +2217,7 @@
     If enable then includes web search results from Bing in your Start
     Menu search.
   registries:
-    - path: HKCU:\Software\Microsoft\Windows\CurrentVersion\Search
+    - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Search
       name: BingSearchEnabled
       type: DWord
       old_value: "0"
@@ -2225,12 +2225,12 @@
 - name: NumLock
   description: Toggle the Num Lock key state when your computer starts.
   registries:
-    - path: HKU:\.Default\Control Panel\Keyboard
+    - path: HKU\.Default\Control Panel\Keyboard
       name: InitialKeyboardIndicators
       type: DWord
       old_value: "0"
       new_value: "2"
-    - path: HKCU:\Control Panel\Keyboard
+    - path: HKCU\Control Panel\Keyboard
       name: InitialKeyboardIndicators
       type: DWord
       old_value: "0"
@@ -2240,7 +2240,7 @@
     Show detailed messages during the login process for troubleshooting
     and diagnostics.
   registries:
-    - path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
+    - path: HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
       name: VerboseStatus
       type: DWord
       old_value: "0"
@@ -2251,17 +2251,17 @@
     | Enables 'iseducationenvironment' | Relogin Required. | WARNING: This will
     also disable Windows Spotlight on your Lock Screen as a side effect."
   registries:
-    - path: HKLM:\SOFTWARE\Microsoft\PolicyManager\current\device\Start
+    - path: HKLM\SOFTWARE\Microsoft\PolicyManager\current\device\Start
       name: HideRecommendedSection
       type: DWord
       old_value: "1"
       new_value: "0"
-    - path: HKLM:\SOFTWARE\Microsoft\PolicyManager\current\device\Education
+    - path: HKLM\SOFTWARE\Microsoft\PolicyManager\current\device\Education
       name: IsEducationEnvironment
       type: DWord
       old_value: "1"
       new_value: "0"
-    - path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\Explorer
+    - path: HKLM\SOFTWARE\Policies\Microsoft\Windows\Explorer
       name: HideRecommendedSection
       type: DWord
       old_value: "1"
@@ -2269,7 +2269,7 @@
 - name: HideSettingsHome
   description: Removes the Home page in the Windows Settings app.
   registries:
-    - path: HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer
+    - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer
       name: SettingsPageVisibility
       type: String
       old_value: show:home
@@ -2277,7 +2277,7 @@
 - name: SnapWindow
   description: If enabled you can align windows by dragging them. | Relogin Required
   registries:
-    - path: HKCU:\Control Panel\Desktop
+    - path: HKCU\Control Panel\Desktop
       name: WindowArrangementActive
       type: String
       old_value: "0"
@@ -2285,7 +2285,7 @@
 - name: SnapFlyout
   description: If enabled then Snap preview is disabled when maximize button is hovered.
   registries:
-    - path: HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+    - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
       name: EnableSnapAssistFlyout
       type: DWord
       old_value: "0"
@@ -2298,7 +2298,7 @@
     If enabled then you will get suggestions to snap other applications
     in the left over spaces.
   registries:
-    - path: HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+    - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
       name: SnapAssist
       type: DWord
       old_value: "0"
@@ -2311,17 +2311,17 @@
     If Enabled then Cursor movement is affected by the speed of your physical
     mouse movements.
   registries:
-    - path: HKCU:\Control Panel\Mouse
+    - path: HKCU\Control Panel\Mouse
       name: MouseSpeed
       type: DWord
       old_value: "0"
       new_value: "1"
-    - path: HKCU:\Control Panel\Mouse
+    - path: HKCU\Control Panel\Mouse
       name: MouseThreshold1
       type: DWord
       old_value: "0"
       new_value: "6"
-    - path: HKCU:\Control Panel\Mouse
+    - path: HKCU\Control Panel\Mouse
       name: MouseThreshold2
       type: DWord
       old_value: "0"
@@ -2332,7 +2332,7 @@
     feature of some graphical user interfaces which assists users who have physical
     disabilities or help users reduce repetitive strain injury.
   registries:
-    - path: HKCU:\Control Panel\Accessibility\StickyKeys
+    - path: HKCU\Control Panel\Accessibility\StickyKeys
       name: Flags
       type: DWord
       old_value: "58"
@@ -2343,22 +2343,22 @@
     Outlook migration and makes sure the Outlook Application actually uses the old
     Outlook.
   registries:
-    - path: HKCU:\SOFTWARE\Microsoft\Office\16.0\Outlook\Preferences
+    - path: HKCU\SOFTWARE\Microsoft\Office\16.0\Outlook\Preferences
       name: UseNewOutlook
       type: DWord
       old_value: "0"
       new_value: "1"
-    - path: HKCU:\Software\Microsoft\Office\16.0\Outlook\Options\General
+    - path: HKCU\Software\Microsoft\Office\16.0\Outlook\Options\General
       name: HideNewOutlookToggle
       type: DWord
       old_value: "1"
       new_value: "0"
-    - path: HKCU:\Software\Policies\Microsoft\Office\16.0\Outlook\Options\General
+    - path: HKCU\Software\Policies\Microsoft\Office\16.0\Outlook\Options\General
       name: DoNewOutlookAutoMigration
       type: DWord
       old_value: "0"
       new_value: "0"
-    - path: HKCU:\Software\Policies\Microsoft\Office\16.0\Outlook\Preferences
+    - path: HKCU\Software\Policies\Microsoft\Office\16.0\Outlook\Preferences
       name: NewOutlookMigrationUserSetting
       type: DWord
       old_value: <RemoveEntry>
@@ -2368,7 +2368,7 @@
     Disable the Multiplane Overlay which can sometimes cause issues with
     Graphics Cards.
   registries:
-    - path: HKLM:\SOFTWARE\Microsoft\Windows\Dwm
+    - path: HKLM\SOFTWARE\Microsoft\Windows\Dwm
       name: OverlayTestMode
       type: DWord
       old_value: <RemoveEntry>
@@ -2376,7 +2376,7 @@
 - name: HiddenFiles
   description: If Enabled then Hidden Files will be shown.
   registries:
-    - path: HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+    - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
       name: Hidden
       type: DWord
       old_value: "0"
@@ -2387,7 +2387,7 @@
 - name: ShowExt
   description: If enabled then File extensions (e.g., .txt, .jpg) are visible.
   registries:
-    - path: HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+    - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
       name: HideFileExt
       type: DWord
       old_value: "1"
@@ -2398,7 +2398,7 @@
 - name: TaskbarSearch
   description: If Enabled Search Button will be on the taskbar.
   registries:
-    - path: HKCU:\Software\Microsoft\Windows\CurrentVersion\Search
+    - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Search
       name: SearchboxTaskbarMode
       type: DWord
       old_value: "0"
@@ -2406,7 +2406,7 @@
 - name: TaskView
   description: If Enabled then Task View Button in Taskbar will be shown.
   registries:
-    - path: HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+    - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
       name: ShowTaskViewButton
       type: DWord
       old_value: "0"
@@ -2414,7 +2414,7 @@
 - name: TaskbarWidgets
   description: If Enabled then Widgets Button in Taskbar will be shown.
   registries:
-    - path: HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+    - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
       name: TaskbarDa
       type: DWord
       old_value: "0"
@@ -2424,7 +2424,7 @@
     "[Windows 11] If Enabled then the Taskbar Items will be shown on the
     Center, otherwise the Taskbar Items will be shown on the Left."
   registries:
-    - path: HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+    - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
       name: TaskbarAl
       type: DWord
       old_value: "0"
@@ -2434,12 +2434,12 @@
     If Enabled then you will see a detailed Blue Screen of Death (BSOD)
     with more information.
   registries:
-    - path: HKLM:\SYSTEM\CurrentControlSet\Control\CrashControl
+    - path: HKLM\SYSTEM\CurrentControlSet\Control\CrashControl
       name: DisplayParameters
       type: DWord
       old_value: "0"
       new_value: "1"
-    - path: HKLM:\SYSTEM\CurrentControlSet\Control\CrashControl
+    - path: HKLM\SYSTEM\CurrentControlSet\Control\CrashControl
       name: DisableEmoticon
       type: DWord
       old_value: "0"
@@ -2447,7 +2447,7 @@
 - name: S3Sleep
   description: Toggles between Modern Standby and S3 sleep.
   registries:
-    - path: HKLM:\SYSTEM\CurrentControlSet\Control\Power
+    - path: HKLM\SYSTEM\CurrentControlSet\Control\Power
       name: PlatformAoAcOverride
       type: DWord
       old_value: <RemoveEntry>
@@ -2504,7 +2504,7 @@
     This tweak controls the Resume function in Windows 11 24H2 and later,
     which allows you to resume an activity from a mobile device and vice-versa.
   registries:
-    - path: HKCU:\Software\Microsoft\Windows\CurrentVersion\CrossDeviceResume\Configuration
+    - path: HKCU\Software\Microsoft\Windows\CurrentVersion\CrossDeviceResume\Configuration
       name: IsResumeAllowed
       type: DWord
       old_value: "0"

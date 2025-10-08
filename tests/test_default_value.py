@@ -13,7 +13,7 @@ logger = getLogger(__name__)
 DEFINITIONS_FILE = Path("src/winconfig/definitions/winutil_definitions.yaml")
 definitions = DefinitionContainer.model_validate(
     yaml.safe_load(DEFINITIONS_FILE.read_text())
-).root[:30]
+).root
 
 
 @pytest.mark.parametrize("definition", definitions, ids=[d.name for d in definitions])
@@ -27,7 +27,7 @@ def test_default_resitory(definition: Definition):
             current_value = str(int(current_value))
 
         assert str(current_value) == str(registry.old_value), (
-            f"[{truncate(f'{registry.path}\\{registry.name}')}]'s value '{current_value}' != '{registry.old_value}'"
+            f"[{shorten(f'{registry.path}\\{registry.name}')}]'s value '{current_value}' != '{registry.old_value}'"
         )
 
 
@@ -65,5 +65,6 @@ def run_powershell_command(command: str):
     return result
 
 
-def truncate(s: str, width: int = 50, placeholder: str = "...") -> str:
+def shorten(s: str, width: int = 50, placeholder: str = "...") -> str:
+    s = s.replace("Registry::", "")
     return s if len(s) <= width else s[: width - len(placeholder)] + placeholder
