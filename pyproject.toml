@@ -69,6 +69,7 @@ combine-as-imports = true
 ]
 "tests/**.py" = [
     "ANN201",  # flake8-annotations[missing-return-type-undocumented-public-function]
+    "PLR1714", # Pylint-Refactor[repeated-equality-comparison]
     "PLR2004", # Pylint-Refactor[magic-value-comparison]
     "S101",    # flake8-bandit[assert]
 ]
