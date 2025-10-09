@@ -1,5 +1,3 @@
-import re
-import subprocess
 from pathlib import Path
 from typing import Literal
 
@@ -8,6 +6,7 @@ import yaml
 from winconfig.model.config import Config, ConfigContainer
 from winconfig.model.definition import DefinitionContainer
 from winconfig.model.task import Task
+from winconfig.powershell.process import PowershellProcess, PowershellRunspace
 
 RUNSPACE_POOL_TEMPLATE = r"""
 param([string[]]$Scripts)
@@ -55,7 +54,8 @@ class ConfigApplier:
 
     def apply(self, mode: ApplyMode) -> None:
         tasks = self.generate_tasks(mode)
-        self.execute_tasks(tasks)
+        powershell = PowershellProcess(PowershellRunspace.create_runspace())
+        results = [powershell.run(task.execution_script) for task in tasks]  # noqa: F841
 
     def generate_tasks(self, mode: ApplyMode) -> list[Task]:
         config_container = ConfigContainer.model_validate(
@@ -81,18 +81,3 @@ class ConfigApplier:
                 return True
             case "auto":
                 return config.revert
-
-    def execute_tasks(self, tasks: list[Task]) -> str:
-        ps_args = ", ".join(
-            f'"{re.sub(r'(["$])', r"`\1", task.execution_script)}"' for task in tasks
-        )
-        cmd = [
-            "powershell",
-            "-NoProfile",
-            "-ExecutionPolicy",
-            "Bypass",
-            "-Command",
-            f"& {{ {RUNSPACE_POOL_TEMPLATE} }} -Scripts @({ps_args})",
-        ]
-        result = subprocess.run(cmd, check=False, capture_output=True, text=True)
-        return result.stdout + "\n" + result.stderr

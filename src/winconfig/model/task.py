@@ -2,7 +2,7 @@ from typing import Self
 
 from pydantic import BaseModel
 
-from winconfig.generator.script_generator import ScriptGenerator
+from winconfig.powershell.script_generator import ScriptGenerator
 
 from .definition import Definition
 

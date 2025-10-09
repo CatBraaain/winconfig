@@ -3,8 +3,8 @@ from pathlib import Path
 import pytest
 import yaml
 
-from winconfig.generator.script_generator import ScriptGenerator
 from winconfig.model.definition import Definition, DefinitionContainer
+from winconfig.powershell.script_generator import ScriptGenerator
 
 from .conftest import PowershellProcess
 
