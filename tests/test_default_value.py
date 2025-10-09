@@ -1,4 +1,3 @@
-import subprocess
 from pathlib import Path
 
 import pytest
@@ -6,6 +5,8 @@ import yaml
 
 from winconfig.generator.script_generator import ScriptGenerator
 from winconfig.model.definition import Definition, DefinitionContainer
+
+from .conftest import PowershellProcess
 
 pytestmark = pytest.mark.xfail(
     strict=False, reason="Maybe someday, maybe never - under consideration"
@@ -19,12 +20,11 @@ definitions = DefinitionContainer.model_validate(
 
 
 @pytest.mark.parametrize("definition", definitions, ids=[d.name for d in definitions])
-def test_default_resitory(definition: Definition):
+def test_default_resitory(definition: Definition, powershell: PowershellProcess):
     for registry in definition.registries:
         script = ScriptGenerator.generate_get_registry_script(registry)
-        result = run_powershell_command(script)
+        current_value = powershell.send(script)
 
-        current_value = result.stdout.strip()
         if registry.type == "REG_DWORD":
             current_value = str(int(current_value))
 
@@ -34,37 +34,25 @@ def test_default_resitory(definition: Definition):
 
 
 @pytest.mark.parametrize("definition", definitions, ids=[d.name for d in definitions])
-def test_default_scheduled_task(definition: Definition):
+def test_default_scheduled_task(definition: Definition, powershell: PowershellProcess):
     for task in definition.scheduled_tasks:
         script = ScriptGenerator.generate_get_schtask_script(task)
-        result = run_powershell_command(script)
+        current_state = powershell.send(script)
 
-        current_state = result.stdout.strip()
         assert current_state == "<NotExist>" or current_state == task.old_state, (
             f"[{task.path}]'s state '{current_state}' != '{task.old_state}'"
         )
 
 
 @pytest.mark.parametrize("definition", definitions, ids=[d.name for d in definitions])
-def test_default_service(definition: Definition):
+def test_default_service(definition: Definition, powershell: PowershellProcess):
     for service in definition.services:
         script = ScriptGenerator.generate_get_service_script(service)
-        result = run_powershell_command(script)
+        current_type = powershell.send(script)
 
-        current_type = result.stdout.strip()
         assert (
             current_type == "<NotExist>" or current_type == service.old_startup_type
         ), f"[{service.name}]'s type '{current_type}' != '{service.old_startup_type}'"
-
-
-def run_powershell_command(command: str):
-    result = subprocess.run(
-        ["powershell", "-Command", command],
-        capture_output=True,
-        check=True,
-        text=True,
-    )
-    return result
 
 
 def shorten(s: str, width: int = 50, placeholder: str = "...") -> str:
