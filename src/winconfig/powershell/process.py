@@ -20,9 +20,17 @@ class PowershellProcess:
 
     def run(self, script: str) -> str:
         self.process.Commands.AddScript(script, True)
-        results = self.process.Invoke()
-        self.process.Commands.Clear()  # perf: remove added scripts
-        return "\n".join(map(str, results)).strip()
+        stdouts = self.process.Invoke()
+        output = "\n".join(map(str, stdouts)).strip()
+        self.process.Commands.Clear()
+
+        if self.process.Streams.Error.Count > 0:
+            stderrs = "\n".join(map(str, self.process.Streams.Error.ReadAll())).strip()
+            self.process.Streams.Error.Clear()
+            raise Exception(stderrs)
+
+        self.process.Streams.ClearStream()
+        return output
 
 
 class PowershellRunspace:
