@@ -1,8 +1,8 @@
 import pytest
 
-from winconfig.powershell.process import PowershellProcess, PowershellRunspace
+from winconfig.powershell.process import PowershellRunspace
 
 
 @pytest.fixture(scope="session")
-def powershell() -> PowershellProcess:
-    return PowershellProcess(PowershellRunspace.create_runspace())
+def powershell() -> PowershellRunspace:
+    return PowershellRunspace()

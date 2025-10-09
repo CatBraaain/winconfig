@@ -6,7 +6,7 @@ import yaml
 from winconfig.model.config import Config, ConfigContainer
 from winconfig.model.definition import DefinitionContainer
 from winconfig.model.task import Task
-from winconfig.powershell.process import PowershellProcess, PowershellRunspace
+from winconfig.powershell.process import PowershellRunspace
 
 RUNSPACE_POOL_TEMPLATE = r"""
 param([string[]]$Scripts)
@@ -54,7 +54,7 @@ class ConfigApplier:
 
     def apply(self, mode: ApplyMode) -> None:
         tasks = self.generate_tasks(mode)
-        powershell = PowershellProcess(PowershellRunspace.create_runspace())
+        powershell = PowershellRunspace()
         results = [powershell.run(task.execution_script) for task in tasks]  # noqa: F841
 
     def generate_tasks(self, mode: ApplyMode) -> list[Task]:

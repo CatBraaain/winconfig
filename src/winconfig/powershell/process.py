@@ -11,33 +11,28 @@ from System.Management.Automation import (  # pyright: ignore[reportMissingImpor
 )
 
 
-class PowershellProcess:
-    process: PowerShell
-
-    def __init__(self, runspace: Runspaces.Runspace) -> None:
-        self.process = PowerShell.Create()
-        self.process.Runspace = runspace
-
-    def run(self, script: str) -> str:
-        self.process.Commands.AddScript(script, True)
-        stdouts = self.process.Invoke()
-        output = "\n".join(map(str, stdouts)).strip()
-        self.process.Commands.Clear()
-
-        if self.process.Streams.Error.Count > 0:
-            stderrs = "\n".join(map(str, self.process.Streams.Error.ReadAll())).strip()
-            self.process.Streams.Error.Clear()
-            raise Exception(stderrs)
-
-        self.process.Streams.ClearStream()
-        return output
-
-
 class PowershellRunspace:
-    @staticmethod
-    def create_runspace() -> Runspaces.Runspace:
+    runspace: Runspaces.Runspace
+
+    def __init__(self) -> None:
         iss = Runspaces.InitialSessionState.CreateDefault()
         iss.ExecutionPolicy = ExecutionPolicy.Bypass
-        runspace = Runspaces.RunspaceFactory.CreateRunspace(iss)
-        runspace.Open()
-        return runspace
+        self.runspace = Runspaces.RunspaceFactory.CreateRunspace(iss)
+        self.runspace.Open()
+
+    def run(self, script: str) -> str:
+        process = PowerShell.Create()
+        process.Runspace = self.runspace
+        process.Commands.AddScript(script, True)
+
+        try:
+            stdouts = process.Invoke()
+            output = "\n".join(map(str, stdouts)).strip()
+
+            if process.Streams.Error.Count > 0:
+                stderrs = "\n".join(map(str, process.Streams.Error)).strip()
+                raise Exception(stderrs)
+
+            return output
+        finally:
+            process.Dispose()

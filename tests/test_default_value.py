@@ -6,7 +6,7 @@ import yaml
 from winconfig.model.definition import Definition, DefinitionContainer
 from winconfig.powershell.script_generator import ScriptGenerator
 
-from .conftest import PowershellProcess
+from .conftest import PowershellRunspace
 
 pytestmark = pytest.mark.xfail(
     strict=False, reason="Maybe someday, maybe never - under consideration"
@@ -20,7 +20,7 @@ definitions = DefinitionContainer.model_validate(
 
 
 @pytest.mark.parametrize("definition", definitions, ids=[d.name for d in definitions])
-def test_default_resitory(definition: Definition, powershell: PowershellProcess):
+def test_default_resitory(definition: Definition, powershell: PowershellRunspace):
     for registry in definition.registries:
         script = ScriptGenerator.generate_get_registry_script(registry)
         current_value = powershell.run(script)
@@ -31,7 +31,7 @@ def test_default_resitory(definition: Definition, powershell: PowershellProcess)
 
 
 @pytest.mark.parametrize("definition", definitions, ids=[d.name for d in definitions])
-def test_default_scheduled_task(definition: Definition, powershell: PowershellProcess):
+def test_default_scheduled_task(definition: Definition, powershell: PowershellRunspace):
     for task in definition.scheduled_tasks:
         script = ScriptGenerator.generate_get_schtask_script(task)
         current_state = powershell.run(script)
@@ -42,7 +42,7 @@ def test_default_scheduled_task(definition: Definition, powershell: PowershellPr
 
 
 @pytest.mark.parametrize("definition", definitions, ids=[d.name for d in definitions])
-def test_default_service(definition: Definition, powershell: PowershellProcess):
+def test_default_service(definition: Definition, powershell: PowershellRunspace):
     for service in definition.services:
         script = ScriptGenerator.generate_get_service_script(service)
         current_type = powershell.run(script)
