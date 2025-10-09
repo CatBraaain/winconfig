@@ -26,7 +26,7 @@ def test_default_resitory(definition: Definition, powershell: PowershellProcess)
         current_value = powershell.send(script)
 
         assert str(current_value) == str(registry.old_value), (
-            f"[{shorten(f'{registry.path}\\{registry.name}')}]'s value '{current_value}' != '{registry.old_value}'"
+            f"[{registry.path.replace('Registry::', '')}\\{registry.name}]'s value '{current_value}' != '{registry.old_value}'"
         )
 
 
@@ -50,8 +50,3 @@ def test_default_service(definition: Definition, powershell: PowershellProcess):
         assert (
             current_type == "<NotExist>" or current_type == service.old_startup_type
         ), f"[{service.name}]'s type '{current_type}' != '{service.old_startup_type}'"
-
-
-def shorten(s: str, width: int = 50, placeholder: str = "...") -> str:
-    s = s.replace("Registry::", "")
-    return s if len(s) <= width else s[: width - len(placeholder)] + placeholder
