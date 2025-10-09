@@ -25,9 +25,6 @@ def test_default_resitory(definition: Definition, powershell: PowershellProcess)
         script = ScriptGenerator.generate_get_registry_script(registry)
         current_value = powershell.send(script)
 
-        if registry.type == "REG_DWORD":
-            current_value = str(int(current_value))
-
         assert str(current_value) == str(registry.old_value), (
             f"[{shorten(f'{registry.path}\\{registry.name}')}]'s value '{current_value}' != '{registry.old_value}'"
         )
