@@ -23,7 +23,7 @@ definitions = DefinitionContainer.model_validate(
 def test_default_resitory(definition: Definition, powershell: PowershellProcess):
     for registry in definition.registries:
         script = ScriptGenerator.generate_get_registry_script(registry)
-        current_value = powershell.send(script)
+        current_value = powershell.run(script)
 
         assert str(current_value) == str(registry.old_value), (
             f"[{registry.path.replace('Registry::', '')}\\{registry.name}]'s value '{current_value}' != '{registry.old_value}'"
@@ -34,7 +34,7 @@ def test_default_resitory(definition: Definition, powershell: PowershellProcess)
 def test_default_scheduled_task(definition: Definition, powershell: PowershellProcess):
     for task in definition.scheduled_tasks:
         script = ScriptGenerator.generate_get_schtask_script(task)
-        current_state = powershell.send(script)
+        current_state = powershell.run(script)
 
         assert current_state == "<NotExist>" or current_state == task.old_state, (
             f"[{task.path}]'s state '{current_state}' != '{task.old_state}'"
@@ -45,7 +45,7 @@ def test_default_scheduled_task(definition: Definition, powershell: PowershellPr
 def test_default_service(definition: Definition, powershell: PowershellProcess):
     for service in definition.services:
         script = ScriptGenerator.generate_get_service_script(service)
-        current_type = powershell.send(script)
+        current_type = powershell.run(script)
 
         assert (
             current_type == "<NotExist>" or current_type == service.old_startup_type

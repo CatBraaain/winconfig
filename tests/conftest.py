@@ -1,27 +1,41 @@
-import re
-
+import clr
 import pytest
-from pexpect.popen_spawn import PopenSpawn
+
+dll_path = r"C:\Windows\Microsoft.NET\assembly\GAC_MSIL\System.Management.Automation\v4.0_3.0.0.0__31bf3856ad364e35\System.Management.Automation.dll"
+clr.AddReference(dll_path)  # pyright: ignore[reportAttributeAccessIssue]
+from Microsoft.PowerShell import (  # pyright: ignore[reportMissingImports]  # noqa: E402
+    ExecutionPolicy,
+)
+from System.Management.Automation import (  # pyright: ignore[reportMissingImports]  # noqa: E402
+    PowerShell,
+    Runspaces,
+)
 
 
 class PowershellProcess:
-    process: PopenSpawn
-    left_prompt: re.Pattern = re.compile(rb"PS .*> ")
+    process: PowerShell
 
-    def __init__(self) -> None:
-        self.process = PopenSpawn(
-            "powershell -NoExit -Command 'chcp 65001'", encoding="utf-8"
-        )
-        self.process.expect(self.left_prompt, timeout=3)
+    def __init__(self, runspace: Runspaces.Runspace) -> None:
+        self.process = PowerShell.Create()
+        self.process.Runspace = runspace
 
-    def send(self, cmd: str, timeout: int = 10) -> str:
-        self.process.sendline(cmd.replace("\n", ""))
-        self.process.expect(self.left_prompt, timeout=timeout)
+    def run(self, script: str) -> str:
+        self.process.Commands.AddScript(script, True)
+        results = self.process.Invoke()
+        self.process.Commands.Clear()  # perf: remove added scripts
+        return "\n".join(map(str, results)).strip()
 
-        output = self.process.before or ""
-        return "\n".join(output.splitlines()[1:]).strip()
+
+class PowershellRunspace:
+    @staticmethod
+    def create_runspace() -> Runspaces.Runspace:
+        iss = Runspaces.InitialSessionState.CreateDefault()
+        iss.ExecutionPolicy = ExecutionPolicy.Bypass
+        runspace = Runspaces.RunspaceFactory.CreateRunspace(iss)
+        runspace.Open()
+        return runspace
 
 
 @pytest.fixture(scope="session")
 def powershell() -> PowershellProcess:
-    return PowershellProcess()
+    return PowershellProcess(PowershellRunspace.create_runspace())
