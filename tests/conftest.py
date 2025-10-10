@@ -32,3 +32,11 @@ def ensure_sandbox(powershell: PowershellRunspace):
 @pytest.fixture(scope="session")
 def powershell() -> PowershellRunspace:
     return PowershellRunspace()
+
+
+@pytest.fixture(
+    params=[False, True],
+    ids=["[apply]", "[revert]"],
+)
+def revert(request: pytest.FixtureRequest):
+    return request.param
