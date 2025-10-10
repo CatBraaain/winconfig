@@ -13,12 +13,14 @@ from System.Management.Automation import (  # pyright: ignore[reportMissingImpor
 
 class PowershellRunspace:
     runspace: Runspaces.Runspace
+    version: int
 
     def __init__(self) -> None:
         iss = Runspaces.InitialSessionState.CreateDefault()
         iss.ExecutionPolicy = ExecutionPolicy.Bypass
         self.runspace = Runspaces.RunspaceFactory.CreateRunspace(iss)
         self.runspace.Open()
+        self.version = self.runspace.Version.Major
 
     def run(self, script: str) -> str:
         process = PowerShell.Create()

@@ -38,10 +38,20 @@ class ScriptGenerator:
             }}
         """
         set_entry = rf"""
-            Set-ItemProperty -Path "{registry.path}" -Name "{registry.name}" -Type "{registry.type}" -Value "{value}" -Force -ErrorAction SilentlyContinue | Out-Null
+            try {{
+                Set-ItemProperty -Path "{registry.path}" -Name "{registry.name}" -Type "{registry.type}" -Value "{value}" -Force -ErrorAction Stop | Out-Null
+            }}
+            catch [System.UnauthorizedAccessException] {{
+                "<AccessDenied>"
+            }}
         """
         remove_entry = rf"""
-            Remove-ItemProperty -Path "{registry.path}" -Name "{registry.name}" -Force -ErrorAction SilentlyContinue | Out-Null
+            try {{
+                Remove-ItemProperty -Path "{registry.path}" -Name "{registry.name}" -Force -ErrorAction Stop | Out-Null
+            }}
+            catch [System.Management.Automation.PSArgumentException] {{
+                "<NoExist>"
+            }}
         """
         script = ensure_key + (set_entry if value != "<NotExist>" else remove_entry)
 
@@ -66,10 +76,20 @@ class ScriptGenerator:
     def generate_set_schtask_script(schtask: ScheduledTask, revert: bool) -> str:
         state = schtask.resolve_value(revert)
         enable_task = f"""
-            Enable-ScheduledTask -TaskName "{schtask.path}" -ErrorAction SilentlyContinue
+            try {{
+                Enable-ScheduledTask -TaskName "{schtask.path}" -ErrorAction Stop | Out-Null
+            }}
+            catch [Microsoft.Management.Infrastructure.CimException] {{
+                "<NotExist>"
+            }}
         """
         disable_task = f"""
-            Disable-ScheduledTask -TaskName "{schtask.path}" -ErrorAction SilentlyContinue
+            try {{
+                Disable-ScheduledTask -TaskName "{schtask.path}" -ErrorAction Stop | Out-Null
+            }}
+            catch [Microsoft.Management.Infrastructure.CimException] {{
+                "<NotExist>"
+            }}
         """
         script = enable_task if state == "Enabled" else disable_task
         return dedent(script)
@@ -78,7 +98,8 @@ class ScriptGenerator:
     def generate_get_schtask_script(schtask: ScheduledTask) -> str:
         get_task = f"""
             $taskState = Get-ScheduledTask | ? {{$_.TaskPath + $_.TaskName -eq "\\" + "{schtask.path}"}} | % {{$_.State}}
-            $taskState = if ($taskState) {{ $taskState }} else {{ "<NotExist>" }}
+            if ($taskState -eq $null) {{ $taskState = "<NotExist>" }}
+            if ($taskState -eq "Ready") {{ $taskState = "Enabled" }}
             $taskState
         """
         return dedent(get_task)
@@ -86,16 +107,43 @@ class ScriptGenerator:
     @staticmethod
     def generate_set_service_script(service: Service, revert: bool) -> str:
         startup_type = service.resolve_value(revert)
-        script = f"""
-            Set-Service -Name "{service.name}" -StartupType "{startup_type}" -ErrorAction SilentlyContinue
+
+        service_name = f"""
+            $serviceName = "{service.name}"
         """
+        service_name_by_glob = f"""
+            $service = @(Get-Service -Name "{service.name}" -ErrorAction Stop)[0]
+            if ($service -eq $null) {{ "<NotExist>"; return }}
+            $serviceName = $service.Name
+        """
+        body = f"""
+            try {{
+                Set-Service -Name "$serviceName" -StartupType "{startup_type.replace("DelayedStart", "")}" -ErrorAction Stop | Out-Null
+            }}
+            catch [System.Management.Automation.ParameterBindingException] {{
+                throw
+            }}
+            catch [System.InvalidOperationException] {{
+                "<NotExist>"
+            }}
+            catch [Microsoft.PowerShell.Commands.ServiceCommandException] {{
+                "<AccessDenied>"
+            }}
+        """
+        script = (
+            service_name if "*" not in service.name else service_name_by_glob
+        ) + body
         return dedent(script)
 
     @staticmethod
     def generate_get_service_script(service: Service) -> str:
         script = f"""
             try {{
-                (Get-Service -Name "{service.name}" -ErrorAction Stop).StartType
+                $startupType = (Get-Service -Name "{service.name}" -ErrorAction Stop).StartType
+                $isDelayed = (Get-ItemProperty "Registry::HKLM\\SYSTEM\\CurrentControlSet\\Services\\{service.name}").DelayedAutostart
+                if ($startupType -eq "Automatic" -and $isDelayed -eq 1) {{ $startupType = "AutomaticDelayedStart" }}
+                if ($startupType -eq $null) {{ $startupType = "<NotExist>" }}
+                $startupType
             }}
             catch [Microsoft.PowerShell.Commands.ServiceCommandException] {{
                 "<NotExist>"
