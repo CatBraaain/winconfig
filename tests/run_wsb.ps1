@@ -5,7 +5,7 @@ param([string]$Headless = $false)
 
 $runAs = $(if ($isHeadless) { "System" } else { "ExistingLogin" })
 
-wsb stop --id (wsb list)
+wsb stop --id (wsb list) 2>&1 | Out-Null
 echo "Opening sandbox ${id}"
 $id = (wsb start --raw | ConvertFrom-Json).Id
 wsb share --id $id --host-path . --sandbox-path C:\winconfig-readonly
