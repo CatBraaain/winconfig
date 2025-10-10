@@ -50,7 +50,7 @@ class WinutilDefinitionContainer(RootModel):
 
     def to_definitions(self) -> DefinitionContainer:
         return DefinitionContainer(
-            [
+            definitions=[
                 Definition(
                     name=re.sub(r"WPFToggle|WPFTweaks", "", name),
                     description=winutil_def.Description,

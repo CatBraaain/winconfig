@@ -174,9 +174,14 @@
       "type": "string"
     }
   },
-  "default": [],
-  "items": {
-    "$ref": "#/$defs/Definition"
+  "properties": {
+    "definitions": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/Definition"
+      },
+      "type": "array"
+    }
   },
-  "type": "array"
+  "type": "object"
 }

@@ -9,7 +9,7 @@ from winconfig.powershell.process import PowershellRunspace
 DEFINITIONS_FILE = Path("src/winconfig/definitions/winutil_definition.yaml")
 definitions = DefinitionContainer.model_validate(
     yaml.safe_load(DEFINITIONS_FILE.read_text())
-).root
+).definitions
 
 
 @pytest.fixture(params=definitions, ids=[d.name for d in definitions])

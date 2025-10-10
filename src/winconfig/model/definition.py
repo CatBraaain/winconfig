@@ -5,7 +5,6 @@ from pydantic import (
     BaseModel,
     ConfigDict,
     PlainSerializer,
-    RootModel,
     field_validator,
 )
 
@@ -123,11 +122,11 @@ class Definition(BaseModel):
     )
 
 
-class DefinitionContainer(RootModel):
-    root: list[Definition] = []
+class DefinitionContainer(BaseModel):
+    definitions: list[Definition] = []
 
     def get_definition(self, task_name: str) -> Definition:
-        definition = next((x for x in self.root if x.name == task_name), None)
+        definition = next((x for x in self.definitions if x.name == task_name), None)
         if definition is None:
             raise ValueError(f"Definition {task_name} not found")
         return definition
