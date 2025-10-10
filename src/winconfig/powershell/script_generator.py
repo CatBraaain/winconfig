@@ -38,10 +38,10 @@ class ScriptGenerator:
             }}
         """
         set_entry = rf"""
-            Set-ItemProperty -Path "{registry.path}" -Name {registry.name} -Type {registry.type} -Value {value} -Force -ErrorAction SilentlyContinue | Out-Null
+            Set-ItemProperty -Path "{registry.path}" -Name "{registry.name}" -Type "{registry.type}" -Value "{value}" -Force -ErrorAction SilentlyContinue | Out-Null
         """
         remove_entry = rf"""
-            Remove-ItemProperty -Path "{registry.path}" -Name {registry.name} -Force -ErrorAction SilentlyContinue | Out-Null
+            Remove-ItemProperty -Path "{registry.path}" -Name "{registry.name}" -Force -ErrorAction SilentlyContinue | Out-Null
         """
         script = ensure_key + (set_entry if value != "<NotExist>" else remove_entry)
 
@@ -51,7 +51,7 @@ class ScriptGenerator:
     def generate_get_registry_script(registry: Registry) -> str:
         get_entry = rf"""
             try {{
-                Get-ItemPropertyValue -Path "{registry.path}" -Name {registry.name} -ErrorAction Stop
+                Get-ItemPropertyValue -Path "{registry.path}" -Name "{registry.name}" -ErrorAction Stop
             }}
             catch [System.Management.Automation.ItemNotFoundException] {{
                 "<NotExist>"
@@ -87,7 +87,7 @@ class ScriptGenerator:
     def generate_set_service_script(service: Service, revert: bool) -> str:
         startup_type = service.resolve_value(revert)
         script = f"""
-            Set-Service -Name "{service.name}" -StartupType {startup_type} -ErrorAction SilentlyContinue
+            Set-Service -Name "{service.name}" -StartupType "{startup_type}" -ErrorAction SilentlyContinue
         """
         return dedent(script)
 
