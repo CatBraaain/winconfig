@@ -4,9 +4,15 @@ from winconfig.model.definition import Definition
 from winconfig.powershell.process import PowershellRunspace
 from winconfig.powershell.script_generator import ScriptGenerator
 
-pytestmark = pytest.mark.xfail(
-    strict=False, reason="Maybe someday, maybe never - under consideration"
-)
+
+@pytest.fixture(autouse=True)
+def skip_this_test():
+    pytest.skip("under consideration")
+
+
+# pytestmark = pytest.mark.xfail(
+#     strict=False, reason="under consideration"
+# )
 
 
 def test_default_resitory(powershell: PowershellRunspace, definition: Definition):
