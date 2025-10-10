@@ -46,7 +46,7 @@ def create_winutil_definitions() -> None:
         )
     )
 
-    dist = "src/winconfig/definitions/winutil_definitions.yaml"
+    dist = "src/winconfig/definitions/winutil_definition.yaml"
     Path(dist).write_text(yaml_str, encoding="utf-8")
     subprocess.run(["bunx", "prettier", "--write", f'"{dist}"'], check=True)
 

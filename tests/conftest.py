@@ -6,7 +6,7 @@ import yaml
 from winconfig.model.definition import DefinitionContainer
 from winconfig.powershell.process import PowershellRunspace
 
-DEFINITIONS_FILE = Path("src/winconfig/definitions/winutil_definitions.yaml")
+DEFINITIONS_FILE = Path("src/winconfig/definitions/winutil_definition.yaml")
 definitions = DefinitionContainer.model_validate(
     yaml.safe_load(DEFINITIONS_FILE.read_text())
 ).root
