@@ -4,9 +4,8 @@ import pytest
 import yaml
 
 from winconfig.model.definition import Definition, DefinitionContainer
+from winconfig.powershell.process import PowershellRunspace
 from winconfig.powershell.script_generator import ScriptGenerator
-
-from .conftest import PowershellRunspace
 
 pytestmark = pytest.mark.xfail(
     strict=False, reason="Maybe someday, maybe never - under consideration"
