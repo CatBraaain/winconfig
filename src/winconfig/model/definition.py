@@ -55,6 +55,10 @@ class Registry(BaseModel):
             )
         return value
 
+    @property
+    def full_path(self) -> str:
+        return f"{self.path.replace('Registry::', '')}\\{self.name}"
+
 
 type ScheduledTaskState = Literal["Enabled", "Disabled"]
 

@@ -15,7 +15,7 @@ def test_default_resitory(powershell: PowershellRunspace, definition: Definition
         current_value = powershell.run(script)
         expected_value = registry.old_value
         assert str(current_value) == str(expected_value), (
-            f"[{registry.path.replace('Registry::', '')}\\{registry.name}]'s value '{current_value}' != '{expected_value}'"
+            f"[{registry.full_path}]'s value '{current_value}' != '{expected_value}'"
         )
 
 
