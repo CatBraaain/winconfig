@@ -1,6 +1,20 @@
-import pytest
+from pathlib import Path
 
+import pytest
+import yaml
+
+from winconfig.model.definition import DefinitionContainer
 from winconfig.powershell.process import PowershellRunspace
+
+DEFINITIONS_FILE = Path("src/winconfig/definitions/winutil_definitions.yaml")
+definitions = DefinitionContainer.model_validate(
+    yaml.safe_load(DEFINITIONS_FILE.read_text())
+).root
+
+
+@pytest.fixture(params=definitions, ids=[d.name for d in definitions])
+def definition(request: pytest.FixtureRequest):
+    return request.param
 
 
 @pytest.fixture(autouse=True, scope="session")

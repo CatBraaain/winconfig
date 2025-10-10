@@ -1,9 +1,6 @@
-from pathlib import Path
-
 import pytest
-import yaml
 
-from winconfig.model.definition import Definition, DefinitionContainer
+from winconfig.model.definition import Definition
 from winconfig.powershell.process import PowershellRunspace
 from winconfig.powershell.script_generator import ScriptGenerator
 
@@ -12,14 +9,7 @@ pytestmark = pytest.mark.xfail(
 )
 
 
-DEFINITIONS_FILE = Path("src/winconfig/definitions/winutil_definitions.yaml")
-definitions = DefinitionContainer.model_validate(
-    yaml.safe_load(DEFINITIONS_FILE.read_text())
-).root
-
-
-@pytest.mark.parametrize("definition", definitions, ids=[d.name for d in definitions])
-def test_default_resitory(definition: Definition, powershell: PowershellRunspace):
+def test_default_resitory(powershell: PowershellRunspace, definition: Definition):
     for registry in definition.registries:
         script = ScriptGenerator.generate_get_registry_script(registry)
         current_value = powershell.run(script)
@@ -29,8 +19,7 @@ def test_default_resitory(definition: Definition, powershell: PowershellRunspace
         )
 
 
-@pytest.mark.parametrize("definition", definitions, ids=[d.name for d in definitions])
-def test_default_scheduled_task(definition: Definition, powershell: PowershellRunspace):
+def test_default_scheduled_task(powershell: PowershellRunspace, definition: Definition):
     for task in definition.scheduled_tasks:
         script = ScriptGenerator.generate_get_schtask_script(task)
         current_state = powershell.run(script)
@@ -40,8 +29,7 @@ def test_default_scheduled_task(definition: Definition, powershell: PowershellRu
         )
 
 
-@pytest.mark.parametrize("definition", definitions, ids=[d.name for d in definitions])
-def test_default_service(definition: Definition, powershell: PowershellRunspace):
+def test_default_service(powershell: PowershellRunspace, definition: Definition):
     for service in definition.services:
         script = ScriptGenerator.generate_get_service_script(service)
         current_type = powershell.run(script)
