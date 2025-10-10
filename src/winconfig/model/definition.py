@@ -59,6 +59,9 @@ class Registry(BaseModel):
     def full_path(self) -> str:
         return f"{self.path.replace('Registry::', '')}\\{self.name}"
 
+    def resolve_value(self, revert: bool) -> str:
+        return self.new_value if not revert else self.old_value
+
 
 type ScheduledTaskState = Literal["Enabled", "Disabled"]
 
@@ -67,6 +70,9 @@ class ScheduledTask(BaseModel):
     path: str
     old_state: ScheduledTaskState
     new_state: ScheduledTaskState
+
+    def resolve_value(self, revert: bool) -> str:
+        return self.new_state if not revert else self.old_state
 
 
 type ServiceStartupType = Literal[
@@ -83,10 +89,16 @@ class Service(BaseModel):
     old_startup_type: ServiceStartupType
     new_startup_type: ServiceStartupType
 
+    def resolve_value(self, revert: bool) -> str:
+        return self.new_startup_type if not revert else self.old_startup_type
+
 
 class Script(BaseModel):
     apply: str | None
     revert: str | None
+
+    def resolve_value(self, revert: bool) -> str | None:
+        return self.apply if not revert else self.revert
 
 
 class Definition(BaseModel):

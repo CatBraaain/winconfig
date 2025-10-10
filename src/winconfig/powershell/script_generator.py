@@ -30,7 +30,7 @@ class ScriptGenerator:
 
     @staticmethod
     def generate_set_registry_script(registry: Registry, revert: bool) -> str:
-        value = registry.new_value if not revert else registry.old_value
+        value = registry.resolve_value(revert)
 
         ensure_key = rf"""
             If (!(Test-Path "{registry.path}")) {{
@@ -38,7 +38,7 @@ class ScriptGenerator:
             }}
         """
         set_entry = rf"""
-            Set-ItemProperty -Path "{registry.path}" -Name {registry.name} -Type {registry.type} -Value {registry.new_value} -Force -ErrorAction SilentlyContinue | Out-Null
+            Set-ItemProperty -Path "{registry.path}" -Name {registry.name} -Type {registry.type} -Value {value} -Force -ErrorAction SilentlyContinue | Out-Null
         """
         remove_entry = rf"""
             Remove-ItemProperty -Path "{registry.path}" -Name {registry.name} -Force -ErrorAction SilentlyContinue | Out-Null
@@ -64,7 +64,7 @@ class ScriptGenerator:
 
     @staticmethod
     def generate_set_schtask_script(schtask: ScheduledTask, revert: bool) -> str:
-        state = schtask.new_state if not revert else schtask.old_state
+        state = schtask.resolve_value(revert)
         enable_task = f"""
             Enable-ScheduledTask -TaskName "{schtask.path}" -ErrorAction SilentlyContinue
         """
@@ -85,9 +85,7 @@ class ScriptGenerator:
 
     @staticmethod
     def generate_set_service_script(service: Service, revert: bool) -> str:
-        startup_type = (
-            service.new_startup_type if not revert else service.old_startup_type
-        )
+        startup_type = service.resolve_value(revert)
         script = f"""
             Set-Service -Name "{service.name}" -StartupType {startup_type} -ErrorAction SilentlyContinue
         """
@@ -107,5 +105,5 @@ class ScriptGenerator:
 
     @staticmethod
     def generate_script_script(input_script: Script, revert: bool) -> str:
-        script = (input_script.apply if not revert else input_script.revert) or ""
+        script = input_script.resolve_value(revert) or ""
         return dedent(script)
