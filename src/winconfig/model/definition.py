@@ -68,7 +68,7 @@ type ScheduledTaskState = Literal["Enabled", "Disabled"]
 
 
 class ScheduledTask(BaseModel):
-    path: str
+    full_path: str
     old_state: ScheduledTaskState
     new_state: ScheduledTaskState
 

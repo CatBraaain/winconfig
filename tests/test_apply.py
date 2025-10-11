@@ -38,7 +38,7 @@ def test_apply_scheduled_task(
         )
         expected_value = schtask.resolve_value(revert)
         assert current_state in (NOT_EXIST, expected_value), (
-            f"[{schtask.path}]'s state '{current_state}' != '{expected_value}'"
+            f"[{schtask.full_path}]'s state '{current_state}' != '{expected_value}'"
         )
 
 

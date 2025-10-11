@@ -131,7 +131,7 @@ class WinutilDefinitionContainer(BaseModel):
                     ],
                     scheduled_tasks=[
                         ScheduledTask(
-                            path=scheduled_task.Name,
+                            full_path=scheduled_task.Name,
                             old_state=scheduled_task.OriginalState,
                             new_state=scheduled_task.State,
                         )

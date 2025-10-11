@@ -107,7 +107,7 @@
     },
     "ScheduledTask": {
       "properties": {
-        "path": {
+        "full_path": {
           "type": "string"
         },
         "old_state": {
@@ -117,7 +117,7 @@
           "$ref": "#/$defs/ScheduledTaskState"
         }
       },
-      "required": ["path", "old_state", "new_state"],
+      "required": ["full_path", "old_state", "new_state"],
       "type": "object"
     },
     "ScheduledTaskState": {

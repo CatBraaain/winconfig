@@ -78,7 +78,7 @@ class ScriptGenerator:
         state = schtask.resolve_value(revert)
         enable_task = f"""
             try {{
-                Enable-ScheduledTask -TaskName "{schtask.path}" -ErrorAction Stop | Out-Null
+                Enable-ScheduledTask -TaskName "{schtask.full_path}" -ErrorAction Stop | Out-Null
             }}
             catch [Microsoft.Management.Infrastructure.CimException] {{
                 "{NOT_EXIST}"
@@ -86,7 +86,7 @@ class ScriptGenerator:
         """
         disable_task = f"""
             try {{
-                Disable-ScheduledTask -TaskName "{schtask.path}" -ErrorAction Stop | Out-Null
+                Disable-ScheduledTask -TaskName "{schtask.full_path}" -ErrorAction Stop | Out-Null
             }}
             catch [Microsoft.Management.Infrastructure.CimException] {{
                 "{NOT_EXIST}"
@@ -98,7 +98,7 @@ class ScriptGenerator:
     @staticmethod
     def generate_get_schtask_script(schtask: ScheduledTask) -> str:
         get_task = f"""
-            $taskState = Get-ScheduledTask | ? {{$_.TaskPath + $_.TaskName -eq "\\" + "{schtask.path}"}} | % {{$_.State}}
+            $taskState = Get-ScheduledTask | ? {{$_.TaskPath + $_.TaskName -eq "\\" + "{schtask.full_path}"}} | % {{$_.State}}
             if ($taskState -eq $null) {{ $taskState = "{NOT_EXIST}" }}
             if ($taskState -eq "Ready") {{ $taskState = "Enabled" }}
             $taskState

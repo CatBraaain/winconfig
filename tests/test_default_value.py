@@ -32,7 +32,7 @@ def test_default_scheduled_task(powershell: PowershellRunspace, definition: Defi
         current_state = powershell.run(script)
         expected_state = task.old_state
         assert current_state in (NOT_EXIST, expected_state), (
-            f"[{task.path}]'s state '{current_state}' != '{expected_state}'"
+            f"[{task.full_path}]'s state '{current_state}' != '{expected_state}'"
         )
 
 

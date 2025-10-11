@@ -1256,43 +1256,43 @@ definitions:
         old_value: "1"
         new_value: "0"
     scheduled_tasks:
-      - path: Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser
+      - full_path: Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser
         old_state: Enabled
         new_state: Disabled
-      - path: Microsoft\Windows\Application Experience\ProgramDataUpdater
+      - full_path: Microsoft\Windows\Application Experience\ProgramDataUpdater
         old_state: Enabled
         new_state: Disabled
-      - path: Microsoft\Windows\Autochk\Proxy
+      - full_path: Microsoft\Windows\Autochk\Proxy
         old_state: Enabled
         new_state: Disabled
-      - path: Microsoft\Windows\Customer Experience Improvement Program\Consolidator
+      - full_path: Microsoft\Windows\Customer Experience Improvement Program\Consolidator
         old_state: Enabled
         new_state: Disabled
-      - path: Microsoft\Windows\Customer Experience Improvement Program\UsbCeip
+      - full_path: Microsoft\Windows\Customer Experience Improvement Program\UsbCeip
         old_state: Enabled
         new_state: Disabled
-      - path: Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector
+      - full_path: Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector
         old_state: Enabled
         new_state: Disabled
-      - path: Microsoft\Windows\Feedback\Siuf\DmClient
+      - full_path: Microsoft\Windows\Feedback\Siuf\DmClient
         old_state: Enabled
         new_state: Disabled
-      - path: Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload
+      - full_path: Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload
         old_state: Enabled
         new_state: Disabled
-      - path: Microsoft\Windows\Windows Error Reporting\QueueReporting
+      - full_path: Microsoft\Windows\Windows Error Reporting\QueueReporting
         old_state: Enabled
         new_state: Disabled
-      - path: Microsoft\Windows\Application Experience\MareBackup
+      - full_path: Microsoft\Windows\Application Experience\MareBackup
         old_state: Enabled
         new_state: Disabled
-      - path: Microsoft\Windows\Application Experience\StartupAppTask
+      - full_path: Microsoft\Windows\Application Experience\StartupAppTask
         old_state: Enabled
         new_state: Disabled
-      - path: Microsoft\Windows\Application Experience\PcaPatchDbTask
+      - full_path: Microsoft\Windows\Application Experience\PcaPatchDbTask
         old_state: Enabled
         new_state: Disabled
-      - path: Microsoft\Windows\Maps\MapsUpdateTask
+      - full_path: Microsoft\Windows\Maps\MapsUpdateTask
         old_state: Enabled
         new_state: Disabled
     script:
