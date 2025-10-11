@@ -21,7 +21,7 @@ if (!$isHeadless) {
 $command = "robocopy C:\winconfig-readonly C:\winconfig /s /xf .* /xd .*"
 echo "> $command"
 wsb exec --id $id --command $command --run-as $runAs
-echo "*exit code 1: OK"
+echo "*hint: exit code 1 is OK"
 
 $command = "powershell -ExecutionPolicy ByPass -c """"irm https://astral.sh/uv/install.ps1 | iex"""""
 echo "> $command"
