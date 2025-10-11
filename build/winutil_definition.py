@@ -1,7 +1,11 @@
 import re
-from typing import Literal
+import subprocess
+from pathlib import Path
+from typing import Any, Literal, Self
 
-from pydantic import BaseModel, RootModel
+import httpx
+import yaml
+from pydantic import BaseModel
 
 from winconfig.model.definition import (
     Definition,
@@ -46,10 +50,53 @@ class WinutilDefinition(BaseModel):
     UndoScript: list[str] | None = None
 
 
-class WinutilDefinitionContainer(RootModel):
-    root: dict[str, WinutilDefinition]
+class WinutilDefinitionContainer(BaseModel):
+    definition_dict: dict[str, WinutilDefinition]
+    preload_scripts: list[str]
 
-    def to_definitions(self) -> DefinitionContainer:
+    @classmethod
+    def from_winutil_url(
+        cls, definition_url: str, preload_script_urls: list[str]
+    ) -> Self:
+        res = httpx.get(definition_url)
+        invalid_json = res.text
+        fixed_json = re.sub(
+            r"(\"(?:InvokeScript|UndoScript)\": \[\n\s*[\"'])([\s\S]*?)([\"']\n\s*],?\n)",
+            lambda x: x.group(1)
+            + re.sub(r"(\n\r? {0,6})", r"\\n", x.group(2).lstrip())
+            + x.group(3),
+            invalid_json,
+        )
+        preload_scripts = [httpx.get(url).text for url in preload_script_urls]
+        return cls(
+            definition_dict=yaml.safe_load(fixed_json), preload_scripts=preload_scripts
+        )
+
+    def output_yaml_file(self, dist_path: str) -> None:
+        definitions = self.to_winconfig_definition()
+
+        def str_presenter(dumper: Any, data: Any) -> Any:  # noqa: ANN401
+            if len(data.splitlines()) > 1:
+                return dumper.represent_scalar("tag:yaml.org,2002:str", data, style="|")
+            return dumper.represent_scalar("tag:yaml.org,2002:str", data)
+
+        yaml.add_representer(str, str_presenter)
+
+        schema_ref_str = "# yaml-language-server: $schema=./schema.json"
+        yaml_str = (
+            schema_ref_str
+            + "\n\n"
+            + yaml.dump(
+                definitions.model_dump(exclude_defaults=True),
+                allow_unicode=True,
+                sort_keys=False,
+            )
+        )
+
+        Path(dist_path).write_text(yaml_str, encoding="utf-8")
+        subprocess.run(["bunx", "prettier", "--write", f'"{dist_path}"'], check=True)
+
+    def to_winconfig_definition(self) -> DefinitionContainer:
         return DefinitionContainer(
             definitions=[
                 Definition(
@@ -91,7 +138,8 @@ class WinutilDefinitionContainer(RootModel):
                         revert="\n".join(winutil_def.UndoScript or []).rstrip() or None,
                     ),
                 )
-                for name, winutil_def in self.root.items()
+                for name, winutil_def in self.definition_dict.items()
                 if winutil_def.Description != ""
-            ]
+            ],
+            preload_scripts=self.preload_scripts,
         )
