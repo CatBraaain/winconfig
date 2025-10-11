@@ -44,6 +44,9 @@ class ConfigApplier:
     config_path: str
     definition_path: str
 
+    config_container: ConfigContainer
+    definition_container: DefinitionContainer
+
     def __init__(
         self,
         config_path: str,
@@ -51,25 +54,25 @@ class ConfigApplier:
     ) -> None:
         self.config_path = config_path
         self.definition_path = definition_path
+        self.config_container = ConfigContainer.model_validate(
+            yaml.safe_load(Path(self.config_path).read_text())
+        )
+        self.definition_container = DefinitionContainer.model_validate(
+            yaml.safe_load(Path(self.definition_path).read_text())
+        )
 
     def apply(self, mode: ApplyMode) -> None:
         tasks = self.generate_tasks(mode)
-        powershell = PowershellRunspace()
+        powershell = PowershellRunspace(preload=self.definition_container.preload)
         results = [powershell.run(task.execution_script) for task in tasks]  # noqa: F841
 
     def generate_tasks(self, mode: ApplyMode) -> list[Task]:
-        config_container = ConfigContainer.model_validate(
-            yaml.safe_load(Path(self.config_path).read_text())
-        )
-        definition_container = DefinitionContainer.model_validate(
-            yaml.safe_load(Path(self.definition_path).read_text())
-        )
         tasks = [
             Task.from_definition(
-                definition=definition_container.get_definition(config.name),
+                definition=self.definition_container.get_definition(config.name),
                 revert=self._resolve_revert(mode, config),
             )
-            for config in config_container.root
+            for config in self.config_container.root
         ]
         return tasks
 

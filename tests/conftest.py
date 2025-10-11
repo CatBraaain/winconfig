@@ -7,9 +7,10 @@ from winconfig.model.definition import DefinitionContainer
 from winconfig.powershell.process import PowershellRunspace
 
 DEFINITIONS_FILE = Path("src/winconfig/definitions/winutil_definition.yaml")
-definitions = DefinitionContainer.model_validate(
+definition_container = DefinitionContainer.model_validate(
     yaml.safe_load(DEFINITIONS_FILE.read_text())
-).definitions
+)
+definitions = definition_container.definitions
 
 
 @pytest.fixture(params=definitions, ids=[d.name for d in definitions])
@@ -31,7 +32,7 @@ def ensure_sandbox(powershell: PowershellRunspace):
 
 @pytest.fixture(scope="session")
 def powershell() -> PowershellRunspace:
-    return PowershellRunspace()
+    return PowershellRunspace(preload=definition_container.preload)
 
 
 @pytest.fixture(
