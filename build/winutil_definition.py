@@ -5,7 +5,7 @@ from typing import Any, Literal, Self
 
 import httpx
 import yaml
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from winconfig.model.definition import (
     Definition,
@@ -48,6 +48,18 @@ class WinutilDefinition(BaseModel):
     service: list[WinutilService] = []
     InvokeScript: list[str] | None = None
     UndoScript: list[str] | None = None
+
+    Type: Any | None = None
+    Order: Any | None = None
+    panel: Any | None = None
+    category: Any | None = None
+    link: Any | None = None
+    ButtonWidth: Any | None = None
+    appx: Any | None = None
+    Checked: Any | None = None
+    ComboItems: Any | None = None
+
+    model_config = ConfigDict(extra="forbid")
 
 
 class WinutilDefinitionContainer(BaseModel):
