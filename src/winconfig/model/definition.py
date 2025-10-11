@@ -8,6 +8,8 @@ from pydantic import (
     field_validator,
 )
 
+from winconfig.powershell.constants import NotExistType
+
 # Why use PowerShell instead of reg.exe, sc.exe, or schtasks.exe?
 # ---------------------------------------------------------------
 # Tools like reg.exe, sc.exe, and schtasks.exe are effective for setting values
@@ -31,8 +33,8 @@ class Registry(BaseModel):
     path: Annotated[str, PlainSerializer(lambda x: x.replace("Registry::", ""))]
     name: str
     type: RegistryValueKind
-    old_value: str | Literal["<NotExist>"]  # noqa: PYI051
-    new_value: str | Literal["<NotExist>"]  # noqa: PYI051
+    old_value: str | NotExistType
+    new_value: str | NotExistType
 
     @field_validator("path", mode="after")
     @staticmethod

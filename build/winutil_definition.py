@@ -13,6 +13,7 @@ from winconfig.model.definition import (
     Service,
     ServiceStartupType,
 )
+from winconfig.powershell.constants import NOT_EXIST
 
 
 class WinutilRegistry(BaseModel):
@@ -60,10 +61,10 @@ class WinutilDefinitionContainer(RootModel):
                             name=registry.Name,
                             type=registry.Type,
                             old_value=registry.OriginalValue.replace(
-                                "<RemoveEntry>", "<NotExist>"
+                                "<RemoveEntry>", NOT_EXIST
                             ),
                             new_value=registry.Value.replace(
-                                "<RemoveEntry>", "<NotExist>"
+                                "<RemoveEntry>", NOT_EXIST
                             ),
                         )
                         for registry in winutil_def.registry

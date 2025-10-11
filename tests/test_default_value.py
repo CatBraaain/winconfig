@@ -1,6 +1,7 @@
 import pytest
 
 from winconfig.model.definition import Definition
+from winconfig.powershell.constants import NOT_EXIST
 from winconfig.powershell.process import PowershellRunspace
 from winconfig.powershell.script_generator import ScriptGenerator
 
@@ -30,7 +31,7 @@ def test_default_scheduled_task(powershell: PowershellRunspace, definition: Defi
         script = ScriptGenerator.generate_get_schtask_script(task)
         current_state = powershell.run(script)
         expected_state = task.old_state
-        assert current_state == "<NotExist>" or current_state == expected_state, (
+        assert current_state in (NOT_EXIST, expected_state), (
             f"[{task.path}]'s state '{current_state}' != '{expected_state}'"
         )
 
@@ -40,6 +41,6 @@ def test_default_service(powershell: PowershellRunspace, definition: Definition)
         script = ScriptGenerator.generate_get_service_script(service)
         current_type = powershell.run(script)
         expected_type = service.old_startup_type
-        assert current_type == "<NotExist>" or current_type == expected_type, (
+        assert current_type in (NOT_EXIST, expected_type), (
             f"[{service.name}]'s type '{current_type}' != '{expected_type}'"
         )

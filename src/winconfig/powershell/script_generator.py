@@ -7,6 +7,7 @@ from winconfig.model.definition import (
     Script,
     Service,
 )
+from winconfig.powershell.constants import ACCESS_DENIED, NOT_EXIST
 
 
 class ScriptGenerator:
@@ -42,7 +43,7 @@ class ScriptGenerator:
                 Set-ItemProperty -Path "{registry.path}" -Name "{registry.name}" -Type "{registry.type}" -Value "{value}" -Force -ErrorAction Stop | Out-Null
             }}
             catch [System.UnauthorizedAccessException] {{
-                "<AccessDenied>"
+                "{ACCESS_DENIED}"
             }}
         """
         remove_entry = rf"""
@@ -50,10 +51,10 @@ class ScriptGenerator:
                 Remove-ItemProperty -Path "{registry.path}" -Name "{registry.name}" -Force -ErrorAction Stop | Out-Null
             }}
             catch [System.Management.Automation.PSArgumentException] {{
-                "<NoExist>"
+                "{NOT_EXIST}"
             }}
         """
-        script = ensure_key + (set_entry if value != "<NotExist>" else remove_entry)
+        script = ensure_key + (set_entry if value != NOT_EXIST else remove_entry)
 
         return dedent(script)
 
@@ -64,10 +65,10 @@ class ScriptGenerator:
                 Get-ItemPropertyValue -Path "{registry.path}" -Name "{registry.name}" -ErrorAction Stop
             }}
             catch [System.Management.Automation.ItemNotFoundException] {{
-                "<NotExist>"
+                "{NOT_EXIST}"
             }}
             catch [System.Management.Automation.PSArgumentException] {{
-                "<NotExist>"
+                "{NOT_EXIST}"
             }}
         """
         return dedent(get_entry)
@@ -80,7 +81,7 @@ class ScriptGenerator:
                 Enable-ScheduledTask -TaskName "{schtask.path}" -ErrorAction Stop | Out-Null
             }}
             catch [Microsoft.Management.Infrastructure.CimException] {{
-                "<NotExist>"
+                "{NOT_EXIST}"
             }}
         """
         disable_task = f"""
@@ -88,7 +89,7 @@ class ScriptGenerator:
                 Disable-ScheduledTask -TaskName "{schtask.path}" -ErrorAction Stop | Out-Null
             }}
             catch [Microsoft.Management.Infrastructure.CimException] {{
-                "<NotExist>"
+                "{NOT_EXIST}"
             }}
         """
         script = enable_task if state == "Enabled" else disable_task
@@ -98,7 +99,7 @@ class ScriptGenerator:
     def generate_get_schtask_script(schtask: ScheduledTask) -> str:
         get_task = f"""
             $taskState = Get-ScheduledTask | ? {{$_.TaskPath + $_.TaskName -eq "\\" + "{schtask.path}"}} | % {{$_.State}}
-            if ($taskState -eq $null) {{ $taskState = "<NotExist>" }}
+            if ($taskState -eq $null) {{ $taskState = "{NOT_EXIST}" }}
             if ($taskState -eq "Ready") {{ $taskState = "Enabled" }}
             $taskState
         """
@@ -113,7 +114,7 @@ class ScriptGenerator:
         """
         service_name_by_glob = f"""
             $service = @(Get-Service -Name "{service.name}" -ErrorAction Stop)[0]
-            if ($service -eq $null) {{ "<NotExist>"; return }}
+            if ($service -eq $null) {{ "{NOT_EXIST}"; return }}
             $serviceName = $service.Name
         """
         body = f"""
@@ -124,10 +125,10 @@ class ScriptGenerator:
                 throw
             }}
             catch [System.InvalidOperationException] {{
-                "<NotExist>"
+                "{NOT_EXIST}"
             }}
             catch [Microsoft.PowerShell.Commands.ServiceCommandException] {{
-                "<AccessDenied>"
+                "{ACCESS_DENIED}"
             }}
         """
         script = (
@@ -142,11 +143,11 @@ class ScriptGenerator:
                 $startupType = (Get-Service -Name "{service.name}" -ErrorAction Stop).StartType
                 $isDelayed = (Get-ItemProperty "Registry::HKLM\\SYSTEM\\CurrentControlSet\\Services\\{service.name}").DelayedAutostart
                 if ($startupType -eq "Automatic" -and $isDelayed -eq 1) {{ $startupType = "AutomaticDelayedStart" }}
-                if ($startupType -eq $null) {{ $startupType = "<NotExist>" }}
+                if ($startupType -eq $null) {{ $startupType = "{NOT_EXIST}" }}
                 $startupType
             }}
             catch [Microsoft.PowerShell.Commands.ServiceCommandException] {{
-                "<NotExist>"
+                "{NOT_EXIST}"
             }}
         """
         return dedent(script)

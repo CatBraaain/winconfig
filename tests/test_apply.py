@@ -1,6 +1,7 @@
 import pytest
 
 from winconfig.model.definition import Definition
+from winconfig.powershell.constants import ACCESS_DENIED, NOT_EXIST
 from winconfig.powershell.process import PowershellRunspace
 from winconfig.powershell.script_generator import ScriptGenerator
 
@@ -12,7 +13,7 @@ def test_apply_resitory(
         res = powershell.run(
             ScriptGenerator.generate_set_registry_script(registry, revert=revert)
         )
-        if res == "<AccessDenied>":
+        if res == ACCESS_DENIED:
             # pytest.skip("Access denied: need workaround")
             continue
 
@@ -36,7 +37,7 @@ def test_apply_scheduled_task(
             ScriptGenerator.generate_get_schtask_script(schtask)
         )
         expected_value = schtask.resolve_value(revert)
-        assert current_state == "<NotExist>" or current_state == expected_value, (
+        assert current_state in (NOT_EXIST, expected_value), (
             f"[{schtask.path}]'s state '{current_state}' != '{expected_value}'"
         )
 
@@ -48,11 +49,8 @@ def test_apply_service(
         res = powershell.run(
             ScriptGenerator.generate_set_service_script(service, revert=revert)
         )
-        if res == "<AccessDenied>":
+        if res == ACCESS_DENIED:
             # pytest.skip("Access denied: need workaround")
-            continue
-        if res == "<NotSupported>":
-            # pytest.skip("Not supported: try with PowerShell 7")
             continue
         current_type = powershell.run(
             ScriptGenerator.generate_get_service_script(service)
@@ -65,7 +63,7 @@ def test_apply_service(
             # pytest.skip("Not supported: try with PowerShell 7")
             continue
 
-        assert current_type == "<NotExist>" or current_type == expected_type, (
+        assert current_type in (NOT_EXIST, expected_type), (
             f"[{service.name}]'s type '{current_type}' != '{expected_type}'"
         )
 
