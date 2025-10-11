@@ -75,6 +75,14 @@ class ScheduledTask(BaseModel):
     def resolve_value(self, revert: bool) -> str:
         return self.new_state if not revert else self.old_state
 
+    @property
+    def path(self) -> str:
+        return self.full_path.rsplit("\\", 1)[0]
+
+    @property
+    def name(self) -> str:
+        return self.full_path.rsplit("\\", 1)[1]
+
 
 type ServiceStartupType = Literal[
     "Automatic",
