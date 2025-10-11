@@ -64,7 +64,7 @@ class WinutilDefinition(BaseModel):
 
 class WinutilDefinitionContainer(BaseModel):
     definition_dict: dict[str, WinutilDefinition]
-    preload_scripts: list[str]
+    preload: str | None = None
 
     @classmethod
     def from_winutil_url(
@@ -79,9 +79,10 @@ class WinutilDefinitionContainer(BaseModel):
             + x.group(3),
             invalid_json,
         )
-        preload_scripts = [httpx.get(url).text for url in preload_script_urls]
+        preload = "\n".join([httpx.get(url).text for url in preload_script_urls])
         return cls(
-            definition_dict=yaml.safe_load(fixed_json), preload_scripts=preload_scripts
+            definition_dict=yaml.safe_load(fixed_json),
+            preload=preload,
         )
 
     def output_yaml_file(self, dist_path: str) -> None:
@@ -153,5 +154,5 @@ class WinutilDefinitionContainer(BaseModel):
                 for name, winutil_def in self.definition_dict.items()
                 if winutil_def.Description != ""
             ],
-            preload_scripts=self.preload_scripts,
+            preload=self.preload,
         )

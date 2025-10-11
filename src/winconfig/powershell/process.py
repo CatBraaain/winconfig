@@ -25,10 +25,10 @@ class PowershellRunspace:
     runspace: Runspaces.Runspace
     version: int
 
-    def __init__(self, preload_functions: list[str] | None = None) -> None:
+    def __init__(self, preload: str | None = None) -> None:
         iss = Runspaces.InitialSessionState.CreateDefault()
-        if preload_functions:
-            function_defs = self.extract_functions(preload_functions)
+        if preload:
+            function_defs = self.extract_functions(preload)
             for function_def in function_defs.root:
                 iss.Commands.Add(
                     Runspaces.SessionStateFunctionEntry(
@@ -41,10 +41,10 @@ class PowershellRunspace:
         self.version = self.runspace.Version.Major
 
     @classmethod
-    def extract_functions(cls, preload_functions: list[str]) -> FunctionDefinitions:
+    def extract_functions(cls, preload: str) -> FunctionDefinitions:
         script = f"""
             $oldCommandNames = Get-Command | % {{ $_.Name }}
-            $funcDef = @'{"\n" + "\n".join(preload_functions).replace("'", "\\'") + "\n"}'@
+            $funcDef = @'{"\n" + preload.replace("'", "\\'") + "\n"}'@
             iex $funcDef
             $commands = Get-Command
             $newCommands = @($commands | ? {{ $oldCommandNames -notcontains $_.Name }})

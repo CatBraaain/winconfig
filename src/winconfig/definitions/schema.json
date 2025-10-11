@@ -184,12 +184,16 @@
       },
       "type": "array"
     },
-    "preload_scripts": {
-      "default": [],
-      "items": {
-        "type": "string"
-      },
-      "type": "array"
+    "preload": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
     }
   },
   "type": "object"

@@ -126,7 +126,7 @@ class Definition(BaseModel):
 
 class DefinitionContainer(BaseModel):
     definitions: list[Definition] = []
-    preload_scripts: list[str] = []
+    preload: str | None = None
 
     def get_definition(self, task_name: str) -> Definition:
         definition = next((x for x in self.definitions if x.name == task_name), None)
