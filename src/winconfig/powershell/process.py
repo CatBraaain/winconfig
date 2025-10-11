@@ -25,7 +25,7 @@ class PowershellRunspace:
     def run(self, script: str) -> str:
         process = PowerShell.Create()
         process.Runspace = self.runspace
-        process.Commands.AddScript(script, True)
+        process.AddScript(script, True)
 
         try:
             stdouts = process.Invoke()
