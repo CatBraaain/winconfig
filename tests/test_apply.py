@@ -75,5 +75,4 @@ def test_apply_script(
         pytest.skip("Windows Sandbox not supporting Hibernation")
 
     script = ScriptGenerator.generate_script_script(definition.script, revert=revert)
-    print(script)
     powershell.run(script)
