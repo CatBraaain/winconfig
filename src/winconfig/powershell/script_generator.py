@@ -98,8 +98,12 @@ class ScriptGenerator:
     @staticmethod
     def generate_get_schtask_script(schtask: ScheduledTask) -> str:
         get_task = f"""
-            $taskState = (Get-ScheduledTask -TaskPath "{schtask.path}" -TaskName "{schtask.name}").State
-            if ($taskState -eq $null) {{ $taskState = "{NOT_EXIST}" }}
+            try {{
+                $taskState = (Get-ScheduledTask -TaskPath "{schtask.path}" -TaskName "{schtask.name}" -ErrorAction Stop).State
+            }}
+            catch [Microsoft.PowerShell.Cmdletization.Cim.CimJobException] {{
+                "{NOT_EXIST}"; return
+            }}
             if ($taskState -eq "Ready") {{ $taskState = "Enabled" }}
             $taskState
         """
