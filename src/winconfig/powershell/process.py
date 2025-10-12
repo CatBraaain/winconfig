@@ -44,7 +44,7 @@ class PowershellRunspace:
     def extract_functions(cls, preload: str) -> FunctionDefinitions:
         script = f"""
             $oldCommandNames = Get-Command | % {{ $_.Name }}
-            $funcDef = @'{"\n" + preload.replace("'", "\\'") + "\n"}'@
+            $funcDef = @'{"\n" + preload + "\n"}'@
             iex $funcDef
             $commands = Get-Command
             $newCommands = @($commands | ? {{ $oldCommandNames -notcontains $_.Name }})
