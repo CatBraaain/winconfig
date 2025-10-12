@@ -1,4 +1,5 @@
 import re
+from pathlib import Path
 from typing import Annotated, Literal
 
 from pydantic import (
@@ -76,12 +77,16 @@ class ScheduledTask(BaseModel):
         return self.new_state if not revert else self.old_state
 
     @property
+    def formatted_path(self) -> str:
+        return "\\" + self.full_path.removeprefix("\\")
+
+    @property
     def path(self) -> str:
-        return self.full_path.rsplit("\\", 1)[0]
+        return str(Path(self.formatted_path).parent.as_posix()) + "/"
 
     @property
     def name(self) -> str:
-        return self.full_path.rsplit("\\", 1)[1]
+        return Path(self.formatted_path).name
 
 
 type ServiceStartupType = Literal[
