@@ -78,17 +78,21 @@ class ScriptGenerator:
         state = schtask.resolve_value(revert)
         enable_task = f"""
             try {{
-                Enable-ScheduledTask -TaskName "{schtask.full_path}" -ErrorAction Stop | Out-Null
+                $service = New-Object -ComObject "Schedule.Service"
+                $service.Connect()
+                $service.GetFolder("\").GetTask("{schtask.full_path}").Enabled = $true
             }}
-            catch [Microsoft.Management.Infrastructure.CimException] {{
+            catch [System.IO.FileNotFoundException] {{
                 "{NOT_EXIST}"
             }}
         """
         disable_task = f"""
             try {{
-                Disable-ScheduledTask -TaskName "{schtask.full_path}" -ErrorAction Stop | Out-Null
+                $service = New-Object -ComObject "Schedule.Service"
+                $service.Connect()
+                $service.GetFolder("\").GetTask("{schtask.full_path}").Enabled = $false
             }}
-            catch [Microsoft.Management.Infrastructure.CimException] {{
+            catch [System.IO.FileNotFoundException] {{
                 "{NOT_EXIST}"
             }}
         """
@@ -99,13 +103,15 @@ class ScriptGenerator:
     def generate_get_schtask_script(schtask: ScheduledTask) -> str:
         get_task = f"""
             try {{
-                $taskState = (Get-ScheduledTask -TaskPath "{schtask.path}" -TaskName "{schtask.name}" -ErrorAction Stop).State
+                $service = New-Object -ComObject "Schedule.Service"
+                $service.Connect()
+                $enabled = $service.GetFolder("\").GetTask("{schtask.full_path}").Enabled
+                $ret = if ($enabled) {{ "Enabled" }} else {{ "Disabled" }}
+                $ret
             }}
-            catch [Microsoft.PowerShell.Cmdletization.Cim.CimJobException] {{
-                "{NOT_EXIST}"; return
+            catch [System.IO.FileNotFoundException] {{
+                "{NOT_EXIST}"
             }}
-            if ($taskState -eq "Ready") {{ $taskState = "Enabled" }}
-            $taskState
         """
         return dedent(get_task)
 
