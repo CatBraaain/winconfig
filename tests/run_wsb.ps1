@@ -35,6 +35,6 @@ $command = "uv sync"
 echo "> $command"
 wsb exec --id $id --command $command --run-as $runAs --working-directory C:\winconfig
 
-$command = "cmd.exe /c start cmd.exe /k """"uv run pytest"""""
+$command = "cmd.exe /c start cmd.exe /k """"uv run pytest --durations 0"""""
 echo "> $command"
 wsb exec --id $id --command $command --run-as $runAs --working-directory C:\winconfig
