@@ -76,27 +76,17 @@ class ScriptGenerator:
     @staticmethod
     def generate_set_schtask_script(schtask: ScheduledTask, revert: bool) -> str:
         state = schtask.resolve_value(revert)
-        enable_task = f"""
+        enabled = "$true" if state == "Enabled" else "$false"
+        script = f"""
             try {{
                 $service = New-Object -ComObject "Schedule.Service"
                 $service.Connect()
-                $service.GetFolder("\").GetTask("{schtask.full_path}").Enabled = $true
+                $service.GetFolder("\").GetTask("{schtask.full_path}").Enabled = {enabled}
             }}
             catch [System.IO.FileNotFoundException] {{
                 "{NOT_EXIST}"
             }}
         """
-        disable_task = f"""
-            try {{
-                $service = New-Object -ComObject "Schedule.Service"
-                $service.Connect()
-                $service.GetFolder("\").GetTask("{schtask.full_path}").Enabled = $false
-            }}
-            catch [System.IO.FileNotFoundException] {{
-                "{NOT_EXIST}"
-            }}
-        """
-        script = enable_task if state == "Enabled" else disable_task
         return dedent(script)
 
     @staticmethod
