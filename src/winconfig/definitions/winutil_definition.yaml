@@ -2512,60 +2512,6 @@ definitions:
         old_value: "0"
         new_value: "1"
 preload: |
-  function Invoke-WPFTweakPS7{
-          <#
-      .SYNOPSIS
-          This will edit the config file of the Windows Terminal Replacing the Powershell 5 to Powershell 7 and install Powershell 7 if necessary
-      .PARAMETER action
-          PS7:           Configures Powershell 7 to be the default Terminal
-          PS5:           Configures Powershell 5 to be the default Terminal
-      #>
-      param (
-          [ValidateSet("PS7", "PS5")]
-          [string]$action
-      )
-
-      switch ($action) {
-          "PS7"{
-              if (Test-Path -Path "$env:ProgramFiles\PowerShell\7") {
-                  Write-Host "Powershell 7 is already installed."
-              } else {
-                  Write-Host "Installing Powershell 7..."
-                  Install-WinUtilProgramWinget -Action Install -Programs @("Microsoft.PowerShell")
-              }
-              $targetTerminalName = "PowerShell"
-          }
-          "PS5"{
-              $targetTerminalName = "Windows PowerShell"
-          }
-      }
-      # Check if the Windows Terminal is installed and return if not (Prerequisite for the following code)
-      if (-not (Get-Command "wt" -ErrorAction SilentlyContinue)) {
-          Write-Host "Windows Terminal not installed. Skipping Terminal preference"
-          return
-      }
-      # Check if the Windows Terminal settings.json file exists and return if not (Prereqisite for the following code)
-      $settingsPath = "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
-      if (-not (Test-Path -Path $settingsPath)) {
-          Write-Host "Windows Terminal Settings file not found at $settingsPath"
-          return
-      }
-
-      Write-Host "Settings file found."
-      $settingsContent = Get-Content -Path $settingsPath | ConvertFrom-Json
-      $ps7Profile = $settingsContent.profiles.list | Where-Object { $_.name -eq $targetTerminalName }
-      if ($ps7Profile) {
-          $settingsContent.defaultProfile = $ps7Profile.guid
-          $updatedSettings = $settingsContent | ConvertTo-Json -Depth 100
-          Set-Content -Path $settingsPath -Value $updatedSettings
-          Write-Host "Default profile updated to " -NoNewline
-          Write-Host "$targetTerminalName " -ForegroundColor White -NoNewline
-          Write-Host "using the name attribute."
-      } else {
-          Write-Host "No PowerShell 7 profile found in Windows Terminal settings using the name attribute."
-      }
-  }
-
   function Invoke-WinUtilExplorerUpdate {
       <#
       .SYNOPSIS
@@ -2608,4 +2554,65 @@ preload: |
           taskkill.exe /F /IM "explorer.exe"
           Start-Process "explorer.exe"
       }
+  }
+
+  function Invoke-WPFRunspace {
+
+      <#
+
+      .SYNOPSIS
+          Creates and invokes a runspace using the given scriptblock and argumentlist
+
+      .PARAMETER ScriptBlock
+          The scriptblock to invoke in the runspace
+
+      .PARAMETER ArgumentList
+          A list of arguments to pass to the runspace
+
+      .PARAMETER ParameterList
+          A list of named parameters that should be provided.
+      .EXAMPLE
+          Invoke-WPFRunspace `
+              -ScriptBlock $sync.ScriptsInstallPrograms `
+              -ArgumentList "Installadvancedip,Installbitwarden" `
+
+          Invoke-WPFRunspace`
+              -ScriptBlock $sync.ScriptsInstallPrograms `
+              -ParameterList @(("PackagesToInstall", @("Installadvancedip,Installbitwarden")),("ChocoPreference", $true))
+      #>
+
+      [CmdletBinding()]
+      Param (
+          $ScriptBlock,
+          $ArgumentList,
+          $ParameterList,
+          $DebugPreference
+      )
+
+      # Create a PowerShell instance
+      $script:powershell = [powershell]::Create()
+
+      # Add Scriptblock and Arguments to runspace
+      $script:powershell.AddScript($ScriptBlock)
+      $script:powershell.AddArgument($ArgumentList)
+
+      foreach ($parameter in $ParameterList) {
+          $script:powershell.AddParameter($parameter[0], $parameter[1])
+      }
+      $script:powershell.AddArgument($DebugPreference)  # Pass DebugPreference to the script block
+      $script:powershell.RunspacePool = $sync.runspace
+
+      # Execute the RunspacePool
+      $script:handle = $script:powershell.BeginInvoke()
+
+      # Clean up the RunspacePool threads when they are complete, and invoke the garbage collector to clean up the memory
+      if ($script:handle.IsCompleted) {
+          $script:powershell.EndInvoke($script:handle)
+          $script:powershell.Dispose()
+          $sync.runspace.Dispose()
+          $sync.runspace.Close()
+          [System.GC]::Collect()
+      }
+      # Return the handle
+      return $handle
   }
