@@ -17,6 +17,9 @@
         }
       ],
       "properties": {
+        "id": {
+          "type": "string"
+        },
         "name": {
           "type": "string"
         },
@@ -52,7 +55,7 @@
           }
         }
       },
-      "required": ["name", "description"],
+      "required": ["id", "name", "description"],
       "type": "object"
     },
     "NotExistType": {

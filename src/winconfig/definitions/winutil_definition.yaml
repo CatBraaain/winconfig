@@ -1,7 +1,8 @@
 # yaml-language-server: $schema=./schema.json
 
 definitions:
-  - name: AH
+  - id: AH
+    name: AH
     description: This erases recent docs, clipboard, and run history.
     registries:
       - path: HKLM\SOFTWARE\Policies\Microsoft\Windows\System
@@ -19,7 +20,8 @@ definitions:
         type: DWord
         old_value: <NotExist>
         new_value: "0"
-  - name: Hiber
+  - id: Hiber
+    name: Hiber
     description:
       Hibernation is really meant for laptops as it saves what's in memory
       before turning the pc off. It really should never be used, but some people are
@@ -38,7 +40,8 @@ definitions:
     script:
       apply: powercfg.exe /hibernate off
       revert: powercfg.exe /hibernate on
-  - name: LaptopHibernation
+  - id: LaptopHibernation
+    name: LaptopHibernation
     description:
       Most modern laptops have connected standby enabled which drains the
       battery, this sets hibernation as default which will not drain the battery. See
@@ -73,7 +76,8 @@ definitions:
         Start-Process -FilePath powercfg -ArgumentList "/change standby-timeout-dc 15" -NoNewWindow -Wait
         Start-Process -FilePath powercfg -ArgumentList "/change monitor-timeout-ac 15" -NoNewWindow -Wait
         Start-Process -FilePath powercfg -ArgumentList "/change monitor-timeout-dc 15" -NoNewWindow -Wait
-  - name: Home
+  - id: Home
+    name: Home
     description:
       Disables HomeGroup - HomeGroup is a password-protected home networking
       service that lets you share your stuff with other PCs that are currently running
@@ -85,7 +89,8 @@ definitions:
       - name: HomeGroupProvider
         old_startup_type: Automatic
         new_startup_type: Manual
-  - name: Loc
+  - id: Loc
+    name: Loc
     description: Disables Location Tracking...DUH!
     registries:
       - path: HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location
@@ -108,7 +113,8 @@ definitions:
         type: DWord
         old_value: "1"
         new_value: "0"
-  - name: Services
+  - id: Services
+    name: Services
     description:
       Turns a bunch of system services to manual that don't need to be running
       all the time. This is pretty harmless as if the service is needed, it will simply
@@ -939,7 +945,8 @@ definitions:
       - name: wudfsvc
         old_startup_type: Manual
         new_startup_type: Manual
-  - name: BraveDebloat
+  - id: BraveDebloat
+    name: BraveDebloat
     description:
       Disables various annoyances like Brave Rewards,Leo AI,Crypto Wallet
       and VPN
@@ -964,7 +971,8 @@ definitions:
         type: DWord
         old_value: <NotExist>
         new_value: "0"
-  - name: EdgeDebloat
+  - id: EdgeDebloat
+    name: EdgeDebloat
     description:
       Disables various telemetry options, popups, and other annoyances in
       Edge.
@@ -1059,7 +1067,8 @@ definitions:
         type: DWord
         old_value: <NotExist>
         new_value: "0"
-  - name: ConsumerFeatures
+  - id: ConsumerFeatures
+    name: ConsumerFeatures
     description:
       Windows 10 will not automatically install any games, third-party apps,
       or application links from the Windows Store for the signed-in user. Some default
@@ -1070,7 +1079,8 @@ definitions:
         type: DWord
         old_value: <NotExist>
         new_value: "1"
-  - name: Tele
+  - id: Tele
+    name: Tele
     description:
       "Disables Microsoft Telemetry. Note: This will lock many Edge Browser
       settings. Microsoft spies heavily on you when using the Edge browser."
@@ -1329,7 +1339,8 @@ definitions:
           # Disable Defender Auto Sample Submission
           Set-MpPreference -SubmitSamplesConsent 2 -ErrorAction SilentlyContinue | Out-Null
       revert: null
-  - name: Wifi
+  - id: Wifi
+    name: Wifi
     description:
       Wi-Fi Sense is a spying service that phones home all nearby scanned
       Wi-Fi networks and your current geographic location.
@@ -1344,7 +1355,8 @@ definitions:
         type: DWord
         old_value: "1"
         new_value: "0"
-  - name: UTC
+  - id: UTC
+    name: UTC
     description:
       Essential for computers that are dual booting. Fixes the time sync
       with Linux Systems.
@@ -1354,7 +1366,8 @@ definitions:
         type: DWord
         old_value: "0"
         new_value: "1"
-  - name: RemoveHome
+  - id: RemoveHome
+    name: RemoveHome
     description: Removes the Home from Explorer and sets This PC as default
     script:
       apply: |-
@@ -1363,7 +1376,8 @@ definitions:
       revert: |-
         REG ADD "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}" /f /ve /t REG_SZ /d "CLSID_MSGraphHomeFolder"
         REG DELETE "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /f /v "LaunchTo"
-  - name: RemoveGallery
+  - id: RemoveGallery
+    name: RemoveGallery
     description: Removes the Gallery from Explorer and sets This PC as default
     script:
       apply: |-
@@ -1372,7 +1386,8 @@ definitions:
       revert: |-
         REG ADD "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}" /f /ve /t REG_SZ /d "{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}"
         REG DELETE "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /f /v "LaunchTo"
-  - name: Display
+  - id: Display
+    name: Display
     description:
       Sets the system preferences to performance. You can do this manually
       with sysdm.cpl as well.
@@ -1447,7 +1462,8 @@ definitions:
         Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name "UserPreferencesMask"
         -Type Binary -Value ([byte[]](144,18,3,128,16,0,0,0))
       revert: Remove-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name "UserPreferencesMask"
-  - name: DeBloat
+  - id: DeBloat
+    name: DeBloat
     description:
       USE WITH CAUTION!!!!! This will remove ALL Microsoft store apps other
       than the essentials to make winget work. Games installed by MS Store ARE INCLUDED!
@@ -1486,7 +1502,8 @@ definitions:
               $proc.WaitForExit()
           }
       revert: null
-  - name: RestorePoint
+  - id: RestorePoint
+    name: RestorePoint
     description:
       Creates a restore point at runtime in case a revert is needed from
       WinUtil modifications
@@ -1531,7 +1548,8 @@ definitions:
               Write-Host -ForegroundColor Green "System Restore Point Created Successfully"
           }
       revert: null
-  - name: EndTaskOnTaskbar
+  - id: EndTaskOnTaskbar
+    name: EndTaskOnTaskbar
     description: Enables option to end task when right clicking a program in the taskbar
     script:
       apply: |-
@@ -1558,14 +1576,16 @@ definitions:
 
         # Set the property, creating it if it doesn't exist
         New-ItemProperty -Path $path -Name $name -PropertyType DWord -Value $value -Force | Out-Null
-  - name: Powershell7
+  - id: Powershell7
+    name: Powershell7
     description:
       This will edit the config file of the Windows Terminal replacing PowerShell
       5 with PowerShell 7 and installing PS7 if necessary
     script:
       apply: Invoke-WPFTweakPS7 -action "PS7"
       revert: Invoke-WPFTweakPS7 -action "PS5"
-  - name: Powershell7Tele
+  - id: Powershell7Tele
+    name: Powershell7Tele
     description:
       This will create an Environment Variable called 'POWERSHELL_TELEMETRY_OPTOUT'
       with a value of '1' which will tell Powershell 7 to not send Telemetry Data.
@@ -1576,7 +1596,8 @@ definitions:
       revert:
         "[Environment]::SetEnvironmentVariable('POWERSHELL_TELEMETRY_OPTOUT',
         '', 'Machine')"
-  - name: Storage
+  - id: Storage
+    name: Storage
     description: Storage Sense deletes temp files automatically.
     script:
       apply:
@@ -1585,7 +1606,8 @@ definitions:
       revert:
         Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy"
         -Name "01" -Value 1 -Type Dword -Force
-  - name: RemoveCopilot
+  - id: RemoveCopilot
+    name: RemoveCopilot
     description: Disables MS Copilot AI built into Windows since 23H2.
     registries:
       - path: HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsCopilot
@@ -1638,7 +1660,8 @@ definitions:
       revert: |-
         Write-Host "Install Copilot"
         winget install --name "Microsoft Copilot" --source msstore --accept-package-agreements --accept-source-agreements --silent
-  - name: RecallOff
+  - id: RecallOff
+    name: RecallOff
     description: Turn Recall off
     registries:
       - path: HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsAI
@@ -1665,7 +1688,8 @@ definitions:
         Write-Host "Enable Recall"
         DISM /Online /Enable-Feature /FeatureName:Recall /Quiet /NoRestart
         Write-Host "Please restart your computer in order for the changes to be fully applied."
-  - name: DisableLMS1
+  - id: DisableLMS1
+    name: DisableLMS1
     description:
       Intel LMS service is always listening on all ports and could be a huge
       security risk. There is no need to run LMS on home machines and even in the Enterprise
@@ -1713,7 +1737,8 @@ definitions:
           }
           Write-Host 'Intel LMS vPro service has been disabled, removed, and blocked.';
       revert: Write-Host "LMS vPro needs to be redownloaded from intel.com"
-  - name: DisableWpbtExecution
+  - id: DisableWpbtExecution
+    name: DisableWpbtExecution
     description:
       If enabled then allows your computer vendor to execute a program each
       time it boots. It enables computer vendors to force install anti-theft software,
@@ -1725,7 +1750,8 @@ definitions:
         type: DWord
         old_value: <NotExist>
         new_value: "1"
-  - name: RemoveOnedrive
+  - id: RemoveOnedrive
+    name: RemoveOnedrive
     description: Moves OneDrive files to Default Home Folders and Uninstalls it.
     script:
       apply: |-
@@ -1821,7 +1847,8 @@ definitions:
       revert: |-
         Write-Host "Install OneDrive"
         Start-Process -FilePath winget -ArgumentList "install -e --accept-source-agreements --accept-package-agreements --silent Microsoft.OneDrive " -NoNewWindow -Wait
-  - name: RazerBlock
+  - id: RazerBlock
+    name: RazerBlock
     description:
       "Blocks ALL Razer Software installations. The hardware works fine without
       any software. WARNING: this will also block all Windows third-party driver installations."
@@ -1849,7 +1876,8 @@ definitions:
         $RazerPath = "C:\Windows\Installer\Razer"
             Remove-Item $RazerPath -Recurse -Force
             New-Item -Path "C:\Windows\Installer\" -Name "Razer" -ItemType "directory"
-  - name: DisableNotifications
+  - id: DisableNotifications
+    name: DisableNotifications
     description: Disables all Notifications INCLUDING Calendar
     registries:
       - path: HKCU\Software\Policies\Microsoft\Windows\Explorer
@@ -1862,7 +1890,8 @@ definitions:
         type: DWord
         old_value: "1"
         new_value: "0"
-  - name: DebloatAdobe
+  - id: DebloatAdobe
+    name: DebloatAdobe
     description: Manages Adobe Services, Adobe Desktop Service, and Acrobat Updates
     services:
       - name: AGSService
@@ -1979,7 +2008,8 @@ definitions:
 
         RestoreCCService
         AcrobatUpdates
-  - name: BlockAdobeNet
+  - id: BlockAdobeNet
+    name: BlockAdobeNet
     description:
       "Reduce user interruptions by selectively blocking connections to Adobe's
       activation and telemetry servers. Credit: Ruddernation-Designs"
@@ -2078,7 +2108,8 @@ definitions:
         } catch {
             Write-Error "Failed to flush DNS cache. Error: $_"
         }
-  - name: RightClickMenu
+  - id: RightClickMenu
+    name: RightClickMenu
     description:
       Great Windows 11 tweak to bring back good context menus when right
       clicking things in explorer.
@@ -2092,21 +2123,24 @@ definitions:
         # Restarting Explorer in the Undo Script might not be necessary, as the Registry change without restarting Explorer does work, but just to make sure.
         Write-Host Restarting explorer.exe ...
         Stop-Process -Name "explorer" -Force
-  - name: DiskCleanup
+  - id: DiskCleanup
+    name: DiskCleanup
     description: "Runs Disk Cleanup on Drive C: and removes old Windows Updates."
     script:
       apply: |-
         cleanmgr.exe /d C: /VERYLOWDISK
         Dism.exe /online /Cleanup-Image /StartComponentCleanup /ResetBase
       revert: null
-  - name: DeleteTempFiles
+  - id: DeleteTempFiles
+    name: DeleteTempFiles
     description: Erases TEMP Folders
     script:
       apply: |-
         Get-ChildItem -Path "C:\Windows\Temp" *.* -Recurse | Remove-Item -Force -Recurse
         Get-ChildItem -Path $env:TEMP *.* -Recurse | Remove-Item -Force -Recurse
       revert: null
-  - name: DVR
+  - id: DVR
+    name: DVR
     description:
       GameDVR is a Windows App that is a dependency for some Store Games.
       I've never met someone that likes it, but it's there for the XBOX crowd.
@@ -2136,7 +2170,8 @@ definitions:
         type: DWord
         old_value: <NotExist>
         new_value: "0"
-  - name: IPv46
+  - id: IPv46
+    name: IPv46
     description:
       To set the IPv4 preference can have latency and security benefits on
       private networks where IPv6 is not configured.
@@ -2146,7 +2181,8 @@ definitions:
         type: DWord
         old_value: "0"
         new_value: "32"
-  - name: Teredo
+  - id: Teredo
+    name: Teredo
     description:
       Teredo network tunneling is a ipv6 feature that can cause additional
       latency, but may cause problems with some games
@@ -2159,7 +2195,8 @@ definitions:
     script:
       apply: netsh interface teredo set state disabled
       revert: netsh interface teredo set state default
-  - name: Disableipsix
+  - id: Disableipsix
+    name: Disableipsix
     description: Disables IPv6.
     registries:
       - path: HKLM\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters
@@ -2170,7 +2207,8 @@ definitions:
     script:
       apply: Disable-NetAdapterBinding -Name "*" -ComponentID ms_tcpip6
       revert: Enable-NetAdapterBinding -Name "*" -ComponentID ms_tcpip6
-  - name: DisableBGapps
+  - id: DisableBGapps
+    name: DisableBGapps
     description:
       Disables all Microsoft Store apps from running in the background, which
       has to be done individually since Win11
@@ -2180,7 +2218,8 @@ definitions:
         type: DWord
         old_value: "0"
         new_value: "1"
-  - name: DisableFSO
+  - id: DisableFSO
+    name: DisableFSO
     description:
       "Disables FSO in all applications. NOTE: This will disable Color Management
       in Exclusive Fullscreen"
@@ -2190,7 +2229,8 @@ definitions:
         type: DWord
         old_value: "0"
         new_value: "1"
-  - name: DarkMode
+  - id: DarkMode
+    name: DarkMode
     description: Enable/Disable Dark Mode.
     registries:
       - path: HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize
@@ -2214,7 +2254,8 @@ definitions:
         if ($sync.ThemeButton.Content -eq [char]0xF08C) {
           Invoke-WinutilThemeChange -theme "Auto"
         }
-  - name: BingSearch
+  - id: BingSearch
+    name: BingSearch
     description:
       If enable then includes web search results from Bing in your Start
       Menu search.
@@ -2224,7 +2265,8 @@ definitions:
         type: DWord
         old_value: "0"
         new_value: "1"
-  - name: NumLock
+  - id: NumLock
+    name: NumLock
     description: Toggle the Num Lock key state when your computer starts.
     registries:
       - path: HKU\.Default\Control Panel\Keyboard
@@ -2237,7 +2279,8 @@ definitions:
         type: DWord
         old_value: "0"
         new_value: "2"
-  - name: VerboseLogon
+  - id: VerboseLogon
+    name: VerboseLogon
     description:
       Show detailed messages during the login process for troubleshooting
       and diagnostics.
@@ -2247,7 +2290,8 @@ definitions:
         type: DWord
         old_value: "0"
         new_value: "1"
-  - name: StartMenuRecommendations
+  - id: StartMenuRecommendations
+    name: StartMenuRecommendations
     description:
       "If disabled then you will not see recommendations in the Start Menu.
       | Enables 'iseducationenvironment' | Relogin Required. | WARNING: This will
@@ -2268,7 +2312,8 @@ definitions:
         type: DWord
         old_value: "1"
         new_value: "0"
-  - name: HideSettingsHome
+  - id: HideSettingsHome
+    name: HideSettingsHome
     description: Removes the Home page in the Windows Settings app.
     registries:
       - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer
@@ -2276,7 +2321,8 @@ definitions:
         type: String
         old_value: show:home
         new_value: hide:home
-  - name: SnapWindow
+  - id: SnapWindow
+    name: SnapWindow
     description: If enabled you can align windows by dragging them. | Relogin Required
     registries:
       - path: HKCU\Control Panel\Desktop
@@ -2284,7 +2330,8 @@ definitions:
         type: String
         old_value: "0"
         new_value: "1"
-  - name: SnapFlyout
+  - id: SnapFlyout
+    name: SnapFlyout
     description: If enabled then Snap preview is disabled when maximize button is hovered.
     registries:
       - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
@@ -2295,7 +2342,8 @@ definitions:
     script:
       apply: Invoke-WinUtilExplorerUpdate -action "restart"
       revert: Invoke-WinUtilExplorerUpdate -action "restart"
-  - name: SnapSuggestion
+  - id: SnapSuggestion
+    name: SnapSuggestion
     description:
       If enabled then you will get suggestions to snap other applications
       in the left over spaces.
@@ -2308,7 +2356,8 @@ definitions:
     script:
       apply: Invoke-WinUtilExplorerUpdate -action "restart"
       revert: Invoke-WinUtilExplorerUpdate -action "restart"
-  - name: MouseAcceleration
+  - id: MouseAcceleration
+    name: MouseAcceleration
     description:
       If Enabled then Cursor movement is affected by the speed of your physical
       mouse movements.
@@ -2328,7 +2377,8 @@ definitions:
         type: DWord
         old_value: "0"
         new_value: "10"
-  - name: StickyKeys
+  - id: StickyKeys
+    name: StickyKeys
     description:
       If Enabled then Sticky Keys is activated - Sticky keys is an accessibility
       feature of some graphical user interfaces which assists users who have physical
@@ -2339,7 +2389,8 @@ definitions:
         type: DWord
         old_value: "58"
         new_value: "510"
-  - name: NewOutlook
+  - id: NewOutlook
+    name: NewOutlook
     description:
       If disabled it removes the toggle for new Outlook, disables the new
       Outlook migration and makes sure the Outlook Application actually uses the old
@@ -2365,7 +2416,8 @@ definitions:
         type: DWord
         old_value: <NotExist>
         new_value: "0"
-  - name: MultiplaneOverlay
+  - id: MultiplaneOverlay
+    name: MultiplaneOverlay
     description:
       Disable the Multiplane Overlay which can sometimes cause issues with
       Graphics Cards.
@@ -2375,7 +2427,8 @@ definitions:
         type: DWord
         old_value: <NotExist>
         new_value: "5"
-  - name: HiddenFiles
+  - id: HiddenFiles
+    name: HiddenFiles
     description: If Enabled then Hidden Files will be shown.
     registries:
       - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
@@ -2386,7 +2439,8 @@ definitions:
     script:
       apply: Invoke-WinUtilExplorerUpdate -action "restart"
       revert: Invoke-WinUtilExplorerUpdate -action "restart"
-  - name: ShowExt
+  - id: ShowExt
+    name: ShowExt
     description: If enabled then File extensions (e.g., .txt, .jpg) are visible.
     registries:
       - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
@@ -2397,7 +2451,8 @@ definitions:
     script:
       apply: Invoke-WinUtilExplorerUpdate -action "restart"
       revert: Invoke-WinUtilExplorerUpdate -action "restart"
-  - name: TaskbarSearch
+  - id: TaskbarSearch
+    name: TaskbarSearch
     description: If Enabled Search Button will be on the taskbar.
     registries:
       - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Search
@@ -2405,7 +2460,8 @@ definitions:
         type: DWord
         old_value: "0"
         new_value: "1"
-  - name: TaskView
+  - id: TaskView
+    name: TaskView
     description: If Enabled then Task View Button in Taskbar will be shown.
     registries:
       - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
@@ -2413,7 +2469,8 @@ definitions:
         type: DWord
         old_value: "0"
         new_value: "1"
-  - name: TaskbarWidgets
+  - id: TaskbarWidgets
+    name: TaskbarWidgets
     description: If Enabled then Widgets Button in Taskbar will be shown.
     registries:
       - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
@@ -2421,7 +2478,8 @@ definitions:
         type: DWord
         old_value: "0"
         new_value: "1"
-  - name: TaskbarAlignment
+  - id: TaskbarAlignment
+    name: TaskbarAlignment
     description:
       "[Windows 11] If Enabled then the Taskbar Items will be shown on the
       Center, otherwise the Taskbar Items will be shown on the Left."
@@ -2431,7 +2489,8 @@ definitions:
         type: DWord
         old_value: "0"
         new_value: "1"
-  - name: DetailedBSoD
+  - id: DetailedBSoD
+    name: DetailedBSoD
     description:
       If Enabled then you will see a detailed Blue Screen of Death (BSOD)
       with more information.
@@ -2446,7 +2505,8 @@ definitions:
         type: DWord
         old_value: "0"
         new_value: "1"
-  - name: S3Sleep
+  - id: S3Sleep
+    name: S3Sleep
     description: Toggles between Modern Standby and S3 sleep.
     registries:
       - path: HKLM\SYSTEM\CurrentControlSet\Control\Power
@@ -2454,7 +2514,8 @@ definitions:
         type: DWord
         old_value: <NotExist>
         new_value: "0"
-  - name: DisableExplorerAutoDiscovery
+  - id: DisableExplorerAutoDiscovery
+    name: DisableExplorerAutoDiscovery
     description:
       Windows Explorer automatically tries to guess the type of the folder
       based on its contents, slowing down the browsing experience.
@@ -2501,7 +2562,8 @@ definitions:
         Write-Host "Removed $bagMRU"
 
         Write-Host Please sign out and back in, or restart your computer to apply the changes!
-  - name: DisableCrossDeviceResume
+  - id: DisableCrossDeviceResume
+    name: DisableCrossDeviceResume
     description:
       This tweak controls the Resume function in Windows 11 24H2 and later,
       which allows you to resume an activity from a mobile device and vice-versa.

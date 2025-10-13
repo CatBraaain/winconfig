@@ -116,6 +116,7 @@ class Script(BaseModel):
 
 
 class Definition(BaseModel):
+    id: str
     name: str
     description: str
     registries: list[Registry] = []

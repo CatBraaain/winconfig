@@ -113,6 +113,7 @@ class WinutilDefinitionContainer(BaseModel):
         return DefinitionContainer(
             definitions=[
                 Definition(
+                    id=re.sub(r"WPFToggle|WPFTweaks", "", name),
                     name=re.sub(r"WPFToggle|WPFTweaks", "", name),
                     description=winutil_def.Description,
                     registries=[
