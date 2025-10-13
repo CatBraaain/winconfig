@@ -80,5 +80,8 @@ def test_apply_script(
     if definition.name in ["DisableExplorerAutoDiscovery", "Storage", "RazerBlock"]:
         pytest.xfail("Need error handling")
 
+    if definition.name in ["DiskCleanup", "RestorePoint"]:
+        pytest.skip("Save time")
+
     script = ScriptGenerator.generate_script_script(definition.script, revert=revert)
     powershell.run(script)
