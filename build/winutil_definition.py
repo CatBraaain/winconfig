@@ -5,6 +5,7 @@ from typing import Any, Literal, Self
 
 import httpx
 import yaml
+from capitalize import capitalize
 from pydantic import BaseModel, ConfigDict
 
 from winconfig.model.definition import (
@@ -113,8 +114,10 @@ class WinutilDefinitionContainer(BaseModel):
         return DefinitionContainer(
             definitions=[
                 Definition(
-                    id=re.sub(r"WPFToggle|WPFTweaks", "", name),
-                    name=re.sub(r"WPFToggle|WPFTweaks", "", name),
+                    id=re.sub(r"WPFToggle|WPFTweaks", "", _id),
+                    name=capitalize(
+                        re.sub(r"( [^\s\w]|[^\s\w] ).*", "", winutil_def.Content)
+                    ),
                     description=winutil_def.Description,
                     registries=[
                         Registry(
@@ -152,7 +155,7 @@ class WinutilDefinitionContainer(BaseModel):
                         revert="\n".join(winutil_def.UndoScript or []).rstrip() or None,
                     ),
                 )
-                for name, winutil_def in self.definition_dict.items()
+                for _id, winutil_def in self.definition_dict.items()
                 if winutil_def.Description != ""
             ],
             preload=self.preload,

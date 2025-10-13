@@ -71,16 +71,24 @@ def test_apply_service(
 def test_apply_script(
     powershell: PowershellRunspace, definition: Definition, revert: bool
 ):
-    if definition.name in ["Hiber", "Tele", "RemoveOnedrive"]:
+    if definition.name in ["DisableHibernation", "DisableTelemetry", "RemoveOneDrive"]:
         pytest.skip("Windows Sandbox not supporting")
 
-    if definition.name in ["Powershell7", "DebloatAdobe", "RemoveCopilot"]:
+    if definition.name in [
+        "ChangeWindowsTerminalDefault",
+        "AdobeDebloat",
+        "DisableMicrosoftCopilot",
+    ]:
         pytest.skip("Not supported yet")
 
-    if definition.name in ["DisableExplorerAutoDiscovery", "Storage", "RazerBlock"]:
+    if definition.name in [
+        "DisableExplorerAutomaticFolderDiscovery",
+        "DisableStorageSense",
+        "BlockRazerSoftwareInstalls",
+    ]:
         pytest.xfail("Need error handling")
 
-    if definition.name in ["DiskCleanup", "RestorePoint"]:
+    if definition.name in ["RunDiskCleanup", "CreateRestorePoint"]:
         pytest.skip("Save time")
 
     script = ScriptGenerator.generate_script_script(definition.script, revert=revert)
