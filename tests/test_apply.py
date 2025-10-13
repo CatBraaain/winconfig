@@ -21,7 +21,7 @@ def test_apply_resitory(
             ScriptGenerator.generate_get_registry_script(registry)
         )
         expected_value = registry.resolve_value(revert)
-        assert str(current_value) == str(expected_value), (
+        assert current_value == expected_value, (
             f"[{registry.full_path}]'s value '{current_value}' != '{expected_value}'"
         )
 
