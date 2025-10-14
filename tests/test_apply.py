@@ -71,25 +71,29 @@ def test_apply_service(
 def test_apply_script(
     powershell: PowershellRunspace, definition: Definition, revert: bool
 ):
-    if definition.name in ["DisableHibernation", "DisableTelemetry", "RemoveOneDrive"]:
-        pytest.skip("Windows Sandbox not supporting")
-
     if definition.name in [
-        "ChangeWindowsTerminalDefault",
-        "AdobeDebloat",
-        "DisableMicrosoftCopilot",
+        "DisableHibernation",
+        "DisableTelemetry",
     ]:
-        pytest.skip("Not supported yet")
+        pytest.skip("Windows Sandbox not supporting")
 
     if definition.name in [
         "DisableExplorerAutomaticFolderDiscovery",
         "DisableStorageSense",
         "BlockRazerSoftwareInstalls",
+        "AdobeDebloat",
     ]:
         pytest.xfail("Need error handling")
 
-    if definition.name in ["RunDiskCleanup", "CreateRestorePoint"]:
+    if definition.name in [
+        "RunDiskCleanup",
+        "CreateRestorePoint",
+        "DisableMicrosoftCopilot",  # need winget
+        "ChangeWindowsTerminalDefault",  # need winget
+        "RemoveOneDrive",  # need winget
+    ]:
         pytest.skip("Save time")
 
     script = ScriptGenerator.generate_script_script(definition.script, revert=revert)
     powershell.run(script)
+    # System.Management.Automation.ItemNotFoundException
