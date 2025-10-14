@@ -13,7 +13,9 @@ def create_winutil_definitions() -> None:
             "https://raw.githubusercontent.com/ChrisTitusTech/winutil/refs/heads/main/functions/public/Invoke-WPFRunspace.ps1",
         ],
     )
-    winutil.output_yaml_file("src/winconfig/definitions/winutil_definition.yaml")
+    winutil.to_winconfig_definition().output_yaml(
+        "src/winconfig/definitions/winutil_definition.yaml"
+    )
 
 
 main()

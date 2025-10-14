@@ -86,30 +86,6 @@ class WinutilDefinitionContainer(BaseModel):
             preload=preload,
         )
 
-    def output_yaml_file(self, dist_path: str) -> None:
-        definitions = self.to_winconfig_definition()
-
-        def str_presenter(dumper: Any, data: Any) -> Any:  # noqa: ANN401
-            if len(data.splitlines()) > 1:
-                return dumper.represent_scalar("tag:yaml.org,2002:str", data, style="|")
-            return dumper.represent_scalar("tag:yaml.org,2002:str", data)
-
-        yaml.add_representer(str, str_presenter)
-
-        schema_ref_str = "# yaml-language-server: $schema=./schema.json"
-        yaml_str = (
-            schema_ref_str
-            + "\n\n"
-            + yaml.dump(
-                definitions.model_dump(exclude_defaults=True),
-                allow_unicode=True,
-                sort_keys=False,
-            )
-        )
-
-        Path(dist_path).write_text(yaml_str, encoding="utf-8")
-        subprocess.run(["bunx", "prettier", "--write", f'"{dist_path}"'], check=True)
-
     def to_winconfig_definition(self) -> DefinitionContainer:
         return DefinitionContainer(
             definitions=[
