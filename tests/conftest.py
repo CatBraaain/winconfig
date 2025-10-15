@@ -37,7 +37,7 @@ def powershell() -> PowershellRunspace:
 
 @pytest.fixture(
     params=[False, True],
-    ids=["[apply]", "[revert]"],
+    ids=["Apply", "Revert"],
 )
 def revert(request: pytest.FixtureRequest):
     return request.param
