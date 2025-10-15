@@ -71,7 +71,7 @@ class SophiaDefinitionContainer(BaseModel):
             preload=preload,
         )
 
-    def to_winconfig_definition(self) -> DefinitionContainer:
+    def for_winconfig(self) -> DefinitionContainer:
         target_definitions = [
             definition
             for definition in self.definitions

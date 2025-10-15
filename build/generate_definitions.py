@@ -15,7 +15,7 @@ def create_winutil_definition() -> None:
             "https://raw.githubusercontent.com/ChrisTitusTech/winutil/refs/heads/main/functions/public/Invoke-WPFRunspace.ps1",
         ],
     )
-    winutil.to_winconfig_definition().output_yaml(
+    winutil.for_winconfig().output_yaml(
         "src/winconfig/definitions/winutil_definition.yaml"
     )
 
@@ -27,7 +27,7 @@ def create_sophia_definition() -> None:
             "https://raw.githubusercontent.com/farag2/Sophia-Script-for-Windows/refs/heads/master/src/Sophia_Script_for_Windows_11/Module/Sophia.psm1",
         ],
     )
-    sophia.to_winconfig_definition().output_yaml(
+    sophia.for_winconfig().output_yaml(
         "src/winconfig/definitions/sophia_definition.yaml"
     )
 

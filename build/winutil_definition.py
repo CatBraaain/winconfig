@@ -26,11 +26,27 @@ class WinutilRegistry(BaseModel):
     OriginalValue: str
     Value: str
 
+    def for_winconfig(self) -> Registry:
+        return Registry(
+            path=self.Path,
+            name=self.Name,
+            type=self.Type,
+            old_value=self.OriginalValue.replace("<RemoveEntry>", NOT_EXIST),
+            new_value=self.Value.replace("<RemoveEntry>", NOT_EXIST),
+        )
+
 
 class WinutilScheduledTask(BaseModel):
     Name: str
     OriginalState: Literal["Enabled", "Disabled"]
     State: Literal["Enabled", "Disabled"]
+
+    def for_winconfig(self) -> ScheduledTask:
+        return ScheduledTask(
+            full_path=self.Name,
+            old_state=self.OriginalState,
+            new_state=self.State,
+        )
 
 
 class WinutilService(BaseModel):
@@ -38,8 +54,16 @@ class WinutilService(BaseModel):
     OriginalType: ServiceStartupType
     StartupType: ServiceStartupType
 
+    def for_winconfig(self) -> Service:
+        return Service(
+            name=self.Name,
+            old_startup_type=self.OriginalType,
+            new_startup_type=self.StartupType,
+        )
+
 
 class WinutilDefinition(BaseModel):
+    id: str
     Content: str
     Description: str = ""
     Registry: list[WinutilRegistry] = []
@@ -64,9 +88,27 @@ class WinutilDefinition(BaseModel):
         populate_by_name=True,
     )
 
+    def for_winconfig(self) -> Definition:
+        apply = "\n".join(self.InvokeScript or []).rstrip() or None
+        revert = "\n".join(self.UndoScript or []).rstrip() or None
+        return Definition(
+            id=re.sub(r"WPFToggle|WPFTweaks", "", self.id),
+            name=pascalize(re.sub(r"( [^\s\w]|[^\s\w] ).*", "", self.Content)),
+            description=self.Description,
+            registries=[registry.for_winconfig() for registry in self.Registry],
+            scheduled_tasks=[
+                scheduled_task.for_winconfig() for scheduled_task in self.ScheduledTask
+            ],
+            services=[service.for_winconfig() for service in self.Service],
+            script=Script(
+                apply=apply,
+                revert=revert,
+            ),
+        )
+
 
 class WinutilDefinitionContainer(BaseModel):
-    definition_dict: dict[str, WinutilDefinition]
+    definitions: list[WinutilDefinition]
     preload: str | None = None
 
     @classmethod
@@ -84,61 +126,22 @@ class WinutilDefinitionContainer(BaseModel):
         )
         preload = "\n".join([httpx.get(url).text for url in preload_script_urls])
         return cls(
-            definition_dict=yaml.safe_load(fixed_json),
+            definitions=[
+                WinutilDefinition.model_validate({"id": key, **value})
+                for key, value in yaml.safe_load(fixed_json).items()
+            ],
             preload=preload,
         )
 
-    def to_winconfig_definition(self) -> DefinitionContainer:
-        filtered_definition_dict = {
-            _id: winutil_def
-            for _id, winutil_def in self.definition_dict.items()
+    def for_winconfig(self) -> DefinitionContainer:
+        target_definitions = [
+            winutil_def
+            for winutil_def in self.definitions
             if winutil_def.Description != ""
-        }
+        ]
         return DefinitionContainer(
             definitions=[
-                Definition(
-                    id=re.sub(r"WPFToggle|WPFTweaks", "", _id),
-                    name=pascalize(
-                        re.sub(r"( [^\s\w]|[^\s\w] ).*", "", winutil_def.Content)
-                    ),
-                    description=winutil_def.Description,
-                    registries=[
-                        Registry(
-                            path=registry.Path,
-                            name=registry.Name,
-                            type=registry.Type,
-                            old_value=registry.OriginalValue.replace(
-                                "<RemoveEntry>", NOT_EXIST
-                            ),
-                            new_value=registry.Value.replace(
-                                "<RemoveEntry>", NOT_EXIST
-                            ),
-                        )
-                        for registry in winutil_def.Registry
-                    ],
-                    scheduled_tasks=[
-                        ScheduledTask(
-                            full_path=scheduled_task.Name,
-                            old_state=scheduled_task.OriginalState,
-                            new_state=scheduled_task.State,
-                        )
-                        for scheduled_task in winutil_def.ScheduledTask
-                    ],
-                    services=[
-                        Service(
-                            name=service.Name,
-                            old_startup_type=service.OriginalType,
-                            new_startup_type=service.StartupType,
-                        )
-                        for service in winutil_def.Service
-                    ],
-                    script=Script(
-                        apply="\n".join(winutil_def.InvokeScript or []).rstrip()
-                        or None,
-                        revert="\n".join(winutil_def.UndoScript or []).rstrip() or None,
-                    ),
-                )
-                for _id, winutil_def in filtered_definition_dict.items()
+                winutil_def.for_winconfig() for winutil_def in target_definitions
             ],
             preload=self.preload,
         )
