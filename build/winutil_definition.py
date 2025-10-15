@@ -89,6 +89,11 @@ class WinutilDefinitionContainer(BaseModel):
         )
 
     def to_winconfig_definition(self) -> DefinitionContainer:
+        filtered_definition_dict = {
+            _id: winutil_def
+            for _id, winutil_def in self.definition_dict.items()
+            if winutil_def.Description != ""
+        }
         return DefinitionContainer(
             definitions=[
                 Definition(
@@ -133,8 +138,7 @@ class WinutilDefinitionContainer(BaseModel):
                         revert="\n".join(winutil_def.UndoScript or []).rstrip() or None,
                     ),
                 )
-                for _id, winutil_def in self.definition_dict.items()
-                if winutil_def.Description != ""
+                for _id, winutil_def in filtered_definition_dict.items()
             ],
             preload=self.preload,
         )
