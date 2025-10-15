@@ -8,35 +8,6 @@ from winconfig.model.definition import DefinitionContainer
 from winconfig.model.task import Task
 from winconfig.powershell.process import PowershellRunspace
 
-RUNSPACE_POOL_TEMPLATE = r"""
-param([string[]]$Scripts)
-
-$pool = [runspacefactory]::CreateRunspacePool(1, 4)
-$pool.Open()
-
-$jobs = @()
-$Scripts | % {
-    $ps = [PowerShell]::Create()
-    $ps.RunspacePool = $pool
-    $ps.AddScript($_) | Out-Null
-    $jobs += [PSCustomObject]@{
-        PowerShell  = $ps
-        AsyncResult = $ps.BeginInvoke()
-    }
-}
-
-$results = $jobs | % {
-    $ps = $_.PowerShell
-    $result = $ps.EndInvoke($_.AsyncResult)
-    $ps.Dispose()
-    return $result
-}
-
-$pool.Close()
-$pool.Dispose()
-
-"""
-
 type ApplyMode = Literal["apply", "revert", "auto"]
 
 
