@@ -6,15 +6,6 @@ import yaml
 from winconfig.model.definition import Definition
 from winconfig.powershell.process import PowershellRunspace
 
-DEFINITIONS_FILE = Path("src/winconfig/definitions/winutil_definition.yaml")
-definition = Definition.model_validate(yaml.safe_load(DEFINITIONS_FILE.read_text()))
-task_definitions = definition.task_definitions
-
-
-@pytest.fixture(params=task_definitions, ids=[d.name for d in task_definitions])
-def task_definition(request: pytest.FixtureRequest):
-    return request.param
-
 
 @pytest.fixture(autouse=True, scope="session")
 def ensure_sandbox(powershell: PowershellRunspace):
@@ -26,6 +17,16 @@ def ensure_sandbox(powershell: PowershellRunspace):
     )
     if not is_sandbox:
         pytest.fail("This test must be run inside a Windows Sandbox")
+
+
+DEFINITIONS_FILE = Path("src/winconfig/definitions/winutil_definition.yaml")
+definition = Definition.model_validate(yaml.safe_load(DEFINITIONS_FILE.read_text()))
+task_definitions = definition.task_definitions
+
+
+@pytest.fixture(params=task_definitions, ids=[d.name for d in task_definitions])
+def task_definition(request: pytest.FixtureRequest):
+    return request.param
 
 
 @pytest.fixture(scope="session")
