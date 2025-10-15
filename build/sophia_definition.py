@@ -75,7 +75,7 @@ class SophiaDefinition(BaseModel):
             td
             for td in self.task_definitions
             if not re.search(r"using \w+ pop-up", td.description)
-            and td.calling
+            and td.function_name
             not in [
                 "Set-Association",
                 "Export-Associations",

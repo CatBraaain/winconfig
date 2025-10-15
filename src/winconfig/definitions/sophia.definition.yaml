@@ -535,16 +535,6 @@ task_definitions:
     script:
       apply: NetworkDiscovery -Enable
       revert: NetworkDiscovery -Disable
-  - id: Set-Association
-    name: ProgramFilesNotepadNotepadExe0IconTxtExtensionProgramFilesNotepadNotepadExeProgramPathSetAssociation
-    description:
-      Register app, calculate hash, and associate with an extension with
-      the "How do you want to open this" pop-up hidden
-    script:
-      apply:
-        Set-Association -ProgramPath "%ProgramFiles%\Notepad++\notepad++.exe" -Extension
-        .txt -Icon "%ProgramFiles%\Notepad++\notepad++.exe,0"
-      revert: null
   - id: DefaultTerminalApp
     name: WindowsTerminalDefaultTerminalApp
     description:
