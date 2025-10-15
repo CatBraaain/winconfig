@@ -5,7 +5,7 @@ from typing import Any, Literal, Self
 
 import httpx
 import yaml
-from capitalize import capitalize
+from casing import pascalize
 from pydantic import BaseModel, ConfigDict
 
 from winconfig.model.definition import (
@@ -91,7 +91,7 @@ class WinutilDefinitionContainer(BaseModel):
             definitions=[
                 Definition(
                     id=re.sub(r"WPFToggle|WPFTweaks", "", _id),
-                    name=capitalize(
+                    name=pascalize(
                         re.sub(r"( [^\s\w]|[^\s\w] ).*", "", winutil_def.Content)
                     ),
                     description=winutil_def.Description,

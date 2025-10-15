@@ -3,7 +3,7 @@ from itertools import groupby
 from typing import Self
 
 import httpx
-from capitalize import capitalize
+from casing import pascalize
 from pydantic import BaseModel
 
 from winconfig.model.definition import (
@@ -25,7 +25,7 @@ class SophiaDefinition(BaseModel):
     def from_definition(cls, definition_block: str) -> Self:
         definition_lines = definition_block.splitlines()
         calling = definition_lines[-1].removeprefix("# ").strip()
-        name = capitalize(" ".join(calling.split(" ")[::-1]))
+        name = pascalize(" ".join(calling.split(" ")[::-1]))
         description = definition_lines[0].removeprefix("# ").strip()
         function_name = calling.split(" ")[0]
         is_default = (
