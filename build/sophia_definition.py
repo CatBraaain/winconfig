@@ -34,7 +34,7 @@ class SophiaDefinition(BaseModel):
             or "-Delete" in calling
         )
         return cls(
-            id=name,
+            id=function_name,
             name=name,
             description=description,
             function_name=function_name,
@@ -81,7 +81,8 @@ class SophiaDefinitionContainer(BaseModel):
             list(group)
             for key, group in groupby(target_definitions, key=lambda d: d.function_name)
         ]
-        print([(g[0].function_name, len(g)) for g in definition_groups if len(g) > 2])
+        # print([(g[0].function_name, len(g)) for g in definition_groups if len(g) > 2])
+        print([(g[0].function_name, len(g)) for g in definition_groups if len(g) == 1])
 
         definitions = []
         for definition_group in definition_groups:
@@ -91,13 +92,14 @@ class SophiaDefinitionContainer(BaseModel):
                 if not definition.is_default
             )
             apply = definition.calling
-            revert = next(
-                (
+            revert = (
+                next(
                     definition.calling
                     for definition in definition_group
                     if definition.is_default
-                ),
-                None,
+                )
+                if len(definition_group) > 1
+                else None
             )
             definitions.append(
                 Definition(
