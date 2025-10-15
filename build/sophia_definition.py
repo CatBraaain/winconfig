@@ -90,8 +90,6 @@ class SophiaDefinitionContainer(BaseModel):
             list(group)
             for key, group in groupby(target_definitions, key=lambda d: d.function_name)
         ]
-        # print([(g[0].function_name, len(g)) for g in definition_groups if len(g) > 2])
-        print([(g[0].function_name, len(g)) for g in definition_groups if len(g) == 1])
 
         definitions = []
         for definition_group in definition_groups:
@@ -123,14 +121,3 @@ class SophiaDefinitionContainer(BaseModel):
             definitions=definitions,
             preload=self.preload,
         )
-
-
-sophia = SophiaDefinitionContainer.from_url(
-    definition_url="https://raw.githubusercontent.com/farag2/Sophia-Script-for-Windows/refs/heads/master/src/Sophia_Script_for_Windows_11/Sophia.ps1",
-    preload_script_urls=[
-        "https://raw.githubusercontent.com/farag2/Sophia-Script-for-Windows/refs/heads/master/src/Sophia_Script_for_Windows_11/Module/Sophia.psm1",
-    ],
-)
-sophia.to_winconfig_definition().output_yaml(
-    "src/winconfig/definitions/sophia_definition.yaml"
-)
