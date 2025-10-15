@@ -1,0 +1,132 @@
+import re
+from itertools import groupby
+from typing import Self
+
+import httpx
+from capitalize import capitalize
+from pydantic import BaseModel
+
+from winconfig.model.definition import (
+    Definition,
+    DefinitionContainer,
+    Script,
+)
+
+
+class SophiaDefinition(BaseModel):
+    id: str
+    name: str
+    description: str
+    function_name: str
+    calling: str
+    is_default: bool
+
+    @classmethod
+    def from_definition(cls, definition_block: str) -> Self:
+        definition_lines = definition_block.splitlines()
+        calling = definition_lines[-1].removeprefix("# ").strip()
+        name = capitalize(" ".join(calling.split(" ")[::-1]))
+        description = definition_lines[0].removeprefix("# ").strip()
+        function_name = calling.split(" ")[0]
+        is_default = "(default value)" in description
+        return cls(
+            id=name,
+            name=name,
+            description=description,
+            function_name=function_name,
+            calling=calling,
+            is_default=is_default,
+        )
+
+
+class SophiaDefinitionContainer(BaseModel):
+    definitions: list[SophiaDefinition] = []
+    preload: str
+
+    @classmethod
+    def from_url(cls, definition_url: str, preload_script_urls: list[str]) -> Self:
+        res = httpx.get(definition_url)
+        script_block = re.sub(
+            r".*#endregion Protection", "", res.text, flags=re.DOTALL
+        ).strip()
+        definition_blocks = re.split(
+            r"^\n(?=^\S.*\n)", script_block, flags=re.MULTILINE
+        )
+        definition_blocks = [
+            re.sub(r"^#(end)?region.*|<#|#>", "", block, flags=re.MULTILINE).strip()
+            for block in definition_blocks
+        ]
+        definitions: list[SophiaDefinition] = [
+            SophiaDefinition.from_definition(definition_block)
+            for definition_block in definition_blocks
+        ]
+
+        preload = "\n".join([httpx.get(url).text for url in preload_script_urls])
+        return cls(
+            definitions=definitions,
+            preload=preload,
+        )
+
+    def to_winconfig_definition(self) -> DefinitionContainer:
+        return DefinitionContainer(
+            definitions=[
+                Definition(
+                    id=definition.id,
+                    name=definition.name,
+                    description=definition.description,
+                    script=Script(apply=definition.calling, revert=None),
+                )
+                for definition in self.definitions
+            ],
+            preload=self.preload,
+        )
+
+        definition_groups = [
+            list(group)
+            for key, group in groupby(self.definitions, key=lambda d: d.function_name)
+        ]
+        print([(g[0].function_name, len(g)) for g in definition_groups if len(g) > 2])
+
+        definitions = []
+        for definition_group in definition_groups:
+            first_definition = definition_group[0]
+            apply = next(
+                (
+                    definition.calling
+                    for definition in definition_group
+                    if not definition.is_default
+                ),
+                None,
+            )
+            revert = next(
+                (
+                    definition.calling
+                    for definition in definition_group
+                    if definition.is_default
+                ),
+                None,
+            )
+            definitions.append(
+                Definition(
+                    id=first_definition.id,
+                    name=first_definition.name,
+                    description=first_definition.description,
+                    script=Script(apply=apply, revert=revert),
+                )
+            )
+
+        return DefinitionContainer(
+            definitions=definitions,
+            preload=self.preload,
+        )
+
+
+sophia = SophiaDefinitionContainer.from_url(
+    definition_url="https://raw.githubusercontent.com/farag2/Sophia-Script-for-Windows/refs/heads/master/src/Sophia_Script_for_Windows_11/Sophia.ps1",
+    preload_script_urls=[
+        "https://raw.githubusercontent.com/farag2/Sophia-Script-for-Windows/refs/heads/master/src/Sophia_Script_for_Windows_11/Module/Sophia.psm1",
+    ],
+)
+sophia.to_winconfig_definition().output_yaml(
+    "src/winconfig/definitions/sophia_definition.yaml"
+)

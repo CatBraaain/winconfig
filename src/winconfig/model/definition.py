@@ -153,7 +153,11 @@ class DefinitionContainer(BaseModel):
     def output_yaml(self, dist_path: str) -> None:
         def str_presenter(dumper: Any, data: Any) -> Any:  # noqa: ANN401
             if len(data.splitlines()) > 1:
-                return dumper.represent_scalar("tag:yaml.org,2002:str", data, style="|")
+                return dumper.represent_scalar(
+                    "tag:yaml.org,2002:str",
+                    data.removeprefix("\ufeff").replace("\t", "    "),
+                    style="|",
+                )
             return dumper.represent_scalar("tag:yaml.org,2002:str", data)
 
         yaml.add_representer(str, str_presenter)
