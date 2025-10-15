@@ -8,64 +8,31 @@ definitions:
       and block the connection for the Unified Telemetry Client Outbound Traffic
     script:
       apply: DiagTrackService -Disable
-      revert: null
-  - id: EnableDiagTrackService
-    name: EnableDiagTrackService
-    description:
-      Enable the "Connected User Experiences and Telemetry" service (DiagTrack),
-      and allow the connection for the Unified Telemetry Client Outbound Traffic (default
-      value)
-    script:
-      apply: DiagTrackService -Enable
-      revert: null
+      revert: DiagTrackService -Enable
   - id: MinimalDiagnosticDataLevel
     name: MinimalDiagnosticDataLevel
     description: Set the diagnostic data collection to minimum
     script:
       apply: DiagnosticDataLevel -Minimal
-      revert: null
-  - id: DefaultDiagnosticDataLevel
-    name: DefaultDiagnosticDataLevel
-    description: Set the diagnostic data collection to default (default value)
-    script:
-      apply: DiagnosticDataLevel -Default
-      revert: null
+      revert: DiagnosticDataLevel -Default
   - id: DisableErrorReporting
     name: DisableErrorReporting
     description: Turn off the Windows Error Reporting
     script:
       apply: ErrorReporting -Disable
-      revert: null
-  - id: EnableErrorReporting
-    name: EnableErrorReporting
-    description: Turn on the Windows Error Reporting (default value)
-    script:
-      apply: ErrorReporting -Enable
-      revert: null
+      revert: ErrorReporting -Enable
   - id: NeverFeedbackFrequency
     name: NeverFeedbackFrequency
     description: Change the feedback frequency to "Never"
     script:
       apply: FeedbackFrequency -Never
-      revert: null
-  - id: AutomaticallyFeedbackFrequency
-    name: AutomaticallyFeedbackFrequency
-    description: Change the feedback frequency to "Automatically" (default value)
-    script:
-      apply: FeedbackFrequency -Automatically
-      revert: null
+      revert: FeedbackFrequency -Automatically
   - id: DisableScheduledTasks
     name: DisableScheduledTasks
     description: Turn off the diagnostics tracking scheduled tasks
     script:
       apply: ScheduledTasks -Disable
-      revert: null
-  - id: EnableScheduledTasks
-    name: EnableScheduledTasks
-    description: Turn on the diagnostics tracking scheduled tasks (default value)
-    script:
-      apply: ScheduledTasks -Enable
-      revert: null
+      revert: ScheduledTasks -Enable
   - id: DisableSigninInfo
     name: DisableSigninInfo
     description:
@@ -73,15 +40,7 @@ definitions:
       an update
     script:
       apply: SigninInfo -Disable
-      revert: null
-  - id: EnableSigninInfo
-    name: EnableSigninInfo
-    description:
-      Use sign-in info to automatically finish setting up device after an
-      update (default value)
-    script:
-      apply: SigninInfo -Enable
-      revert: null
+      revert: SigninInfo -Enable
   - id: DisableLanguageListAccess
     name: DisableLanguageListAccess
     description:
@@ -89,29 +48,13 @@ definitions:
       list
     script:
       apply: LanguageListAccess -Disable
-      revert: null
-  - id: EnableLanguageListAccess
-    name: EnableLanguageListAccess
-    description:
-      Let websites provide locally relevant content by accessing language
-      list (default value)
-    script:
-      apply: LanguageListAccess -Enable
-      revert: null
+      revert: LanguageListAccess -Enable
   - id: DisableAdvertisingId
     name: DisableAdvertisingId
     description: Do not let apps show me personalized ads by using my advertising ID
     script:
       apply: AdvertisingID -Disable
-      revert: null
-  - id: EnableAdvertisingId
-    name: EnableAdvertisingId
-    description:
-      Let apps show me personalized ads by using my advertising ID (default
-      value)
-    script:
-      apply: AdvertisingID -Enable
-      revert: null
+      revert: AdvertisingID -Enable
   - id: HideWindowsWelcomeExperience
     name: HideWindowsWelcomeExperience
     description:
@@ -119,51 +62,25 @@ definitions:
       when I sign in to highlight what's new and suggested
     script:
       apply: WindowsWelcomeExperience -Hide
-      revert: null
-  - id: ShowWindowsWelcomeExperience
-    name: ShowWindowsWelcomeExperience
-    description:
-      Show the Windows welcome experiences after updates and occasionally
-      when I sign in to highlight what's new and suggested (default value)
-    script:
-      apply: WindowsWelcomeExperience -Show
-      revert: null
-  - id: EnableWindowsTips
-    name: EnableWindowsTips
-    description: Get tips and suggestions when I use Windows (default value)
-    script:
-      apply: WindowsTips -Enable
-      revert: null
+      revert: WindowsWelcomeExperience -Show
   - id: DisableWindowsTips
     name: DisableWindowsTips
     description: Do not get tips and suggestions when I use Windows
     script:
       apply: WindowsTips -Disable
-      revert: null
+      revert: WindowsTips -Enable
   - id: HideSettingsSuggestedContent
     name: HideSettingsSuggestedContent
     description: Hide from me suggested content in the Settings app
     script:
       apply: SettingsSuggestedContent -Hide
-      revert: null
-  - id: ShowSettingsSuggestedContent
-    name: ShowSettingsSuggestedContent
-    description: Show me suggested content in the Settings app (default value)
-    script:
-      apply: SettingsSuggestedContent -Show
-      revert: null
+      revert: SettingsSuggestedContent -Show
   - id: DisableAppsSilentInstalling
     name: DisableAppsSilentInstalling
     description: Turn off automatic installing suggested apps
     script:
       apply: AppsSilentInstalling -Disable
-      revert: null
-  - id: EnableAppsSilentInstalling
-    name: EnableAppsSilentInstalling
-    description: Turn on automatic installing suggested apps (default value)
-    script:
-      apply: AppsSilentInstalling -Enable
-      revert: null
+      revert: AppsSilentInstalling -Enable
   - id: DisableWhatsNewInWindows
     name: DisableWhatsNewInWindows
     description:
@@ -171,15 +88,7 @@ definitions:
       up this device
     script:
       apply: WhatsNewInWindows -Disable
-      revert: null
-  - id: EnableWhatsNewInWindows
-    name: EnableWhatsNewInWindows
-    description:
-      Suggest ways to get the most out of Windows and finish setting up this
-      device (default value)
-    script:
-      apply: WhatsNewInWindows -Enable
-      revert: null
+      revert: WhatsNewInWindows -Enable
   - id: DisableTailoredExperiences
     name: DisableTailoredExperiences
     description:
@@ -187,27 +96,13 @@ definitions:
       ads, and recommendations
     script:
       apply: TailoredExperiences -Disable
-      revert: null
-  - id: EnableTailoredExperiences
-    name: EnableTailoredExperiences
-    description:
-      Let Microsoft use your diagnostic data for personalized tips, ads,
-      and recommendations (default value)
-    script:
-      apply: TailoredExperiences -Enable
-      revert: null
+      revert: TailoredExperiences -Enable
   - id: DisableBingSearch
     name: DisableBingSearch
     description: Disable Bing search in Start Menu
     script:
       apply: BingSearch -Disable
-      revert: null
-  - id: EnableBingSearch
-    name: EnableBingSearch
-    description: Enable Bing search in Start Menu (default value)
-    script:
-      apply: BingSearch -Enable
-      revert: null
+      revert: BingSearch -Enable
   - id: HideStartRecommendationsTips
     name: HideStartRecommendationsTips
     description:
@@ -215,15 +110,7 @@ definitions:
       in Start menu
     script:
       apply: StartRecommendationsTips -Hide
-      revert: null
-  - id: ShowStartRecommendationsTips
-    name: ShowStartRecommendationsTips
-    description:
-      Show recommendations for tips, shortcuts, new apps, and more in Start
-      menu (default value)
-    script:
-      apply: StartRecommendationsTips -Show
-      revert: null
+      revert: StartRecommendationsTips -Show
   - id: HideStartAccountNotifications
     name: HideStartAccountNotifications
     description:
@@ -231,287 +118,133 @@ definitions:
       Start menu
     script:
       apply: StartAccountNotifications -Hide
-      revert: null
-  - id: ShowStartAccountNotifications
-    name: ShowStartAccountNotifications
-    description:
-      Show Microsoft account-related notifications on Start Menu in Start
-      menu (default value)
-    script:
-      apply: StartAccountNotifications -Show
-      revert: null
+      revert: StartAccountNotifications -Show
   - id: ShowThisPc
     name: ShowThisPc
     description: Show the "This PC" icon on Desktop
     script:
       apply: ThisPC -Show
-      revert: null
-  - id: HideThisPc
-    name: HideThisPc
-    description: Hide the "This PC" icon on Desktop (default value)
-    script:
-      apply: ThisPC -Hide
-      revert: null
+      revert: ThisPC -Hide
   - id: DisableCheckBoxes
     name: DisableCheckBoxes
     description: Do not use item check boxes
     script:
       apply: CheckBoxes -Disable
-      revert: null
-  - id: EnableCheckBoxes
-    name: EnableCheckBoxes
-    description: Use check item check boxes (default value)
-    script:
-      apply: CheckBoxes -Enable
-      revert: null
+      revert: CheckBoxes -Enable
   - id: EnableHiddenItems
     name: EnableHiddenItems
     description: Show hidden files, folders, and drives
     script:
       apply: HiddenItems -Enable
-      revert: null
-  - id: DisableHiddenItems
-    name: DisableHiddenItems
-    description: Do not show hidden files, folders, and drives (default value)
-    script:
-      apply: HiddenItems -Disable
-      revert: null
+      revert: HiddenItems -Disable
   - id: ShowFileExtensions
     name: ShowFileExtensions
     description: Show file name extensions
     script:
       apply: FileExtensions -Show
-      revert: null
-  - id: HideFileExtensions
-    name: HideFileExtensions
-    description: Hide file name extensions (default value)
-    script:
-      apply: FileExtensions -Hide
-      revert: null
+      revert: FileExtensions -Hide
   - id: ShowMergeConflicts
     name: ShowMergeConflicts
     description: Show folder merge conflicts
     script:
       apply: MergeConflicts -Show
-      revert: null
-  - id: HideMergeConflicts
-    name: HideMergeConflicts
-    description: Hide folder merge conflicts (default value)
-    script:
-      apply: MergeConflicts -Hide
-      revert: null
+      revert: MergeConflicts -Hide
   - id: ThisPcOpenFileExplorerTo
     name: ThisPcOpenFileExplorerTo
     description: Open File Explorer to "This PC"
     script:
       apply: OpenFileExplorerTo -ThisPC
-      revert: null
-  - id: QuickAccessOpenFileExplorerTo
-    name: QuickAccessOpenFileExplorerTo
-    description: Open File Explorer to Quick access (default value)
-    script:
-      apply: OpenFileExplorerTo -QuickAccess
-      revert: null
-  - id: DisableFileExplorerCompactMode
-    name: DisableFileExplorerCompactMode
-    description: Disable File Explorer compact mode (default value)
-    script:
-      apply: FileExplorerCompactMode -Disable
-      revert: null
+      revert: OpenFileExplorerTo -QuickAccess
   - id: EnableFileExplorerCompactMode
     name: EnableFileExplorerCompactMode
     description: Enable File Explorer compact mode
     script:
       apply: FileExplorerCompactMode -Enable
-      revert: null
+      revert: FileExplorerCompactMode -Disable
   - id: HideOneDriveFileExplorerAd
     name: HideOneDriveFileExplorerAd
     description: Do not show sync provider notification within File Explorer
     script:
       apply: OneDriveFileExplorerAd -Hide
-      revert: null
-  - id: ShowOneDriveFileExplorerAd
-    name: ShowOneDriveFileExplorerAd
-    description: Show sync provider notification within File Explorer (default value)
-    script:
-      apply: OneDriveFileExplorerAd -Show
-      revert: null
+      revert: OneDriveFileExplorerAd -Show
   - id: DisableSnapAssist
     name: DisableSnapAssist
     description: When I snap a window, do not show what I can snap next to it
     script:
       apply: SnapAssist -Disable
-      revert: null
-  - id: EnableSnapAssist
-    name: EnableSnapAssist
-    description: When I snap a window, show what I can snap next to it (default value)
-    script:
-      apply: SnapAssist -Enable
-      revert: null
+      revert: SnapAssist -Enable
   - id: DetailedFileTransferDialog
     name: DetailedFileTransferDialog
     description: Show the file transfer dialog box in the detailed mode
     script:
       apply: FileTransferDialog -Detailed
-      revert: null
-  - id: CompactFileTransferDialog
-    name: CompactFileTransferDialog
-    description: Show the file transfer dialog box in the compact mode (default value)
-    script:
-      apply: FileTransferDialog -Compact
-      revert: null
+      revert: FileTransferDialog -Compact
   - id: EnableRecycleBinDeleteConfirmation
     name: EnableRecycleBinDeleteConfirmation
     description: Display the recycle bin files delete confirmation dialog
     script:
       apply: RecycleBinDeleteConfirmation -Enable
-      revert: null
-  - id: DisableRecycleBinDeleteConfirmation
-    name: DisableRecycleBinDeleteConfirmation
-    description:
-      Do not display the recycle bin files delete confirmation dialog (default
-      value)
-    script:
-      apply: RecycleBinDeleteConfirmation -Disable
-      revert: null
+      revert: RecycleBinDeleteConfirmation -Disable
   - id: HideQuickAccessRecentFiles
     name: HideQuickAccessRecentFiles
     description: Hide recently used files in Quick access
     script:
       apply: QuickAccessRecentFiles -Hide
-      revert: null
-  - id: ShowQuickAccessRecentFiles
-    name: ShowQuickAccessRecentFiles
-    description: Show recently used files in Quick access (default value)
-    script:
-      apply: QuickAccessRecentFiles -Show
-      revert: null
+      revert: QuickAccessRecentFiles -Show
   - id: HideQuickAccessFrequentFolders
     name: HideQuickAccessFrequentFolders
     description: Hide frequently used folders in Quick access
     script:
       apply: QuickAccessFrequentFolders -Hide
-      revert: null
-  - id: ShowQuickAccessFrequentFolders
-    name: ShowQuickAccessFrequentFolders
-    description: Show frequently used folders in Quick access (default value)
-    script:
-      apply: QuickAccessFrequentFolders -Show
-      revert: null
-  - id: CenterTaskbarAlignment
-    name: CenterTaskbarAlignment
-    description: Set the taskbar alignment to the center (default value)
-    script:
-      apply: TaskbarAlignment -Center
-      revert: null
+      revert: QuickAccessFrequentFolders -Show
   - id: LeftTaskbarAlignment
     name: LeftTaskbarAlignment
     description: Set the taskbar alignment to the left
     script:
       apply: TaskbarAlignment -Left
-      revert: null
+      revert: TaskbarAlignment -Center
   - id: HideTaskbarWidgets
     name: HideTaskbarWidgets
     description: Hide the widgets icon on the taskbar
     script:
       apply: TaskbarWidgets -Hide
-      revert: null
-  - id: ShowTaskbarWidgets
-    name: ShowTaskbarWidgets
-    description: Show the widgets icon on the taskbar (default value)
-    script:
-      apply: TaskbarWidgets -Show
-      revert: null
+      revert: TaskbarWidgets -Show
   - id: HideTaskbarSearch
     name: HideTaskbarSearch
     description: Hide the search on the taskbar
     script:
       apply: TaskbarSearch -Hide
-      revert: null
-  - id: SearchIconTaskbarSearch
-    name: SearchIconTaskbarSearch
-    description: Show the search icon on the taskbar
-    script:
-      apply: TaskbarSearch -SearchIcon
-      revert: null
-  - id: SearchIconLabelTaskbarSearch
-    name: SearchIconLabelTaskbarSearch
-    description: Show the search icon and label on the taskbar
-    script:
-      apply: TaskbarSearch -SearchIconLabel
-      revert: null
-  - id: SearchBoxTaskbarSearch
-    name: SearchBoxTaskbarSearch
-    description: Show the search box on the taskbar (default value)
-    script:
-      apply: TaskbarSearch -SearchBox
-      revert: null
+      revert: TaskbarSearch -SearchBox
   - id: HideSearchHighlights
     name: HideSearchHighlights
     description: Hide search highlights
     script:
       apply: SearchHighlights -Hide
-      revert: null
-  - id: ShowSearchHighlights
-    name: ShowSearchHighlights
-    description: Show search highlights (default value)
-    script:
-      apply: SearchHighlights -Show
-      revert: null
+      revert: SearchHighlights -Show
   - id: HideTaskViewButton
     name: HideTaskViewButton
     description: Hide the Task view button from the taskbar
     script:
       apply: TaskViewButton -Hide
-      revert: null
-  - id: ShowTaskViewButton
-    name: ShowTaskViewButton
-    description: Show the Task view button on the taskbar (default value)
-    script:
-      apply: TaskViewButton -Show
-      revert: null
+      revert: TaskViewButton -Show
   - id: ShowSecondsInSystemClock
     name: ShowSecondsInSystemClock
     description: Show seconds on the taskbar clock
     script:
       apply: SecondsInSystemClock -Show
-      revert: null
-  - id: HideSecondsInSystemClock
-    name: HideSecondsInSystemClock
-    description: Hide seconds on the taskbar clock (default value)
-    script:
-      apply: SecondsInSystemClock -Hide
-      revert: null
+      revert: SecondsInSystemClock -Hide
   - id: ShowClockInNotificationCenter
     name: ShowClockInNotificationCenter
     description: Show time in Notification Center
     script:
       apply: ClockInNotificationCenter -Show
-      revert: null
-  - id: HideClockInNotificationCenter
-    name: HideClockInNotificationCenter
-    description: Hide time in Notification Center (default value)
-    script:
-      apply: ClockInNotificationCenter -Hide
-      revert: null
-  - id: AlwaysTaskbarCombine
-    name: AlwaysTaskbarCombine
-    description: Combine taskbar buttons and always hide labels (default value)
-    script:
-      apply: TaskbarCombine -Always
-      revert: null
+      revert: ClockInNotificationCenter -Hide
   - id: FullTaskbarCombine
     name: FullTaskbarCombine
     description: Combine taskbar buttons and hide labels when taskbar is full
     script:
       apply: TaskbarCombine -Full
-      revert: null
-  - id: NeverTaskbarCombine
-    name: NeverTaskbarCombine
-    description: Combine taskbar buttons and never hide labels
-    script:
-      apply: TaskbarCombine -Never
-      revert: null
+      revert: TaskbarCombine -Always
   - id: OutlookStoreEdgeShortcutsUnpinTaskbarShortcuts
     name: OutlookStoreEdgeShortcutsUnpinTaskbarShortcuts
     description:
@@ -525,119 +258,55 @@ definitions:
     description: Enable end task in taskbar by right click
     script:
       apply: TaskbarEndTask -Enable
-      revert: null
-  - id: DisableTaskbarEndTask
-    name: DisableTaskbarEndTask
-    description: Disable end task in taskbar by right click (default value)
-    script:
-      apply: TaskbarEndTask -Disable
-      revert: null
+      revert: TaskbarEndTask -Disable
   - id: LargeIconsControlPanelView
     name: LargeIconsControlPanelView
     description: View the Control Panel icons by large icons
     script:
       apply: ControlPanelView -LargeIcons
-      revert: null
-  - id: SmallIconsControlPanelView
-    name: SmallIconsControlPanelView
-    description: View the Control Panel icons by small icons
-    script:
-      apply: ControlPanelView -SmallIcons
-      revert: null
-  - id: CategoryControlPanelView
-    name: CategoryControlPanelView
-    description: View the Control Panel icons by category (default value)
-    script:
-      apply: ControlPanelView -Category
-      revert: null
+      revert: ControlPanelView -Category
   - id: DarkWindowsColorMode
     name: DarkWindowsColorMode
     description: Set the default Windows mode to dark
     script:
       apply: WindowsColorMode -Dark
-      revert: null
-  - id: LightWindowsColorMode
-    name: LightWindowsColorMode
-    description: Set the default Windows mode to light (default value)
-    script:
-      apply: WindowsColorMode -Light
-      revert: null
+      revert: WindowsColorMode -Light
   - id: DarkAppColorMode
     name: DarkAppColorMode
     description: Set the default app mode to dark
     script:
       apply: AppColorMode -Dark
-      revert: null
-  - id: LightAppColorMode
-    name: LightAppColorMode
-    description: Set the default app mode to light (default value)
-    script:
-      apply: AppColorMode -Light
-      revert: null
+      revert: AppColorMode -Light
   - id: DisableFirstLogonAnimation
     name: DisableFirstLogonAnimation
     description: Hide first sign-in animation after the upgrade
     script:
       apply: FirstLogonAnimation -Disable
-      revert: null
-  - id: EnableFirstLogonAnimation
-    name: EnableFirstLogonAnimation
-    description: Show first sign-in animation after the upgrade (default value)
-    script:
-      apply: FirstLogonAnimation -Enable
-      revert: null
+      revert: FirstLogonAnimation -Enable
   - id: MaxJpegWallpapersQuality
     name: MaxJpegWallpapersQuality
     description: Set the quality factor of the JPEG desktop wallpapers to maximum
     script:
       apply: JPEGWallpapersQuality -Max
-      revert: null
-  - id: DefaultJpegWallpapersQuality
-    name: DefaultJpegWallpapersQuality
-    description: Set the quality factor of the JPEG desktop wallpapers to default
-    script:
-      apply: JPEGWallpapersQuality -Default
-      revert: null
+      revert: JPEGWallpapersQuality -Default
   - id: DisableShortcutsSuffix
     name: DisableShortcutsSuffix
     description: Do not add the "- Shortcut" suffix to the file name of created shortcuts
     script:
       apply: ShortcutsSuffix -Disable
-      revert: null
-  - id: EnableShortcutsSuffix
-    name: EnableShortcutsSuffix
-    description:
-      Add the "- Shortcut" suffix to the file name of created shortcuts (default
-      value)
-    script:
-      apply: ShortcutsSuffix -Enable
-      revert: null
+      revert: ShortcutsSuffix -Enable
   - id: EnablePrtScnSnippingTool
     name: EnablePrtScnSnippingTool
     description: Use the Print screen button to open screen snipping
     script:
       apply: PrtScnSnippingTool -Enable
-      revert: null
-  - id: DisablePrtScnSnippingTool
-    name: DisablePrtScnSnippingTool
-    description:
-      Do not use the Print screen button to open screen snipping (default
-      value)
-    script:
-      apply: PrtScnSnippingTool -Disable
-      revert: null
+      revert: PrtScnSnippingTool -Disable
   - id: EnableAppsLanguageSwitch
     name: EnableAppsLanguageSwitch
     description: Let me use a different input method for each app window
     script:
       apply: AppsLanguageSwitch -Enable
-      revert: null
-  - id: DisableAppsLanguageSwitch
-    name: DisableAppsLanguageSwitch
-    description: Do not use a different input method for each app window (default value)
-    script:
-      apply: AppsLanguageSwitch -Disable
-      revert: null
+      revert: AppsLanguageSwitch -Disable
   - id: EnableAeroShaking
     name: EnableAeroShaking
     description:
@@ -645,15 +314,7 @@ definitions:
       windows
     script:
       apply: AeroShaking -Enable
-      revert: null
-  - id: DisableAeroShaking
-    name: DisableAeroShaking
-    description:
-      When I grab a windows's title bar and shake it, don't minimize all
-      other windows (default value)
-    script:
-      apply: AeroShaking -Disable
-      revert: null
+      revert: AeroShaking -Disable
   - id: DarkCursors
     name: DarkCursors
     description:
@@ -661,61 +322,25 @@ definitions:
       from Jepri Creations. Internet connection required
     script:
       apply: Cursors -Dark
-      revert: null
-  - id: LightCursors
-    name: LightCursors
-    description:
-      Download and install free light "Windows 11 Cursors Concept" cursors
-      from Jepri Creations. Internet connection required
-    script:
-      apply: Cursors -Light
-      revert: null
-  - id: DefaultCursors
-    name: DefaultCursors
-    description: Set default cursors
-    script:
-      apply: Cursors -Default
-      revert: null
+      revert: Cursors -Default
   - id: NoneFolderGroupBy
     name: NoneFolderGroupBy
     description: Do not group files and folder in the Downloads folder
     script:
       apply: FolderGroupBy -None
-      revert: null
-  - id: DefaultFolderGroupBy
-    name: DefaultFolderGroupBy
-    description:
-      Group files and folder by date modified in the Downloads folder (default
-      value)
-    script:
-      apply: FolderGroupBy -Default
-      revert: null
-  - id: DisableNavigationPaneExpand
-    name: DisableNavigationPaneExpand
-    description: Do not expand to open folder on navigation pane (default value)
-    script:
-      apply: NavigationPaneExpand -Disable
-      revert: null
+      revert: FolderGroupBy -Default
   - id: EnableNavigationPaneExpand
     name: EnableNavigationPaneExpand
     description: Expand to open folder on navigation pane
     script:
       apply: NavigationPaneExpand -Enable
-      revert: null
+      revert: NavigationPaneExpand -Disable
   - id: HideStartRecommendedSection
     name: HideStartRecommendedSection
     description: Remove Recommended section in Start Menu. Not applicable to Home edition
     script:
       apply: StartRecommendedSection -Hide
-      revert: null
-  - id: ShowStartRecommendedSection
-    name: ShowStartRecommendedSection
-    description:
-      Show Recommended section in Start Menu (default value). Not applicable
-      to Home edition
-    script:
-      apply: StartRecommendedSection -Show
-      revert: null
+      revert: StartRecommendedSection -Show
   - id: UninstallOneDrive
     name: UninstallOneDrive
     description:
@@ -723,45 +348,19 @@ definitions:
       found there
     script:
       apply: OneDrive -Uninstall
-      revert: null
-  - id: InstallOneDrive
-    name: InstallOneDrive
-    description: Install OneDrive (default value)
-    script:
-      apply: OneDrive -Install
-      revert: null
-  - id: AllUsersInstallOneDrive
-    name: AllUsersInstallOneDrive
-    description:
-      Install OneDrive all users to %ProgramFiles% depending which installer
-      is triggered
-    script:
-      apply: OneDrive -Install -AllUsers
-      revert: null
+      revert: OneDrive -Install
   - id: EnableStorageSense
     name: EnableStorageSense
     description: Turn on Storage Sense
     script:
       apply: StorageSense -Enable
-      revert: null
-  - id: DisableStorageSense
-    name: DisableStorageSense
-    description: Turn off Storage Sense (default value)
-    script:
-      apply: StorageSense -Disable
-      revert: null
+      revert: StorageSense -Disable
   - id: DisableHibernation
     name: DisableHibernation
     description: Disable hibernation. Not recommended for laptops
     script:
       apply: Hibernation -Disable
-      revert: null
-  - id: EnableHibernation
-    name: EnableHibernation
-    description: Enable hibernate (default value)
-    script:
-      apply: Hibernation -Enable
-      revert: null
+      revert: Hibernation -Enable
   - id: EnableWin32LongPathSupport
     name: EnableWin32LongPathSupport
     description:
@@ -769,76 +368,36 @@ definitions:
       by default
     script:
       apply: Win32LongPathSupport -Enable
-      revert: null
-  - id: DisableWin32LongPathSupport
-    name: DisableWin32LongPathSupport
-    description:
-      Disable Windows long paths support which is limited for 260 characters
-      by default (default value)
-    script:
-      apply: Win32LongPathSupport -Disable
-      revert: null
+      revert: Win32LongPathSupport -Disable
   - id: EnableBSoDStopError
     name: EnableBSoDStopError
     description: Display Stop error code when BSoD occurs
     script:
       apply: BSoDStopError -Enable
-      revert: null
-  - id: DisableBSoDStopError
-    name: DisableBSoDStopError
-    description: Do not display stop error code when BSoD occurs (default value)
-    script:
-      apply: BSoDStopError -Disable
-      revert: null
+      revert: BSoDStopError -Disable
   - id: NeverAdminApprovalMode
     name: NeverAdminApprovalMode
     description: "Choose when to be notified about changes to your computer: never notify"
     script:
       apply: AdminApprovalMode -Never
-      revert: null
-  - id: DefaultAdminApprovalMode
-    name: DefaultAdminApprovalMode
-    description:
-      "Choose when to be notified about changes to your computer: notify
-      me only when apps try to make changes to my computer (default value)"
-    script:
-      apply: AdminApprovalMode -Default
-      revert: null
+      revert: AdminApprovalMode -Default
   - id: DisableDeliveryOptimization
     name: DisableDeliveryOptimization
     description: Turn off Delivery Optimization
     script:
       apply: DeliveryOptimization -Disable
-      revert: null
-  - id: EnableDeliveryOptimization
-    name: EnableDeliveryOptimization
-    description: Turn on Delivery Optimization (default value)
-    script:
-      apply: DeliveryOptimization -Enable
-      revert: null
+      revert: DeliveryOptimization -Enable
   - id: DisableWindowsManageDefaultPrinter
     name: DisableWindowsManageDefaultPrinter
     description: Do not let Windows manage my default printer
     script:
       apply: WindowsManageDefaultPrinter -Disable
-      revert: null
-  - id: EnableWindowsManageDefaultPrinter
-    name: EnableWindowsManageDefaultPrinter
-    description: Let Windows manage my default printer (default value)
-    script:
-      apply: WindowsManageDefaultPrinter -Enable
-      revert: null
+      revert: WindowsManageDefaultPrinter -Enable
   - id: DisableWindowsFeatures
     name: DisableWindowsFeatures
     description: Disable the Windows features using the pop-up dialog box
     script:
       apply: WindowsFeatures -Disable
-      revert: null
-  - id: EnableWindowsFeatures
-    name: EnableWindowsFeatures
-    description: Enable the Windows features using the pop-up dialog box
-    script:
-      apply: WindowsFeatures -Enable
       revert: null
   - id: UninstallWindowsCapabilities
     name: UninstallWindowsCapabilities
@@ -846,88 +405,42 @@ definitions:
     script:
       apply: WindowsCapabilities -Uninstall
       revert: null
-  - id: InstallWindowsCapabilities
-    name: InstallWindowsCapabilities
-    description: Install optional features using the pop-up dialog box
-    script:
-      apply: WindowsCapabilities -Install
-      revert: null
   - id: EnableUpdateMicrosoftProducts
     name: EnableUpdateMicrosoftProducts
     description: Receive updates for other Microsoft products
     script:
       apply: UpdateMicrosoftProducts -Enable
-      revert: null
-  - id: DisableUpdateMicrosoftProducts
-    name: DisableUpdateMicrosoftProducts
-    description: Do not receive updates for other Microsoft products (default value)
-    script:
-      apply: UpdateMicrosoftProducts -Disable
-      revert: null
+      revert: UpdateMicrosoftProducts -Disable
   - id: ShowRestartNotification
     name: ShowRestartNotification
     description: Notify me when a restart is required to finish updating
     script:
       apply: RestartNotification -Show
-      revert: null
-  - id: HideRestartNotification
-    name: HideRestartNotification
-    description:
-      Do not notify me when a restart is required to finish updating (default
-      value)
-    script:
-      apply: RestartNotification -Hide
-      revert: null
+      revert: RestartNotification -Hide
   - id: EnableRestartDeviceAfterUpdate
     name: EnableRestartDeviceAfterUpdate
     description: Restart as soon as possible to finish updating
     script:
       apply: RestartDeviceAfterUpdate -Enable
-      revert: null
-  - id: DisableRestartDeviceAfterUpdate
-    name: DisableRestartDeviceAfterUpdate
-    description: Don't restart as soon as possible to finish updating (default value)
-    script:
-      apply: RestartDeviceAfterUpdate -Disable
-      revert: null
+      revert: RestartDeviceAfterUpdate -Disable
   - id: AutomaticallyActiveHours
     name: AutomaticallyActiveHours
     description: Automatically adjust active hours for me based on daily usage
     script:
       apply: ActiveHours -Automatically
-      revert: null
-  - id: ManuallyActiveHours
-    name: ManuallyActiveHours
-    description: Manually adjust active hours for me based on daily usage (default value)
-    script:
-      apply: ActiveHours -Manually
-      revert: null
-  - id: DisableWindowsLatestUpdate
-    name: DisableWindowsLatestUpdate
-    description:
-      Do not get the latest updates as soon as they're available (default
-      value)
-    script:
-      apply: WindowsLatestUpdate -Disable
-      revert: null
+      revert: ActiveHours -Manually
   - id: EnableWindowsLatestUpdate
     name: EnableWindowsLatestUpdate
     description: Get the latest updates as soon as they're available
     script:
       apply: WindowsLatestUpdate -Enable
-      revert: null
+      revert: WindowsLatestUpdate -Disable
   - id: HighPowerPlan
     name: HighPowerPlan
     description: Set power plan on "High performance". Not recommended for laptops
     script:
       apply: PowerPlan -High
-      revert: null
-  - id: BalancedPowerPlan
-    name: BalancedPowerPlan
-    description: Set power plan on "Balanced" (default value)
-    script:
-      apply: PowerPlan -Balanced
-      revert: null
+      revert: PowerPlan -Balanced
   - id: DisableNetworkAdaptersSavePower
     name: DisableNetworkAdaptersSavePower
     description:
@@ -935,27 +448,13 @@ definitions:
       power. Not recommended for laptops
     script:
       apply: NetworkAdaptersSavePower -Disable
-      revert: null
-  - id: EnableNetworkAdaptersSavePower
-    name: EnableNetworkAdaptersSavePower
-    description:
-      Allow the computer to turn off the network adapters to save power (default
-      value)
-    script:
-      apply: NetworkAdaptersSavePower -Enable
-      revert: null
+      revert: NetworkAdaptersSavePower -Enable
   - id: EnglishInputMethod
     name: EnglishInputMethod
     description: "Override for default input method: English"
     script:
       apply: InputMethod -English
-      revert: null
-  - id: DefaultInputMethod
-    name: DefaultInputMethod
-    description: "Override for default input method: use language list (default value)"
-    script:
-      apply: InputMethod -Default
-      revert: null
+      revert: InputMethod -Default
   - id: RootSetUserShellFolderLocation
     name: RootSetUserShellFolderLocation
     description:
@@ -963,33 +462,13 @@ definitions:
       menu
     script:
       apply: Set-UserShellFolderLocation -Root
-      revert: null
-  - id: CustomSetUserShellFolderLocation
-    name: CustomSetUserShellFolderLocation
-    description:
-      Select folders for user folders location manually using a folder browser
-      dialog
-    script:
-      apply: Set-UserShellFolderLocation -Custom
-      revert: null
-  - id: DefaultSetUserShellFolderLocation
-    name: DefaultSetUserShellFolderLocation
-    description: Change user folders location to the default values
-    script:
-      apply: Set-UserShellFolderLocation -Default
-      revert: null
+      revert: Set-UserShellFolderLocation -Default
   - id: EnableLatestInstalledNet
     name: EnableLatestInstalledNet
     description: Use .NET Framework 4.8.1 for old apps
     script:
       apply: LatestInstalled.NET -Enable
-      revert: null
-  - id: DisableLatestInstalledNet
-    name: DisableLatestInstalledNet
-    description: Do not Use .NET Framework 4.8.1 for old apps (default value)
-    script:
-      apply: LatestInstalled.NET -Disable
-      revert: null
+      revert: LatestInstalled.NET -Disable
   - id: DesktopWinPrtScrFolder
     name: DesktopWinPrtScrFolder
     description:
@@ -997,113 +476,55 @@ definitions:
       Windows+Shift+S
     script:
       apply: WinPrtScrFolder -Desktop
-      revert: null
-  - id: DefaultWinPrtScrFolder
-    name: DefaultWinPrtScrFolder
-    description:
-      Save screenshots in the Pictures folder when pressing Windows+PrtScr
-      or using Windows+Shift+S (default value)
-    script:
-      apply: WinPrtScrFolder -Default
-      revert: null
+      revert: WinPrtScrFolder -Default
   - id: AutomaticallyRecommendedTroubleshooting
     name: AutomaticallyRecommendedTroubleshooting
     description: Run troubleshooter automatically, then notify me
     script:
       apply: RecommendedTroubleshooting -Automatically
-      revert: null
-  - id: DefaultRecommendedTroubleshooting
-    name: DefaultRecommendedTroubleshooting
-    description: Ask me before running troubleshooter (default value)
-    script:
-      apply: RecommendedTroubleshooting -Default
-      revert: null
+      revert: RecommendedTroubleshooting -Default
   - id: DisableReservedStorage
     name: DisableReservedStorage
     description: Disable and delete reserved storage after the next update installation
     script:
       apply: ReservedStorage -Disable
-      revert: null
-  - id: EnableReservedStorage
-    name: EnableReservedStorage
-    description: Enable reserved storage (default value)
-    script:
-      apply: ReservedStorage -Enable
-      revert: null
+      revert: ReservedStorage -Enable
   - id: DisableF1HelpPage
     name: DisableF1HelpPage
     description: Disable help lookup via F1
     script:
       apply: F1HelpPage -Disable
-      revert: null
-  - id: EnableF1HelpPage
-    name: EnableF1HelpPage
-    description: Enable help lookup via F1 (default value)
-    script:
-      apply: F1HelpPage -Enable
-      revert: null
+      revert: F1HelpPage -Enable
   - id: EnableNumLock
     name: EnableNumLock
     description: Enable Num Lock at startup
     script:
       apply: NumLock -Enable
-      revert: null
-  - id: DisableNumLock
-    name: DisableNumLock
-    description: Disable Num Lock at startup (default value)
-    script:
-      apply: NumLock -Disable
-      revert: null
+      revert: NumLock -Disable
   - id: DisableCapsLock
     name: DisableCapsLock
     description: Disable Caps Lock
     script:
       apply: CapsLock -Disable
-      revert: null
-  - id: EnableCapsLock
-    name: EnableCapsLock
-    description: Enable Caps Lock (default value)
-    script:
-      apply: CapsLock -Enable
-      revert: null
+      revert: CapsLock -Enable
   - id: DisableStickyShift
     name: DisableStickyShift
     description: Turn off pressing the Shift key 5 times to turn Sticky keys
     script:
       apply: StickyShift -Disable
-      revert: null
-  - id: EnableStickyShift
-    name: EnableStickyShift
-    description:
-      Turn on pressing the Shift key 5 times to turn Sticky keys (default
-      value)
-    script:
-      apply: StickyShift -Enable
-      revert: null
+      revert: StickyShift -Enable
   - id: DisableAutoplay
     name: DisableAutoplay
     description: Don't use AutoPlay for all media and devices
     script:
       apply: Autoplay -Disable
-      revert: null
-  - id: EnableAutoplay
-    name: EnableAutoplay
-    description: Use AutoPlay for all media and devices (default value)
-    script:
-      apply: Autoplay -Enable
-      revert: null
+      revert: Autoplay -Enable
   - id: DisableThumbnailCacheRemoval
     name: DisableThumbnailCacheRemoval
     description: Disable thumbnail cache removal
     script:
       apply: ThumbnailCacheRemoval -Disable
-      revert: null
-  - id: EnableThumbnailCacheRemoval
-    name: EnableThumbnailCacheRemoval
-    description: Enable thumbnail cache removal (default value)
-    script:
-      apply: ThumbnailCacheRemoval -Enable
-      revert: null
+      revert: ThumbnailCacheRemoval -Enable
   - id: EnableSaveRestartableApps
     name: EnableSaveRestartableApps
     description:
@@ -1111,27 +532,13 @@ definitions:
       back in
     script:
       apply: SaveRestartableApps -Enable
-      revert: null
-  - id: DisableSaveRestartableApps
-    name: DisableSaveRestartableApps
-    description:
-      Turn off automatically saving my restartable apps and restart them
-      when I sign back in (default value)
-    script:
-      apply: SaveRestartableApps -Disable
-      revert: null
-  - id: DisableRestorePreviousFolders
-    name: DisableRestorePreviousFolders
-    description: Do not restore previous folder windows at logon (default value)
-    script:
-      apply: RestorePreviousFolders -Disable
-      revert: null
+      revert: SaveRestartableApps -Disable
   - id: EnableRestorePreviousFolders
     name: EnableRestorePreviousFolders
     description: Restore previous folder windows at logon
     script:
       apply: RestorePreviousFolders -Enable
-      revert: null
+      revert: RestorePreviousFolders -Disable
   - id: EnableNetworkDiscovery
     name: EnableNetworkDiscovery
     description:
@@ -1139,15 +546,7 @@ definitions:
       networks
     script:
       apply: NetworkDiscovery -Enable
-      revert: null
-  - id: DisableNetworkDiscovery
-    name: DisableNetworkDiscovery
-    description:
-      Disable "Network Discovery" and "File and Printers Sharing" for workgroup
-      networks (default value)
-    script:
-      apply: NetworkDiscovery -Disable
-      revert: null
+      revert: NetworkDiscovery -Disable
   - id: ProgramFilesNotepadNotepadExe0IconTxtExtensionProgramFilesNotepadNotepadExeProgramPathSetAssociation
     name: ProgramFilesNotepadNotepadExe0IconTxtExtensionProgramFilesNotepadNotepadExeProgramPathSetAssociation
     description:
@@ -1179,15 +578,7 @@ definitions:
       for command-line applications
     script:
       apply: DefaultTerminalApp -WindowsTerminal
-      revert: null
-  - id: ConsoleHostDefaultTerminalApp
-    name: ConsoleHostDefaultTerminalApp
-    description:
-      Set Windows Console Host as default terminal app to host the user interface
-      for command-line applications (default value)
-    script:
-      apply: DefaultTerminalApp -ConsoleHost
-      revert: null
+      revert: DefaultTerminalApp -ConsoleHost
   - id: 20152022X6420152022X86RedistributablesInstallVcRedist
     name: 20152022X6420152022X86RedistributablesInstallVcRedist
     description:
@@ -1209,15 +600,7 @@ definitions:
       The function is applicable for Russia only
     script:
       apply: RKNBypass -Enable
-      revert: null
-  - id: DisableRknBypass
-    name: DisableRknBypass
-    description:
-      Disable proxying only blocked sites from the unified registry of Roskomnadzor
-      (default value)
-    script:
-      apply: RKNBypass -Disable
-      revert: null
+      revert: RKNBypass -Disable
   - id: CanaryDevBetaStableChannelsPreventEdgeShortcutCreation
     name: CanaryDevBetaStableChannelsPreventEdgeShortcutCreation
     description:
@@ -1225,15 +608,7 @@ definitions:
       its update
     script:
       apply: PreventEdgeShortcutCreation -Channels Stable, Beta, Dev, Canary
-      revert: null
-  - id: DisablePreventEdgeShortcutCreation
-    name: DisablePreventEdgeShortcutCreation
-    description:
-      Do not prevent desktop shortcut creation upon Microsoft Edge update
-      (default value)
-    script:
-      apply: PreventEdgeShortcutCreation -Disable
-      revert: null
+      revert: PreventEdgeShortcutCreation -Disable
   - id: EnableRegistryBackup
     name: EnableRegistryBackup
     description:
@@ -1242,15 +617,7 @@ definitions:
       to manage subsequent backups
     script:
       apply: RegistryBackup -Enable
-      revert: null
-  - id: DisableRegistryBackup
-    name: DisableRegistryBackup
-    description:
-      Do not back up the system registry to %SystemRoot%\System32\config\RegBack
-      folder (default value)
-    script:
-      apply: RegistryBackup -Disable
-      revert: null
+      revert: RegistryBackup -Disable
   - id: InstallWsl
     name: InstallWsl
     description:
@@ -1260,74 +627,36 @@ definitions:
     script:
       apply: Install-WSL
       revert: null
-  - id: DefaultStartLayout
-    name: DefaultStartLayout
-    description: Show default Start layout (default value)
-    script:
-      apply: StartLayout -Default
-      revert: null
   - id: ShowMorePinsStartLayout
     name: ShowMorePinsStartLayout
     description: Show more pins on Start
     script:
       apply: StartLayout -ShowMorePins
-      revert: null
-  - id: ShowMoreRecommendationsStartLayout
-    name: ShowMoreRecommendationsStartLayout
-    description: Show more recommendations on Start
-    script:
-      apply: StartLayout -ShowMoreRecommendations
-      revert: null
+      revert: StartLayout -Default
   - id: UninstallUwpApps
     name: UninstallUwpApps
     description: Uninstall UWP apps using the pop-up dialog box
     script:
       apply: UninstallUWPApps
       revert: null
-  - id: ForAllUsersUninstallUwpApps
-    name: ForAllUsersUninstallUwpApps
-    description: Uninstall UWP apps for all users using the pop-up dialog box
-    script:
-      apply: UninstallUWPApps -ForAllUsers
-      revert: null
   - id: DisableXboxGameBar
     name: DisableXboxGameBar
     description: Disable Xbox Game Bar
     script:
       apply: XboxGameBar -Disable
-      revert: null
-  - id: EnableXboxGameBar
-    name: EnableXboxGameBar
-    description: Enable Xbox Game Bar (default value)
-    script:
-      apply: XboxGameBar -Enable
-      revert: null
+      revert: XboxGameBar -Enable
   - id: DisableXboxGameTips
     name: DisableXboxGameTips
     description: Disable Xbox Game Bar tips
     script:
       apply: XboxGameTips -Disable
-      revert: null
-  - id: EnableXboxGameTips
-    name: EnableXboxGameTips
-    description: Enable Xbox Game Bar tips (default value)
-    script:
-      apply: XboxGameTips -Enable
-      revert: null
+      revert: XboxGameTips -Enable
   - id: EnableGpuScheduling
     name: EnableGpuScheduling
     description: Turn on hardware-accelerated GPU scheduling. Restart needed
     script:
       apply: GPUScheduling -Enable
-      revert: null
-  - id: DisableGpuScheduling
-    name: DisableGpuScheduling
-    description:
-      Turn off hardware-accelerated GPU scheduling (default value). Restart
-      needed
-    script:
-      apply: GPUScheduling -Disable
-      revert: null
+      revert: GPUScheduling -Disable
   - id: RegisterCleanupTask
     name: RegisterCleanupTask
     description:
@@ -1335,15 +664,7 @@ definitions:
       unused files and updates.
     script:
       apply: CleanupTask -Register
-      revert: null
-  - id: DeleteCleanupTask
-    name: DeleteCleanupTask
-    description:
-      Delete the "Windows Cleanup" and "Windows Cleanup Notification" scheduled
-      tasks for cleaning up Windows unused files and updates
-    script:
-      apply: CleanupTask -Delete
-      revert: null
+      revert: CleanupTask -Delete
   - id: RegisterSoftwareDistributionTask
     name: RegisterSoftwareDistributionTask
     description:
@@ -1351,67 +672,31 @@ definitions:
       %SystemRoot%\SoftwareDistribution\Download folder
     script:
       apply: SoftwareDistributionTask -Register
-      revert: null
-  - id: DeleteSoftwareDistributionTask
-    name: DeleteSoftwareDistributionTask
-    description:
-      Delete the "SoftwareDistribution" scheduled task for cleaning up the
-      %SystemRoot%\SoftwareDistribution\Download folder
-    script:
-      apply: SoftwareDistributionTask -Delete
-      revert: null
+      revert: SoftwareDistributionTask -Delete
   - id: RegisterTempTask
     name: RegisterTempTask
     description: Create the "Temp" scheduled task for cleaning up the %TEMP% folder
     script:
       apply: TempTask -Register
-      revert: null
-  - id: DeleteTempTask
-    name: DeleteTempTask
-    description: Delete the "Temp" scheduled task for cleaning up the %TEMP% folder
-    script:
-      apply: TempTask -Delete
-      revert: null
+      revert: TempTask -Delete
   - id: EnableNetworkProtection
     name: EnableNetworkProtection
     description: Enable Microsoft Defender Exploit Guard network protection
     script:
       apply: NetworkProtection -Enable
-      revert: null
-  - id: DisableNetworkProtection
-    name: DisableNetworkProtection
-    description:
-      Disable Microsoft Defender Exploit Guard network protection (default
-      value)
-    script:
-      apply: NetworkProtection -Disable
-      revert: null
+      revert: NetworkProtection -Disable
   - id: EnablePuAppsDetection
     name: EnablePuAppsDetection
     description: Enable detection for potentially unwanted applications and block them
     script:
       apply: PUAppsDetection -Enable
-      revert: null
-  - id: DisablePuAppsDetection
-    name: DisablePuAppsDetection
-    description:
-      Disable detection for potentially unwanted applications and block them
-      (default value)
-    script:
-      apply: PUAppsDetection -Disable
-      revert: null
+      revert: PUAppsDetection -Disable
   - id: EnableDefenderSandbox
     name: EnableDefenderSandbox
     description: Enable sandboxing for Microsoft Defender
     script:
       apply: DefenderSandbox -Enable
-      revert: null
-  - id: DisableDefenderSandbox
-    name: DisableDefenderSandbox
-    description: Disable sandboxing for Microsoft Defender (default value)
-    script:
-      apply: DefenderSandbox -Disable
-      revert: null
+      revert: DefenderSandbox -Disable
   - id: DismissMsAccount
     name: DismissMsAccount
     description:
@@ -1435,27 +720,13 @@ definitions:
       executed processes and their arguments
     script:
       apply: EventViewerCustomView -Enable
-      revert: null
-  - id: DisableEventViewerCustomView
-    name: DisableEventViewerCustomView
-    description:
-      Remove the "Process Creation" custom view in the Event Viewer to log
-      executed processes and their arguments (default value)
-    script:
-      apply: EventViewerCustomView -Disable
-      revert: null
+      revert: EventViewerCustomView -Disable
   - id: EnablePowerShellModulesLogging
     name: EnablePowerShellModulesLogging
     description: Enable logging for all Windows PowerShell modules
     script:
       apply: PowerShellModulesLogging -Enable
-      revert: null
-  - id: DisablePowerShellModulesLogging
-    name: DisablePowerShellModulesLogging
-    description: Disable logging for all Windows PowerShell modules (default value)
-    script:
-      apply: PowerShellModulesLogging -Disable
-      revert: null
+      revert: PowerShellModulesLogging -Disable
   - id: EnablePowerShellScriptsLogging
     name: EnablePowerShellScriptsLogging
     description:
@@ -1463,15 +734,7 @@ definitions:
       event log
     script:
       apply: PowerShellScriptsLogging -Enable
-      revert: null
-  - id: DisablePowerShellScriptsLogging
-    name: DisablePowerShellScriptsLogging
-    description:
-      Disable logging for all PowerShell scripts input to the Windows PowerShell
-      event log (default value)
-    script:
-      apply: PowerShellScriptsLogging -Disable
-      revert: null
+      revert: PowerShellScriptsLogging -Disable
   - id: DisableAppsSmartScreen
     name: DisableAppsSmartScreen
     description:
@@ -1479,15 +742,7 @@ definitions:
       the Internet as unsafe
     script:
       apply: AppsSmartScreen -Disable
-      revert: null
-  - id: EnableAppsSmartScreen
-    name: EnableAppsSmartScreen
-    description:
-      Microsoft Defender SmartScreen marks downloaded files from the Internet
-      as unsafe (default value)
-    script:
-      apply: AppsSmartScreen -Enable
-      revert: null
+      revert: AppsSmartScreen -Enable
   - id: DisableSaveZoneInformation
     name: DisableSaveZoneInformation
     description:
@@ -1495,15 +750,7 @@ definitions:
       from the Internet as unsafe
     script:
       apply: SaveZoneInformation -Disable
-      revert: null
-  - id: EnableSaveZoneInformation
-    name: EnableSaveZoneInformation
-    description:
-      Enable the Attachment Manager marking files that have been downloaded
-      from the Internet as unsafe (default value)
-    script:
-      apply: SaveZoneInformation -Enable
-      revert: null
+      revert: SaveZoneInformation -Enable
   - id: DisableWindowsScriptHost
     name: DisableWindowsScriptHost
     description:
@@ -1511,13 +758,7 @@ definitions:
       files
     script:
       apply: WindowsScriptHost -Disable
-      revert: null
-  - id: EnableWindowsScriptHost
-    name: EnableWindowsScriptHost
-    description: Enable Windows Script Host (default value)
-    script:
-      apply: WindowsScriptHost -Enable
-      revert: null
+      revert: WindowsScriptHost -Enable
   - id: EnableWindowsSandbox
     name: EnableWindowsSandbox
     description:
@@ -1525,47 +766,19 @@ definitions:
       and Education editions
     script:
       apply: WindowsSandbox -Enable
-      revert: null
-  - id: DisableWindowsSandbox
-    name: DisableWindowsSandbox
-    description:
-      Disable Windows Sandbox (default value). Applicable only to Professional,
-      Enterprise and Education editions
-    script:
-      apply: WindowsSandbox -Disable
-      revert: null
+      revert: WindowsSandbox -Disable
   - id: 1111SecondaryDns1001PrimaryDnsEnableDnSoverHttps
     name: 1111SecondaryDns1001PrimaryDnsEnableDnSoverHttps
     description: Enable DNS-over-HTTPS for IPv4
     script:
       apply: DNSoverHTTPS -Enable -PrimaryDNS 1.0.0.1 -SecondaryDNS 1.1.1.1
-      revert: null
-  - id: DisableDnSoverHttps
-    name: DisableDnSoverHttps
-    description: Disable DNS-over-HTTPS for IPv4 (default value)
-    script:
-      apply: DNSoverHTTPS -Disable
-      revert: null
-  - id: ComssOneDnsDnSoverHttps
-    name: ComssOneDnsDnSoverHttps
-    description:
-      Enable DNS-over-HTTPS via Comss.one DNS server. Applicable for Russia
-      only
-    script:
-      apply: DNSoverHTTPS -ComssOneDNS
-      revert: null
+      revert: DNSoverHTTPS -Disable
   - id: EnableLocalSecurityAuthority
     name: EnableLocalSecurityAuthority
     description: Enable Local Security Authority protection to prevent code injection
     script:
       apply: LocalSecurityAuthority -Enable
-      revert: null
-  - id: DisableLocalSecurityAuthority
-    name: DisableLocalSecurityAuthority
-    description: Disable Local Security Authority protection (default value)
-    script:
-      apply: LocalSecurityAuthority -Disable
-      revert: null
+      revert: LocalSecurityAuthority -Disable
   - id: ShowMsiExtractContext
     name: ShowMsiExtractContext
     description:
@@ -1573,15 +786,7 @@ definitions:
       menu
     script:
       apply: MSIExtractContext -Show
-      revert: null
-  - id: HideMsiExtractContext
-    name: HideMsiExtractContext
-    description:
-      Hide the "Extract all" item from the Windows Installer (.msi) context
-      menu (default value)
-    script:
-      apply: MSIExtractContext -Hide
-      revert: null
+      revert: MSIExtractContext -Hide
   - id: ShowCabInstallContext
     name: ShowCabInstallContext
     description:
@@ -1589,83 +794,37 @@ definitions:
       context menu
     script:
       apply: CABInstallContext -Show
-      revert: null
-  - id: HideCabInstallContext
-    name: HideCabInstallContext
-    description:
-      Hide the "Install" item from the Cabinet (.cab) filenames extensions
-      context menu (default value)
-    script:
-      apply: CABInstallContext -Hide
-      revert: null
+      revert: CABInstallContext -Hide
   - id: HideEditWithClipchampContext
     name: HideEditWithClipchampContext
     description: Hide the "Edit with Clipchamp" item from the media files context menu
     script:
       apply: EditWithClipchampContext -Hide
-      revert: null
-  - id: ShowEditWithClipchampContext
-    name: ShowEditWithClipchampContext
-    description:
-      Show the "Edit with Clipchamp" item in the media files context menu
-      (default value)
-    script:
-      apply: EditWithClipchampContext -Show
-      revert: null
+      revert: EditWithClipchampContext -Show
   - id: HideEditWithPhotosContext
     name: HideEditWithPhotosContext
     description: Hide the "Edit with Photos" item from the media files context menu
     script:
       apply: EditWithPhotosContext -Hide
-      revert: null
-  - id: ShowEditWithPhotosContext
-    name: ShowEditWithPhotosContext
-    description:
-      Show the "Edit with Photos" item in the media files context menu (default
-      value)
-    script:
-      apply: EditWithPhotosContext -Show
-      revert: null
+      revert: EditWithPhotosContext -Show
   - id: HideEditWithPaintContext
     name: HideEditWithPaintContext
     description: Hide the "Edit with Paint" item from the media files context menu
     script:
       apply: EditWithPaintContext -Hide
-      revert: null
-  - id: ShowEditWithPaintContext
-    name: ShowEditWithPaintContext
-    description:
-      Show the "Edit with Paint" item in the media files context menu (default
-      value)
-    script:
-      apply: EditWithPaintContext -Show
-      revert: null
+      revert: EditWithPaintContext -Show
   - id: HidePrintCmdContext
     name: HidePrintCmdContext
     description: Hide the "Print" item from the .bat and .cmd context menu
     script:
       apply: PrintCMDContext -Hide
-      revert: null
-  - id: ShowPrintCmdContext
-    name: ShowPrintCmdContext
-    description: Show the "Print" item in the .bat and .cmd context menu (default value)
-    script:
-      apply: PrintCMDContext -Show
-      revert: null
+      revert: PrintCMDContext -Show
   - id: HideCompressedFolderNewContext
     name: HideCompressedFolderNewContext
     description: Hide the "Compressed (zipped) Folder" item from the "New" context menu
     script:
       apply: CompressedFolderNewContext -Hide
-      revert: null
-  - id: ShowCompressedFolderNewContext
-    name: ShowCompressedFolderNewContext
-    description:
-      Show the "Compressed (zipped) Folder" item to the "New" context menu
-      (default value)
-    script:
-      apply: CompressedFolderNewContext -Show
-      revert: null
+      revert: CompressedFolderNewContext -Show
   - id: EnableMultipleInvokeContext
     name: EnableMultipleInvokeContext
     description:
@@ -1673,15 +832,7 @@ definitions:
       than 15 items selected
     script:
       apply: MultipleInvokeContext -Enable
-      revert: null
-  - id: DisableMultipleInvokeContext
-    name: DisableMultipleInvokeContext
-    description:
-      Disable the "Open", "Print", and "Edit" context menu items for more
-      than 15 items selected (default value)
-    script:
-      apply: MultipleInvokeContext -Disable
-      revert: null
+      revert: MultipleInvokeContext -Disable
   - id: HideUseStoreOpenWith
     name: HideUseStoreOpenWith
     description:
@@ -1689,43 +840,19 @@ definitions:
       with" dialog
     script:
       apply: UseStoreOpenWith -Hide
-      revert: null
-  - id: ShowUseStoreOpenWith
-    name: ShowUseStoreOpenWith
-    description:
-      Show the "Look for an app in the Microsoft Store" item in the "Open
-      with" dialog (default value)
-    script:
-      apply: UseStoreOpenWith -Show
-      revert: null
-  - id: ShowOpenWindowsTerminalContext
-    name: ShowOpenWindowsTerminalContext
-    description:
-      Show the "Open in Windows Terminal" item in the folders context menu
-      (default value)
-    script:
-      apply: OpenWindowsTerminalContext -Show
-      revert: null
+      revert: UseStoreOpenWith -Show
   - id: HideOpenWindowsTerminalContext
     name: HideOpenWindowsTerminalContext
     description: Hide the "Open in Windows Terminal" item in the folders context menu
     script:
       apply: OpenWindowsTerminalContext -Hide
-      revert: null
+      revert: OpenWindowsTerminalContext -Show
   - id: EnableOpenWindowsTerminalAdminContext
     name: EnableOpenWindowsTerminalAdminContext
     description: Open Windows Terminal in context menu as administrator by default
     script:
       apply: OpenWindowsTerminalAdminContext -Enable
-      revert: null
-  - id: DisableOpenWindowsTerminalAdminContext
-    name: DisableOpenWindowsTerminalAdminContext
-    description:
-      Do not open Windows Terminal in context menu as administrator by default
-      (default value)
-    script:
-      apply: OpenWindowsTerminalAdminContext -Disable
-      revert: null
+      revert: OpenWindowsTerminalAdminContext -Disable
   - id: ScanRegistryPolicies
     name: ScanRegistryPolicies
     description:

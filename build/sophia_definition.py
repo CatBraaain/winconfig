@@ -28,7 +28,11 @@ class SophiaDefinition(BaseModel):
         name = capitalize(" ".join(calling.split(" ")[::-1]))
         description = definition_lines[0].removeprefix("# ").strip()
         function_name = calling.split(" ")[0]
-        is_default = "(default value)" in description
+        is_default = (
+            "(default value)" in description
+            or "-Default" in calling
+            or "-Delete" in calling
+        )
         return cls(
             id=name,
             name=name,
@@ -68,19 +72,6 @@ class SophiaDefinitionContainer(BaseModel):
         )
 
     def to_winconfig_definition(self) -> DefinitionContainer:
-        return DefinitionContainer(
-            definitions=[
-                Definition(
-                    id=definition.id,
-                    name=definition.name,
-                    description=definition.description,
-                    script=Script(apply=definition.calling, revert=None),
-                )
-                for definition in self.definitions
-            ],
-            preload=self.preload,
-        )
-
         definition_groups = [
             list(group)
             for key, group in groupby(self.definitions, key=lambda d: d.function_name)
@@ -89,15 +80,12 @@ class SophiaDefinitionContainer(BaseModel):
 
         definitions = []
         for definition_group in definition_groups:
-            first_definition = definition_group[0]
-            apply = next(
-                (
-                    definition.calling
-                    for definition in definition_group
-                    if not definition.is_default
-                ),
-                None,
+            definition = next(
+                definition
+                for definition in definition_group
+                if not definition.is_default
             )
+            apply = definition.calling
             revert = next(
                 (
                     definition.calling
@@ -108,9 +96,9 @@ class SophiaDefinitionContainer(BaseModel):
             )
             definitions.append(
                 Definition(
-                    id=first_definition.id,
-                    name=first_definition.name,
-                    description=first_definition.description,
+                    id=definition.id,
+                    name=definition.name,
+                    description=definition.description,
                     script=Script(apply=apply, revert=revert),
                 )
             )
