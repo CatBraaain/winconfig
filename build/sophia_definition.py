@@ -8,12 +8,12 @@ from pydantic import BaseModel
 
 from winconfig.model.definition import (
     Definition,
-    DefinitionContainer,
-    Script,
+    ScriptDefinition,
+    TaskDefinition,
 )
 
 
-class SophiaDefinition(BaseModel):
+class SophiaTaskDefinition(BaseModel):
     id: str
     name: str
     description: str
@@ -43,40 +43,39 @@ class SophiaDefinition(BaseModel):
         )
 
 
-class SophiaDefinitionContainer(BaseModel):
-    definitions: list[SophiaDefinition] = []
-    preload: str
+class SophiaDefinition(BaseModel):
+    task_definitions: list[SophiaTaskDefinition] = []
+    preload: str | None = None
 
     @classmethod
-    def from_url(cls, definition_url: str, preload_script_urls: list[str]) -> Self:
+    def from_remote(cls, definition_url: str, preload_script_urls: list[str]) -> Self:
         res = httpx.get(definition_url)
-        script_block = re.sub(
+        sophia_script_block = re.sub(
             r".*#endregion Protection", "", res.text, flags=re.DOTALL
         ).strip()
-        definition_blocks = re.split(
-            r"^\n(?=^\S.*\n)", script_block, flags=re.MULTILINE
+        td_sources = re.split(
+            r"^\n(?=^\S.*\n)", sophia_script_block, flags=re.MULTILINE
         )
-        definition_blocks = [
+        td_sources = [
             re.sub(r"^#(end)?region.*|<#|#>", "", block, flags=re.MULTILINE).strip()
-            for block in definition_blocks
+            for block in td_sources
         ]
-        definitions: list[SophiaDefinition] = [
-            SophiaDefinition.from_definition(definition_block)
-            for definition_block in definition_blocks
+        tds: list[SophiaTaskDefinition] = [
+            SophiaTaskDefinition.from_definition(td_source) for td_source in td_sources
         ]
 
         preload = "\n".join([httpx.get(url).text for url in preload_script_urls])
         return cls(
-            definitions=definitions,
-            preload=preload,
+            task_definitions=tds,
+            preload=preload or None,
         )
 
-    def for_winconfig(self) -> DefinitionContainer:
-        target_definitions = [
-            definition
-            for definition in self.definitions
-            if not re.search(r"using \w+ pop-up", definition.description)
-            and definition.calling
+    def for_winconfig(self) -> Definition:
+        target_tds = [
+            td
+            for td in self.task_definitions
+            if not re.search(r"using \w+ pop-up", td.description)
+            and td.calling
             not in [
                 "Set-Association",
                 "Export-Associations",
@@ -86,38 +85,30 @@ class SophiaDefinitionContainer(BaseModel):
                 "Errors",
             ]
         ]
-        definition_groups = [
+        td_groups = [
             list(group)
-            for key, group in groupby(target_definitions, key=lambda d: d.function_name)
+            for key, group in groupby(target_tds, key=lambda d: d.function_name)
         ]
 
-        definitions = []
-        for definition_group in definition_groups:
-            definition = next(
-                definition
-                for definition in definition_group
-                if not definition.is_default
-            )
-            apply = definition.calling
+        tds = []
+        for td_group in td_groups:
+            td = next(td for td in td_group if not td.is_default)
+            apply = td.calling
             revert = (
-                next(
-                    definition.calling
-                    for definition in definition_group
-                    if definition.is_default
-                )
-                if len(definition_group) > 1
+                next(td.calling for td in td_group if td.is_default)
+                if len(td_group) > 1
                 else None
             )
-            definitions.append(
-                Definition(
-                    id=definition.id,
-                    name=definition.name,
-                    description=definition.description,
-                    script=Script(apply=apply, revert=revert),
+            tds.append(
+                TaskDefinition(
+                    id=td.id,
+                    name=td.name,
+                    description=td.description,
+                    script=ScriptDefinition(apply=apply, revert=revert),
                 )
             )
 
-        return DefinitionContainer(
-            definitions=definitions,
+        return Definition(
+            task_definitions=tds,
             preload=self.preload,
         )

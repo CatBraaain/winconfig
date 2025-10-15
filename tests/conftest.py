@@ -3,18 +3,16 @@ from pathlib import Path
 import pytest
 import yaml
 
-from winconfig.model.definition import DefinitionContainer
+from winconfig.model.definition import Definition
 from winconfig.powershell.process import PowershellRunspace
 
 DEFINITIONS_FILE = Path("src/winconfig/definitions/winutil_definition.yaml")
-definition_container = DefinitionContainer.model_validate(
-    yaml.safe_load(DEFINITIONS_FILE.read_text())
-)
-definitions = definition_container.definitions
+definition = Definition.model_validate(yaml.safe_load(DEFINITIONS_FILE.read_text()))
+task_definitions = definition.task_definitions
 
 
-@pytest.fixture(params=definitions, ids=[d.name for d in definitions])
-def definition(request: pytest.FixtureRequest):
+@pytest.fixture(params=task_definitions, ids=[d.name for d in task_definitions])
+def task_definition(request: pytest.FixtureRequest):
     return request.param
 
 
@@ -32,7 +30,7 @@ def ensure_sandbox(powershell: PowershellRunspace):
 
 @pytest.fixture(scope="session")
 def powershell() -> PowershellRunspace:
-    return PowershellRunspace(preload=definition_container.preload)
+    return PowershellRunspace(preload=definition.preload)
 
 
 @pytest.fixture(

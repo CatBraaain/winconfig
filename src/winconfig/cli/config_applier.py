@@ -4,8 +4,8 @@ from typing import Literal
 import yaml
 
 from winconfig.model.config import Config, ConfigContainer
-from winconfig.model.definition import DefinitionContainer
-from winconfig.model.task import Task
+from winconfig.model.definition import Definition
+from winconfig.model.execution import Execution
 from winconfig.powershell.process import PowershellRunspace
 
 type ApplyMode = Literal["apply", "revert", "auto"]
@@ -16,7 +16,7 @@ class ConfigApplier:
     definition_path: str
 
     config_container: ConfigContainer
-    definition_container: DefinitionContainer
+    definition: Definition
 
     def __init__(
         self,
@@ -28,24 +28,24 @@ class ConfigApplier:
         self.config_container = ConfigContainer.model_validate(
             yaml.safe_load(Path(self.config_path).read_text())
         )
-        self.definition_container = DefinitionContainer.model_validate(
+        self.definition = Definition.model_validate(
             yaml.safe_load(Path(self.definition_path).read_text())
         )
 
     def apply(self, mode: ApplyMode) -> None:
-        tasks = self.generate_tasks(mode)
-        powershell = PowershellRunspace(preload=self.definition_container.preload)
-        results = [powershell.run(task.execution_script) for task in tasks]  # noqa: F841
+        executions = self.generate_executions(mode)
+        powershell = PowershellRunspace(preload=self.definition.preload)
+        results = [powershell.run(execution.script) for execution in executions]  # noqa: F841
 
-    def generate_tasks(self, mode: ApplyMode) -> list[Task]:
-        tasks = [
-            Task.from_definition(
-                definition=self.definition_container.get_definition(config.name),
+    def generate_executions(self, mode: ApplyMode) -> list[Execution]:
+        executions = [
+            Execution.from_definition(
+                task_definition=self.definition.get_task_definition(config.name),
                 revert=self._resolve_revert(mode, config),
             )
             for config in self.config_container.root
         ]
-        return tasks
+        return executions
 
     def _resolve_revert(self, mode: ApplyMode, config: Config) -> bool:
         match mode:

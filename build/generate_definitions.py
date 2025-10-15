@@ -1,5 +1,5 @@
-from sophia_definition import SophiaDefinitionContainer
-from winutil_definition import WinutilDefinitionContainer
+from sophia_definition import SophiaDefinition
+from winutil_definition import WinutilDefinition
 
 
 def main() -> None:
@@ -8,23 +8,23 @@ def main() -> None:
 
 
 def create_winutil_definition() -> None:
-    winutil = WinutilDefinitionContainer.from_winutil_url(
+    winutil_definition = WinutilDefinition.from_remote(
         definition_url="https://raw.githubusercontent.com/ChrisTitusTech/winutil/refs/heads/main/config/tweaks.json",
         preload_script_urls=[],
     )
-    winutil.for_winconfig().output_yaml(
+    winutil_definition.for_winconfig().output_yaml(
         "src/winconfig/definitions/winutil_definition.yaml"
     )
 
 
 def create_sophia_definition() -> None:
-    sophia = SophiaDefinitionContainer.from_url(
+    sophia_definition = SophiaDefinition.from_remote(
         definition_url="https://raw.githubusercontent.com/farag2/Sophia-Script-for-Windows/refs/heads/master/src/Sophia_Script_for_Windows_11/Sophia.ps1",
         preload_script_urls=[
             "https://raw.githubusercontent.com/farag2/Sophia-Script-for-Windows/refs/heads/master/src/Sophia_Script_for_Windows_11/Module/Sophia.psm1",
         ],
     )
-    sophia.for_winconfig().output_yaml(
+    sophia_definition.for_winconfig().output_yaml(
         "src/winconfig/definitions/sophia_definition.yaml"
     )
 

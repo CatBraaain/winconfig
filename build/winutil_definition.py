@@ -8,26 +8,26 @@ from pydantic import BaseModel, ConfigDict
 
 from winconfig.model.definition import (
     Definition,
-    DefinitionContainer,
-    Registry,
+    RegistryDefinition,
     RegistryValueKind,
-    ScheduledTask,
-    Script,
-    Service,
+    SchtaskDefinition,
+    ScriptDefinition,
+    ServiceDefinition,
     ServiceStartupType,
+    TaskDefinition,
 )
 from winconfig.powershell.constants import NOT_EXIST
 
 
-class WinutilRegistry(BaseModel):
+class WinutilRegistryDefinition(BaseModel):
     Path: str
     Name: str
     Type: RegistryValueKind
     OriginalValue: str
     Value: str
 
-    def for_winconfig(self) -> Registry:
-        return Registry(
+    def for_winconfig(self) -> RegistryDefinition:
+        return RegistryDefinition(
             path=self.Path,
             name=self.Name,
             type=self.Type,
@@ -36,39 +36,39 @@ class WinutilRegistry(BaseModel):
         )
 
 
-class WinutilScheduledTask(BaseModel):
+class WinutilScheduledTaskDefinition(BaseModel):
     Name: str
     OriginalState: Literal["Enabled", "Disabled"]
     State: Literal["Enabled", "Disabled"]
 
-    def for_winconfig(self) -> ScheduledTask:
-        return ScheduledTask(
+    def for_winconfig(self) -> SchtaskDefinition:
+        return SchtaskDefinition(
             full_path=self.Name,
             old_state=self.OriginalState,
             new_state=self.State,
         )
 
 
-class WinutilService(BaseModel):
+class WinutilServiceDefinition(BaseModel):
     Name: str
     OriginalType: ServiceStartupType
     StartupType: ServiceStartupType
 
-    def for_winconfig(self) -> Service:
-        return Service(
+    def for_winconfig(self) -> ServiceDefinition:
+        return ServiceDefinition(
             name=self.Name,
-            old_startup_type=self.OriginalType,
-            new_startup_type=self.StartupType,
+            old_startup=self.OriginalType,
+            new_startup=self.StartupType,
         )
 
 
-class WinutilDefinition(BaseModel):
+class WinutilTaskDefinition(BaseModel):
     id: str
     Content: str
     Description: str = ""
-    Registry: list[WinutilRegistry] = []
-    ScheduledTask: list[WinutilScheduledTask] = []
-    Service: list[WinutilService] = []
+    Registry: list[WinutilRegistryDefinition] = []
+    ScheduledTask: list[WinutilScheduledTaskDefinition] = []
+    Service: list[WinutilServiceDefinition] = []
     InvokeScript: list[str] | None = None
     UndoScript: list[str] | None = None
 
@@ -88,8 +88,8 @@ class WinutilDefinition(BaseModel):
         populate_by_name=True,
     )
 
-    def for_winconfig(self) -> Definition:
-        return Definition(
+    def for_winconfig(self) -> TaskDefinition:
+        return TaskDefinition(
             id=re.sub(r"WPFToggle|WPFTweaks", "", self.id),
             name=pascalize(re.sub(r"( [^\s\w]|[^\s\w] ).*", "", self.Content)),
             description=self.Description,
@@ -98,7 +98,7 @@ class WinutilDefinition(BaseModel):
                 scheduled_task.for_winconfig() for scheduled_task in self.ScheduledTask
             ],
             services=[service.for_winconfig() for service in self.Service],
-            script=Script(
+            script=ScriptDefinition(
                 apply=self.resolve_script(self.InvokeScript),
                 revert=self.resolve_script(self.UndoScript),
             ),
@@ -113,14 +113,12 @@ class WinutilDefinition(BaseModel):
         return script.strip() or None
 
 
-class WinutilDefinitionContainer(BaseModel):
-    definitions: list[WinutilDefinition]
+class WinutilDefinition(BaseModel):
+    task_definitions: list[WinutilTaskDefinition]
     preload: str | None = None
 
     @classmethod
-    def from_winutil_url(
-        cls, definition_url: str, preload_script_urls: list[str]
-    ) -> Self:
+    def from_remote(cls, definition_url: str, preload_script_urls: list[str]) -> Self:
         res = httpx.get(definition_url)
         invalid_json = res.text
         fixed_json = re.sub(
@@ -132,22 +130,16 @@ class WinutilDefinitionContainer(BaseModel):
         )
         preload = "\n".join([httpx.get(url).text for url in preload_script_urls])
         return cls(
-            definitions=[
-                WinutilDefinition.model_validate({"id": key, **value})
+            task_definitions=[
+                WinutilTaskDefinition.model_validate({"id": key, **value})
                 for key, value in yaml.safe_load(fixed_json).items()
             ],
-            preload=preload,
+            preload=preload or None,
         )
 
-    def for_winconfig(self) -> DefinitionContainer:
-        target_definitions = [
-            winutil_def
-            for winutil_def in self.definitions
-            if winutil_def.Description != ""
-        ]
-        return DefinitionContainer(
-            definitions=[
-                winutil_def.for_winconfig() for winutil_def in target_definitions
-            ],
+    def for_winconfig(self) -> Definition:
+        target_tds = [td for td in self.task_definitions if td.Description != ""]
+        return Definition(
+            task_definitions=[td.for_winconfig() for td in target_tds],
             preload=self.preload,
         )

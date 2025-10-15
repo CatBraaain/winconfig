@@ -1,25 +1,21 @@
 import pytest
 
-from winconfig.model.definition import Definition
+from winconfig.model.definition import TaskDefinition
 from winconfig.powershell.constants import ACCESS_DENIED, NOT_EXIST
 from winconfig.powershell.process import PowershellRunspace
 from winconfig.powershell.script_generator import ScriptGenerator
 
 
 def test_apply_resitory(
-    powershell: PowershellRunspace, definition: Definition, revert: bool
+    powershell: PowershellRunspace, task_definition: TaskDefinition, revert: bool
 ):
-    for registry in definition.registries:
-        res = powershell.run(
-            ScriptGenerator.generate_set_registry_script(registry, revert=revert)
-        )
+    for registry in task_definition.registries:
+        res = powershell.run(ScriptGenerator.registry_set(registry, revert=revert))
         if res == ACCESS_DENIED:
             # pytest.skip("Access denied: need workaround")
             continue
 
-        current_value = powershell.run(
-            ScriptGenerator.generate_get_registry_script(registry)
-        )
+        current_value = powershell.run(ScriptGenerator.registry_get(registry))
         expected_value = registry.resolve_value(revert)
         assert current_value == expected_value, (
             f"[{registry.full_path}]'s value '{current_value}' != '{expected_value}'"
@@ -27,15 +23,11 @@ def test_apply_resitory(
 
 
 def test_apply_scheduled_task(
-    powershell: PowershellRunspace, definition: Definition, revert: bool
+    powershell: PowershellRunspace, task_definition: TaskDefinition, revert: bool
 ):
-    for schtask in definition.scheduled_tasks:
-        powershell.run(
-            ScriptGenerator.generate_set_schtask_script(schtask, revert=revert)
-        )
-        current_state = powershell.run(
-            ScriptGenerator.generate_get_schtask_script(schtask)
-        )
+    for schtask in task_definition.scheduled_tasks:
+        powershell.run(ScriptGenerator.schtask_set(schtask, revert=revert))
+        current_state = powershell.run(ScriptGenerator.schtask_get(schtask))
         expected_value = schtask.resolve_value(revert)
         assert current_state in (NOT_EXIST, expected_value), (
             f"[{schtask.full_path}]'s state '{current_state}' != '{expected_value}'"
@@ -43,18 +35,14 @@ def test_apply_scheduled_task(
 
 
 def test_apply_service(
-    powershell: PowershellRunspace, definition: Definition, revert: bool
+    powershell: PowershellRunspace, task_definition: TaskDefinition, revert: bool
 ):
-    for service in definition.services:
-        res = powershell.run(
-            ScriptGenerator.generate_set_service_script(service, revert=revert)
-        )
+    for service in task_definition.services:
+        res = powershell.run(ScriptGenerator.service_set(service, revert=revert))
         if res == ACCESS_DENIED:
             # pytest.skip("Access denied: need workaround")
             continue
-        current_type = powershell.run(
-            ScriptGenerator.generate_get_service_script(service)
-        )
+        current_type = powershell.run(ScriptGenerator.service_get(service))
         expected_type = service.resolve_value(revert)
         if powershell.version == 5 and (
             current_type == "AutomaticDelayedStart"
@@ -69,15 +57,15 @@ def test_apply_service(
 
 
 def test_apply_script(
-    powershell: PowershellRunspace, definition: Definition, revert: bool
+    powershell: PowershellRunspace, task_definition: TaskDefinition, revert: bool
 ):
-    if definition.name in [
+    if task_definition.name in [
         "DisableHibernation",
         "DisableTelemetry",
     ]:
         pytest.skip("Windows Sandbox not supporting")
 
-    if definition.name in [
+    if task_definition.name in [
         "DisableExplorerAutomaticFolderDiscovery",
         "DisableStorageSense",
         "BlockRazerSoftwareInstalls",
@@ -85,7 +73,7 @@ def test_apply_script(
     ]:
         pytest.xfail("Need error handling")
 
-    if definition.name in [
+    if task_definition.name in [
         "RunDiskCleanup",
         "CreateRestorePoint",
         "DisableMicrosoftCopilot",  # need winget
@@ -94,6 +82,6 @@ def test_apply_script(
     ]:
         pytest.skip("Save time")
 
-    script = ScriptGenerator.generate_script_script(definition.script, revert=revert)
+    script = ScriptGenerator.custom_script(task_definition.script, revert=revert)
     powershell.run(script)
     # System.Management.Automation.ItemNotFoundException

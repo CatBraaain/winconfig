@@ -1,36 +1,33 @@
 from textwrap import dedent
 
 from winconfig.model.definition import (
-    Definition,
-    Registry,
-    ScheduledTask,
-    Script,
-    Service,
+    RegistryDefinition,
+    SchtaskDefinition,
+    ScriptDefinition,
+    ServiceDefinition,
+    TaskDefinition,
 )
 from winconfig.powershell.constants import ACCESS_DENIED, NOT_EXIST
 
 
 class ScriptGenerator:
     @classmethod
-    def generate_script(cls, definition: Definition, revert: bool) -> str:
+    def generate_execution(cls, task_definition: TaskDefinition, revert: bool) -> str:
         return "\n".join(
             [
-                cls.generate_set_registry_script(registry, revert)
-                for registry in definition.registries
+                cls.registry_set(registry, revert)
+                for registry in task_definition.registries
             ]
             + [
-                cls.generate_set_schtask_script(task, revert)
-                for task in definition.scheduled_tasks
+                cls.schtask_set(task, revert)
+                for task in task_definition.scheduled_tasks
             ]
-            + [
-                cls.generate_set_service_script(service, revert)
-                for service in definition.services
-            ]
-            + [cls.generate_script_script(definition.script, revert)]
+            + [cls.service_set(service, revert) for service in task_definition.services]
+            + [cls.custom_script(task_definition.script, revert)]
         )
 
     @staticmethod
-    def generate_set_registry_script(registry: Registry, revert: bool) -> str:
+    def registry_set(registry: RegistryDefinition, revert: bool) -> str:
         value = registry.resolve_value(revert)
 
         ensure_key = rf"""
@@ -59,7 +56,7 @@ class ScriptGenerator:
         return dedent(script)
 
     @staticmethod
-    def generate_get_registry_script(registry: Registry) -> str:
+    def registry_get(registry: RegistryDefinition) -> str:
         get_entry = rf"""
             try {{
                 Get-ItemPropertyValue -Path "{registry.path}" -Name "{registry.name}" -ErrorAction Stop
@@ -74,7 +71,7 @@ class ScriptGenerator:
         return dedent(get_entry)
 
     @staticmethod
-    def generate_set_schtask_script(schtask: ScheduledTask, revert: bool) -> str:
+    def schtask_set(schtask: SchtaskDefinition, revert: bool) -> str:
         state = schtask.resolve_value(revert)
         enabled = "$true" if state == "Enabled" else "$false"
         script = f"""
@@ -90,7 +87,7 @@ class ScriptGenerator:
         return dedent(script)
 
     @staticmethod
-    def generate_get_schtask_script(schtask: ScheduledTask) -> str:
+    def schtask_get(schtask: SchtaskDefinition) -> str:
         get_task = f"""
             try {{
                 $service = New-Object -ComObject "Schedule.Service"
@@ -106,7 +103,7 @@ class ScriptGenerator:
         return dedent(get_task)
 
     @staticmethod
-    def generate_set_service_script(service: Service, revert: bool) -> str:
+    def service_set(service: ServiceDefinition, revert: bool) -> str:
         startup_type = service.resolve_value(revert)
 
         service_name = f"""
@@ -137,7 +134,7 @@ class ScriptGenerator:
         return dedent(script)
 
     @staticmethod
-    def generate_get_service_script(service: Service) -> str:
+    def service_get(service: ServiceDefinition) -> str:
         script = f"""
             try {{
                 $startupType = (Get-Service -Name "{service.name}" -ErrorAction Stop).StartType
@@ -153,6 +150,6 @@ class ScriptGenerator:
         return dedent(script)
 
     @staticmethod
-    def generate_script_script(input_script: Script, revert: bool) -> str:
+    def custom_script(input_script: ScriptDefinition, revert: bool) -> str:
         script = input_script.resolve_value(revert) or ""
         return dedent(script)

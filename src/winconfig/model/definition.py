@@ -32,7 +32,7 @@ type RegistryValueKind = Literal[
 ]
 
 
-class Registry(BaseModel):
+class RegistryDefinition(BaseModel):
     path: Annotated[str, PlainSerializer(lambda x: x.replace("Registry::", ""))]
     name: str
     type: RegistryValueKind
@@ -67,13 +67,13 @@ class Registry(BaseModel):
         return self.new_value if not revert else self.old_value
 
 
-type ScheduledTaskState = Literal["Enabled", "Disabled"]
+type SchtaskState = Literal["Enabled", "Disabled"]
 
 
-class ScheduledTask(BaseModel):
+class SchtaskDefinition(BaseModel):
     full_path: str
-    old_state: ScheduledTaskState
-    new_state: ScheduledTaskState
+    old_state: SchtaskState
+    new_state: SchtaskState
 
     def resolve_value(self, revert: bool) -> str:
         return self.new_state if not revert else self.old_state
@@ -100,16 +100,16 @@ type ServiceStartupType = Literal[
 ]
 
 
-class Service(BaseModel):
+class ServiceDefinition(BaseModel):
     name: str
-    old_startup_type: ServiceStartupType
-    new_startup_type: ServiceStartupType
+    old_startup: ServiceStartupType
+    new_startup: ServiceStartupType
 
     def resolve_value(self, revert: bool) -> str:
-        return self.new_startup_type if not revert else self.old_startup_type
+        return self.new_startup if not revert else self.old_startup
 
 
-class Script(BaseModel):
+class ScriptDefinition(BaseModel):
     apply: str | None
     revert: str | None
 
@@ -117,14 +117,14 @@ class Script(BaseModel):
         return self.apply if not revert else self.revert
 
 
-class Definition(BaseModel):
+class TaskDefinition(BaseModel):
     id: str
     name: str
     description: str
-    registries: list[Registry] = []
-    scheduled_tasks: list[ScheduledTask] = []
-    services: list[Service] = []
-    script: Script = Script(apply=None, revert=None)
+    registries: list[RegistryDefinition] = []
+    scheduled_tasks: list[SchtaskDefinition] = []
+    services: list[ServiceDefinition] = []
+    script: ScriptDefinition = ScriptDefinition(apply=None, revert=None)
 
     model_config = ConfigDict(
         # use_enum_values=False,
@@ -140,15 +140,15 @@ class Definition(BaseModel):
     )
 
 
-class DefinitionContainer(BaseModel):
-    definitions: list[Definition] = []
+class Definition(BaseModel):
+    task_definitions: list[TaskDefinition] = []
     preload: str | None = None
 
-    def get_definition(self, task_name: str) -> Definition:
-        definition = next((x for x in self.definitions if x.name == task_name), None)
-        if definition is None:
-            raise ValueError(f"Definition {task_name} not found")
-        return definition
+    def get_task_definition(self, task_name: str) -> TaskDefinition:
+        task = next((x for x in self.task_definitions if x.name == task_name), None)
+        if task is None:
+            raise ValueError(f"Task definition {task_name} not found")
+        return task
 
     def output_yaml(self, dist_path: str) -> None:
         def str_presenter(dumper: Any, data: Any) -> Any:  # noqa: ANN401

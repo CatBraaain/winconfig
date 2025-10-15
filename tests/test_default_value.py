@@ -1,6 +1,6 @@
 import pytest
 
-from winconfig.model.definition import Definition
+from winconfig.model.definition import TaskDefinition
 from winconfig.powershell.constants import NOT_EXIST
 from winconfig.powershell.process import PowershellRunspace
 from winconfig.powershell.script_generator import ScriptGenerator
@@ -16,9 +16,11 @@ def skip_this_test():
 # )
 
 
-def test_default_resitory(powershell: PowershellRunspace, definition: Definition):
-    for registry in definition.registries:
-        script = ScriptGenerator.generate_get_registry_script(registry)
+def test_default_resitory(
+    powershell: PowershellRunspace, task_definition: TaskDefinition
+):
+    for registry in task_definition.registries:
+        script = ScriptGenerator.registry_get(registry)
         current_value = powershell.run(script)
         expected_value = registry.old_value
         assert current_value in (NOT_EXIST, expected_value), (
@@ -26,9 +28,11 @@ def test_default_resitory(powershell: PowershellRunspace, definition: Definition
         )
 
 
-def test_default_scheduled_task(powershell: PowershellRunspace, definition: Definition):
-    for task in definition.scheduled_tasks:
-        script = ScriptGenerator.generate_get_schtask_script(task)
+def test_default_scheduled_task(
+    powershell: PowershellRunspace, task_definition: TaskDefinition
+):
+    for task in task_definition.scheduled_tasks:
+        script = ScriptGenerator.schtask_get(task)
         current_state = powershell.run(script)
         expected_state = task.old_state
         assert current_state in (NOT_EXIST, expected_state), (
@@ -36,11 +40,13 @@ def test_default_scheduled_task(powershell: PowershellRunspace, definition: Defi
         )
 
 
-def test_default_service(powershell: PowershellRunspace, definition: Definition):
-    for service in definition.services:
-        script = ScriptGenerator.generate_get_service_script(service)
+def test_default_service(
+    powershell: PowershellRunspace, task_definition: TaskDefinition
+):
+    for service in task_definition.services:
+        script = ScriptGenerator.service_get(service)
         current_type = powershell.run(script)
-        expected_type = service.old_startup_type
+        expected_type = service.old_startup
         assert current_type in (NOT_EXIST, expected_type), (
             f"[{service.name}]'s type '{current_type}' != '{expected_type}'"
         )

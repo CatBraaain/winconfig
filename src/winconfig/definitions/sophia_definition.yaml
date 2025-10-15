@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=./schema.json
 
-definitions:
+task_definitions:
   - id: DiagTrackService
     name: DisableDiagTrackService
     description:

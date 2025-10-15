@@ -6,7 +6,7 @@ from typing import Any
 from pydantic import ConfigDict
 from pydantic.json_schema import GenerateJsonSchema, JsonSchemaValue
 
-from winconfig.model.definition import DefinitionContainer
+from winconfig.model.definition import Definition
 
 
 class GenerateJsonSchemaNoTitles(GenerateJsonSchema):
@@ -20,9 +20,7 @@ class GenerateJsonSchemaNoTitles(GenerateJsonSchema):
         json_schema.pop("title", None)
 
 
-schema_json = DefinitionContainer.model_json_schema(
-    schema_generator=GenerateJsonSchemaNoTitles
-)
+schema_json = Definition.model_json_schema(schema_generator=GenerateJsonSchemaNoTitles)
 
 dist = "src/winconfig/definitions/schema.json"
 Path(dist).write_text(json.dumps(schema_json, indent=2) + "\n")

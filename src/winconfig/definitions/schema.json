@@ -1,68 +1,10 @@
 {
   "$defs": {
-    "Definition": {
-      "additionalProperties": false,
-      "anyOf": [
-        {
-          "required": ["registries"]
-        },
-        {
-          "required": ["scheduled_tasks"]
-        },
-        {
-          "required": ["services"]
-        },
-        {
-          "required": ["script"]
-        }
-      ],
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "registries": {
-          "default": [],
-          "items": {
-            "$ref": "#/$defs/Registry"
-          },
-          "type": "array"
-        },
-        "scheduled_tasks": {
-          "default": [],
-          "items": {
-            "$ref": "#/$defs/ScheduledTask"
-          },
-          "type": "array"
-        },
-        "services": {
-          "default": [],
-          "items": {
-            "$ref": "#/$defs/Service"
-          },
-          "type": "array"
-        },
-        "script": {
-          "$ref": "#/$defs/Script",
-          "default": {
-            "apply": null,
-            "revert": null
-          }
-        }
-      },
-      "required": ["id", "name", "description"],
-      "type": "object"
-    },
     "NotExistType": {
       "const": "<NotExist>",
       "type": "string"
     },
-    "Registry": {
+    "RegistryDefinition": {
       "properties": {
         "path": {
           "type": "string"
@@ -108,26 +50,26 @@
       ],
       "type": "string"
     },
-    "ScheduledTask": {
+    "SchtaskDefinition": {
       "properties": {
         "full_path": {
           "type": "string"
         },
         "old_state": {
-          "$ref": "#/$defs/ScheduledTaskState"
+          "$ref": "#/$defs/SchtaskState"
         },
         "new_state": {
-          "$ref": "#/$defs/ScheduledTaskState"
+          "$ref": "#/$defs/SchtaskState"
         }
       },
       "required": ["full_path", "old_state", "new_state"],
       "type": "object"
     },
-    "ScheduledTaskState": {
+    "SchtaskState": {
       "enum": ["Enabled", "Disabled"],
       "type": "string"
     },
-    "Script": {
+    "ScriptDefinition": {
       "properties": {
         "apply": {
           "anyOf": [
@@ -153,19 +95,19 @@
       "required": ["apply", "revert"],
       "type": "object"
     },
-    "Service": {
+    "ServiceDefinition": {
       "properties": {
         "name": {
           "type": "string"
         },
-        "old_startup_type": {
+        "old_startup": {
           "$ref": "#/$defs/ServiceStartupType"
         },
-        "new_startup_type": {
+        "new_startup": {
           "$ref": "#/$defs/ServiceStartupType"
         }
       },
-      "required": ["name", "old_startup_type", "new_startup_type"],
+      "required": ["name", "old_startup", "new_startup"],
       "type": "object"
     },
     "ServiceStartupType": {
@@ -177,13 +119,71 @@
         "Manual"
       ],
       "type": "string"
+    },
+    "TaskDefinition": {
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": ["registries"]
+        },
+        {
+          "required": ["scheduled_tasks"]
+        },
+        {
+          "required": ["services"]
+        },
+        {
+          "required": ["script"]
+        }
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "registries": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/RegistryDefinition"
+          },
+          "type": "array"
+        },
+        "scheduled_tasks": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/SchtaskDefinition"
+          },
+          "type": "array"
+        },
+        "services": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ServiceDefinition"
+          },
+          "type": "array"
+        },
+        "script": {
+          "$ref": "#/$defs/ScriptDefinition",
+          "default": {
+            "apply": null,
+            "revert": null
+          }
+        }
+      },
+      "required": ["id", "name", "description"],
+      "type": "object"
     }
   },
   "properties": {
-    "definitions": {
+    "task_definitions": {
       "default": [],
       "items": {
-        "$ref": "#/$defs/Definition"
+        "$ref": "#/$defs/TaskDefinition"
       },
       "type": "array"
     },
