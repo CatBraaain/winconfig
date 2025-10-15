@@ -2256,17 +2256,6 @@ definitions:
         type: DWord
         old_value: "1"
         new_value: "0"
-    script:
-      apply: |-
-        Invoke-WinUtilExplorerUpdate
-        if ($sync.ThemeButton.Content -eq [char]0xF08C) {
-          Invoke-WinutilThemeChange -theme "Auto"
-        }
-      revert: |-
-        Invoke-WinUtilExplorerUpdate
-        if ($sync.ThemeButton.Content -eq [char]0xF08C) {
-          Invoke-WinutilThemeChange -theme "Auto"
-        }
   - id: BingSearch
     name: BingSearchInStartMenu
     description:
@@ -2352,9 +2341,6 @@ definitions:
         type: DWord
         old_value: "0"
         new_value: "1"
-    script:
-      apply: Invoke-WinUtilExplorerUpdate -action "restart"
-      revert: Invoke-WinUtilExplorerUpdate -action "restart"
   - id: SnapSuggestion
     name: SnapAssistSuggestion
     description:
@@ -2366,9 +2352,6 @@ definitions:
         type: DWord
         old_value: "0"
         new_value: "1"
-    script:
-      apply: Invoke-WinUtilExplorerUpdate -action "restart"
-      revert: Invoke-WinUtilExplorerUpdate -action "restart"
   - id: MouseAcceleration
     name: MouseAcceleration
     description:
@@ -2449,9 +2432,6 @@ definitions:
         type: DWord
         old_value: "0"
         new_value: "1"
-    script:
-      apply: Invoke-WinUtilExplorerUpdate -action "restart"
-      revert: Invoke-WinUtilExplorerUpdate -action "restart"
   - id: ShowExt
     name: ShowFileExtensions
     description: If enabled then File extensions (e.g., .txt, .jpg) are visible.
@@ -2461,9 +2441,6 @@ definitions:
         type: DWord
         old_value: "1"
         new_value: "0"
-    script:
-      apply: Invoke-WinUtilExplorerUpdate -action "restart"
-      revert: Invoke-WinUtilExplorerUpdate -action "restart"
   - id: TaskbarSearch
     name: SearchButtonInTaskbar
     description: If Enabled Search Button will be on the taskbar.

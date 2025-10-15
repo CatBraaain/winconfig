@@ -89,8 +89,6 @@ class WinutilDefinition(BaseModel):
     )
 
     def for_winconfig(self) -> Definition:
-        apply = "\n".join(self.InvokeScript or []).rstrip() or None
-        revert = "\n".join(self.UndoScript or []).rstrip() or None
         return Definition(
             id=re.sub(r"WPFToggle|WPFTweaks", "", self.id),
             name=pascalize(re.sub(r"( [^\s\w]|[^\s\w] ).*", "", self.Content)),
@@ -101,10 +99,18 @@ class WinutilDefinition(BaseModel):
             ],
             services=[service.for_winconfig() for service in self.Service],
             script=Script(
-                apply=apply,
-                revert=revert,
+                apply=self.resolve_script(self.InvokeScript),
+                revert=self.resolve_script(self.UndoScript),
             ),
         )
+
+    def resolve_script(self, value: list[str] | None) -> str | None:
+        script = "\n".join(value or []).rstrip()
+        script = re.sub(
+            "Invoke-WinUtilExplorerUpdate.*(;|$)", "", script, flags=re.MULTILINE
+        )
+        script = re.sub(r"if \(\$sync.*\) \{[\s\S]*?\}", "", script)
+        return script.strip() or None
 
 
 class WinutilDefinitionContainer(BaseModel):

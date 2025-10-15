@@ -10,10 +10,7 @@ def main() -> None:
 def create_winutil_definition() -> None:
     winutil = WinutilDefinitionContainer.from_winutil_url(
         definition_url="https://raw.githubusercontent.com/ChrisTitusTech/winutil/refs/heads/main/config/tweaks.json",
-        preload_script_urls=[
-            "https://raw.githubusercontent.com/ChrisTitusTech/winutil/refs/heads/main/functions/private/Invoke-WinUtilExplorerUpdate.ps1",
-            "https://raw.githubusercontent.com/ChrisTitusTech/winutil/refs/heads/main/functions/public/Invoke-WPFRunspace.ps1",
-        ],
+        preload_script_urls=[],
     )
     winutil.for_winconfig().output_yaml(
         "src/winconfig/definitions/winutil_definition.yaml"
