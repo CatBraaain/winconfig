@@ -21,7 +21,7 @@ class ConfigApplier:
     def __init__(
         self,
         config_path: str,
-        definition_path: str = "src/winconfig/definitions/winutil_definition.yaml",
+        definition_path: str = "src/winconfig/definitions/winutil.definition.yaml",
     ) -> None:
         self.config_path = config_path
         self.definition_path = definition_path

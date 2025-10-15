@@ -13,7 +13,7 @@ def create_winutil_definition() -> None:
         preload_script_urls=[],
     )
     winutil_definition.for_winconfig().output_yaml(
-        "src/winconfig/definitions/winutil_definition.yaml"
+        "src/winconfig/definitions/winutil.definition.yaml"
     )
 
 
@@ -25,7 +25,7 @@ def create_sophia_definition() -> None:
         ],
     )
     sophia_definition.for_winconfig().output_yaml(
-        "src/winconfig/definitions/sophia_definition.yaml"
+        "src/winconfig/definitions/sophia.definition.yaml"
     )
 
 

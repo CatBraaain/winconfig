@@ -19,7 +19,7 @@ def ensure_sandbox(powershell: PowershellRunspace):
         pytest.fail("This test must be run inside a Windows Sandbox")
 
 
-DEFINITIONS_FILE = Path("src/winconfig/definitions/winutil_definition.yaml")
+DEFINITIONS_FILE = Path("src/winconfig/definitions/winutil.definition.yaml")
 definition = Definition.model_validate(yaml.safe_load(DEFINITIONS_FILE.read_text()))
 task_definitions = definition.task_definitions
 
