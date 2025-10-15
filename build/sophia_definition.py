@@ -76,6 +76,15 @@ class SophiaDefinitionContainer(BaseModel):
             definition
             for definition in self.definitions
             if not re.search(r"using \w+ pop-up", definition.description)
+            and definition.calling
+            not in [
+                "Set-Association",
+                "Export-Associations",
+                "Import-Associations",
+                "ScanRegistryPolicies",
+                "PostActions",
+                "Errors",
+            ]
         ]
         definition_groups = [
             list(group)

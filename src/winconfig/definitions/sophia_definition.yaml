@@ -545,20 +545,6 @@ definitions:
         Set-Association -ProgramPath "%ProgramFiles%\Notepad++\notepad++.exe" -Extension
         .txt -Icon "%ProgramFiles%\Notepad++\notepad++.exe,0"
       revert: null
-  - id: Export-Associations
-    name: ExportAssociations
-    description:
-      Экспортировать все ассоциации в Windows в корень папки в виде файла
-      Application_Associations.json
-    script:
-      apply: Export-Associations
-      revert: null
-  - id: Import-Associations
-    name: ImportAssociations
-    description: Импортировать все ассоциации в Windows из файла Application_Associations.json
-    script:
-      apply: Import-Associations
-      revert: null
   - id: DefaultTerminalApp
     name: WindowsTerminalDefaultTerminalApp
     description:
@@ -826,26 +812,6 @@ definitions:
     script:
       apply: OpenWindowsTerminalAdminContext -Enable
       revert: OpenWindowsTerminalAdminContext -Disable
-  - id: ScanRegistryPolicies
-    name: ScanRegistryPolicies
-    description:
-      Scan the Windows registry and display all policies (even created manually)
-      in the Local Group Policy Editor snap-in (gpedit.msc)
-    script:
-      apply: ScanRegistryPolicies
-      revert: null
-  - id: PostActions
-    name: PostActions
-    description: Environment refresh and other neccessary post actions
-    script:
-      apply: PostActions
-      revert: null
-  - id: Errors
-    name: Errors
-    description: Errors output
-    script:
-      apply: Errors
-      revert: null
 preload: |
   <#
       .SYNOPSIS
