@@ -393,18 +393,6 @@ definitions:
     script:
       apply: WindowsManageDefaultPrinter -Disable
       revert: WindowsManageDefaultPrinter -Enable
-  - id: DisableWindowsFeatures
-    name: DisableWindowsFeatures
-    description: Disable the Windows features using the pop-up dialog box
-    script:
-      apply: WindowsFeatures -Disable
-      revert: null
-  - id: UninstallWindowsCapabilities
-    name: UninstallWindowsCapabilities
-    description: Uninstall optional features using the pop-up dialog box
-    script:
-      apply: WindowsCapabilities -Uninstall
-      revert: null
   - id: EnableUpdateMicrosoftProducts
     name: EnableUpdateMicrosoftProducts
     description: Receive updates for other Microsoft products
@@ -618,27 +606,12 @@ definitions:
     script:
       apply: RegistryBackup -Enable
       revert: RegistryBackup -Disable
-  - id: InstallWsl
-    name: InstallWsl
-    description:
-      Enable Windows Subsystem for Linux (WSL), install the latest WSL Linux
-      kernel version, and a Linux distribution using a pop-up form. Internet connection
-      required
-    script:
-      apply: Install-WSL
-      revert: null
   - id: ShowMorePinsStartLayout
     name: ShowMorePinsStartLayout
     description: Show more pins on Start
     script:
       apply: StartLayout -ShowMorePins
       revert: StartLayout -Default
-  - id: UninstallUwpApps
-    name: UninstallUwpApps
-    description: Uninstall UWP apps using the pop-up dialog box
-    script:
-      apply: UninstallUWPApps
-      revert: null
   - id: DisableXboxGameBar
     name: DisableXboxGameBar
     description: Disable Xbox Game Bar

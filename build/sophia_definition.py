@@ -72,9 +72,14 @@ class SophiaDefinitionContainer(BaseModel):
         )
 
     def to_winconfig_definition(self) -> DefinitionContainer:
+        target_definitions = [
+            definition
+            for definition in self.definitions
+            if not re.search(r"using \w+ pop-up", definition.description)
+        ]
         definition_groups = [
             list(group)
-            for key, group in groupby(self.definitions, key=lambda d: d.function_name)
+            for key, group in groupby(target_definitions, key=lambda d: d.function_name)
         ]
         print([(g[0].function_name, len(g)) for g in definition_groups if len(g) > 2])
 
