@@ -71,7 +71,7 @@ definitions:
         Write-Host "Turn off Hibernation"
         Start-Process -FilePath powercfg -ArgumentList "/hibernate off" -NoNewWindow -Wait
 
-        # Set standby to detault values
+        # Set standby to default values
         Start-Process -FilePath powercfg -ArgumentList "/change standby-timeout-ac 15" -NoNewWindow -Wait
         Start-Process -FilePath powercfg -ArgumentList "/change standby-timeout-dc 15" -NoNewWindow -Wait
         Start-Process -FilePath powercfg -ArgumentList "/change monitor-timeout-ac 15" -NoNewWindow -Wait
@@ -1028,11 +1028,6 @@ definitions:
         old_value: <NotExist>
         new_value: "0"
       - path: HKLM\SOFTWARE\Policies\Microsoft\Edge
-        name: PersonalizationReportingEnabled
-        type: DWord
-        old_value: <NotExist>
-        new_value: "0"
-      - path: HKLM\SOFTWARE\Policies\Microsoft\Edge
         name: ShowMicrosoftRewards
         type: DWord
         old_value: <NotExist>
@@ -1049,11 +1044,6 @@ definitions:
         new_value: "0"
       - path: HKLM\SOFTWARE\Policies\Microsoft\Edge
         name: EdgeAssetDeliveryServiceEnabled
-        type: DWord
-        old_value: <NotExist>
-        new_value: "0"
-      - path: HKLM\SOFTWARE\Policies\Microsoft\Edge
-        name: EdgeCollectionsEnabled
         type: DWord
         old_value: <NotExist>
         new_value: "0"
@@ -1355,6 +1345,29 @@ definitions:
         type: DWord
         old_value: "1"
         new_value: "0"
+  - id: DisableEdge
+    name: DisableEdge
+    description:
+      Disables Microsoft Edge via the registry and prevents scheduled tasks
+      from running Edge updates.
+    registries:
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\DisallowRun
+        name: DisableEdge
+        type: String
+        old_value: <NotExist>
+        new_value: msedge.exe
+      - path: HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer
+        name: DisallowRun
+        type: DWord
+        old_value: <NotExist>
+        new_value: "1"
+    script:
+      apply:
+        Get-ScheduledTask | Where-Object { $_.TaskName -like '*MicrosoftEdgeUpdate*'
+        } | Disable-ScheduledTask
+      revert:
+        Get-ScheduledTask | Where-Object { $_.TaskName -like '*MicrosoftEdgeUpdate*'
+        } | Enable-ScheduledTask
   - id: UTC
     name: SetTimeToUtc
     description:
