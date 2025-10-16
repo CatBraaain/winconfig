@@ -25,7 +25,7 @@ class SophiaTaskDefinition(BaseModel):
     def from_definition(cls, definition_block: str) -> Self:
         definition_lines = definition_block.splitlines()
         calling = definition_lines[-1].removeprefix("# ").strip()
-        name = pascalize(" ".join(calling.split(" ")[::-1]))
+        name = cls.resolve_name(calling)
         description = definition_lines[0].removeprefix("# ").strip()
         function_name = calling.split(" ")[0]
         is_default = (
@@ -41,6 +41,30 @@ class SophiaTaskDefinition(BaseModel):
             calling=calling,
             is_default=is_default,
         )
+
+    @staticmethod
+    def resolve_name(calling_line: str) -> str:
+        elements = calling_line.split(" ")
+        match len(elements):
+            case 1:
+                function_name = elements[0]
+                param_name = ""
+                has_arg = False
+                name_src = function_name
+            case 2:
+                function_name = elements[0]
+                param_name = elements[1]
+                has_arg = False
+                name_src = param_name + " " + function_name
+            case _:
+                function_name = elements[0]
+                param_name = elements[1]
+                has_arg = not elements[2].startswith("-")
+                name_src = (
+                    function_name if has_arg else param_name + " " + function_name
+                )
+
+        return pascalize(name_src)
 
 
 class SophiaDefinition(BaseModel):

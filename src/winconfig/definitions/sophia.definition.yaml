@@ -246,7 +246,7 @@ task_definitions:
       apply: TaskbarCombine -Full
       revert: TaskbarCombine -Always
   - id: UnpinTaskbarShortcuts
-    name: OutlookStoreEdgeShortcutsUnpinTaskbarShortcuts
+    name: UnpinTaskbarShortcuts
     description:
       Unpin Microsoft Edge, Microsoft Store, and Outlook shortcuts from the
       taskbar
@@ -536,7 +536,7 @@ task_definitions:
       apply: DefaultTerminalApp -WindowsTerminal
       revert: DefaultTerminalApp -ConsoleHost
   - id: Install-VCRedist
-    name: 20152022X6420152022X86RedistributablesInstallVcRedist
+    name: InstallVcRedist
     description:
       Install the latest Microsoft Visual C++ Redistributable Packages 2015–2022
       (x86/x64). Internet connection required
@@ -544,7 +544,7 @@ task_definitions:
       apply: Install-VCRedist -Redistributables 2015_2022_x86, 2015_2022_x64
       revert: null
   - id: Install-DotNetRuntimes
-    name: Net9Net8RuntimesInstallDotNetRuntimes
+    name: InstallDotNetRuntimes
     description: Install the latest .NET Runtime 8, 9. Internet connection required
     script:
       apply: Install-DotNetRuntimes -Runtimes NET8, NET9
@@ -558,7 +558,7 @@ task_definitions:
       apply: RKNBypass -Enable
       revert: RKNBypass -Disable
   - id: PreventEdgeShortcutCreation
-    name: CanaryDevBetaStableChannelsPreventEdgeShortcutCreation
+    name: PreventEdgeShortcutCreation
     description:
       List Microsoft Edge channels to prevent desktop shortcut creation upon
       its update
@@ -709,7 +709,7 @@ task_definitions:
       apply: WindowsSandbox -Enable
       revert: WindowsSandbox -Disable
   - id: DNSoverHTTPS
-    name: 1111SecondaryDns1001PrimaryDnsEnableDnSoverHttps
+    name: EnableDnSoverHttps
     description: Enable DNS-over-HTTPS for IPv4
     script:
       apply: DNSoverHTTPS -Enable -PrimaryDNS 1.0.0.1 -SecondaryDNS 1.1.1.1
