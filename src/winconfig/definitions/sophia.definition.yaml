@@ -1,14 +1,6 @@
 # yaml-language-server: $schema=./schema.json
 
 task_definitions:
-  - id: DiagTrackService
-    name: DisableDiagTrackService
-    description:
-      Disable the "Connected User Experiences and Telemetry" service (DiagTrack),
-      and block the connection for the Unified Telemetry Client Outbound Traffic
-    script:
-      apply: DiagTrackService -Disable
-      revert: DiagTrackService -Enable
   - id: DiagnosticDataLevel
     name: MinimalDiagnosticDataLevel
     description: Set the diagnostic data collection to minimum
@@ -27,12 +19,6 @@ task_definitions:
     script:
       apply: FeedbackFrequency -Never
       revert: FeedbackFrequency -Automatically
-  - id: ScheduledTasks
-    name: DisableScheduledTasks
-    description: Turn off the diagnostics tracking scheduled tasks
-    script:
-      apply: ScheduledTasks -Disable
-      revert: ScheduledTasks -Enable
   - id: SigninInfo
     name: DisableSigninInfo
     description:
@@ -245,14 +231,6 @@ task_definitions:
     script:
       apply: TaskbarCombine -Full
       revert: TaskbarCombine -Always
-  - id: UnpinTaskbarShortcuts
-    name: UnpinTaskbarShortcuts
-    description:
-      Unpin Microsoft Edge, Microsoft Store, and Outlook shortcuts from the
-      taskbar
-    script:
-      apply: UnpinTaskbarShortcuts -Shortcuts Edge, Store, Outlook
-      revert: null
   - id: TaskbarEndTask
     name: EnableTaskbarEndTask
     description: Enable end task in taskbar by right click
@@ -315,14 +293,6 @@ task_definitions:
     script:
       apply: AeroShaking -Enable
       revert: AeroShaking -Disable
-  - id: Cursors
-    name: DarkCursors
-    description:
-      Download and install free dark "Windows 11 Cursors Concept" cursors
-      from Jepri Creations. Internet connection required
-    script:
-      apply: Cursors -Dark
-      revert: Cursors -Default
   - id: FolderGroupBy
     name: NoneFolderGroupBy
     description: Do not group files and folder in the Downloads folder
@@ -341,14 +311,6 @@ task_definitions:
     script:
       apply: StartRecommendedSection -Hide
       revert: StartRecommendedSection -Show
-  - id: OneDrive
-    name: UninstallOneDrive
-    description:
-      Uninstall OneDrive. OneDrive user folder won't be removed if any file
-      found there
-    script:
-      apply: OneDrive -Uninstall
-      revert: OneDrive -Install
   - id: StorageSense
     name: EnableStorageSense
     description: Turn on Storage Sense
@@ -429,14 +391,6 @@ task_definitions:
     script:
       apply: PowerPlan -High
       revert: PowerPlan -Balanced
-  - id: NetworkAdaptersSavePower
-    name: DisableNetworkAdaptersSavePower
-    description:
-      Do not allow the computer to turn off the network adapters to save
-      power. Not recommended for laptops
-    script:
-      apply: NetworkAdaptersSavePower -Disable
-      revert: NetworkAdaptersSavePower -Enable
   - id: InputMethod
     name: EnglishInputMethod
     description: "Override for default input method: English"
@@ -598,28 +552,6 @@ task_definitions:
     script:
       apply: GPUScheduling -Enable
       revert: GPUScheduling -Disable
-  - id: CleanupTask
-    name: RegisterCleanupTask
-    description:
-      Create the "Windows Cleanup" scheduled task for cleaning up Windows
-      unused files and updates.
-    script:
-      apply: CleanupTask -Register
-      revert: CleanupTask -Delete
-  - id: SoftwareDistributionTask
-    name: RegisterSoftwareDistributionTask
-    description:
-      Create the "SoftwareDistribution" scheduled task for cleaning up the
-      %SystemRoot%\SoftwareDistribution\Download folder
-    script:
-      apply: SoftwareDistributionTask -Register
-      revert: SoftwareDistributionTask -Delete
-  - id: TempTask
-    name: RegisterTempTask
-    description: Create the "Temp" scheduled task for cleaning up the %TEMP% folder
-    script:
-      apply: TempTask -Register
-      revert: TempTask -Delete
   - id: NetworkProtection
     name: EnableNetworkProtection
     description: Enable Microsoft Defender Exploit Guard network protection

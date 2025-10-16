@@ -101,11 +101,23 @@ class SophiaDefinition(BaseModel):
             if not re.search(r"using \w+ pop-up", td.description)
             and td.function_name
             not in [
+                # gui
                 "Set-Association",
                 "Export-Associations",
                 "Import-Associations",
                 "ScanRegistryPolicies",
                 "Set-UserShellFolderLocation",
+                "UnpinTaskbarShortcuts",
+                # deps
+                "DiagTrackService",
+                "NetworkAdaptersSavePower",
+                "ScheduledTasks",
+                "Cursors",
+                "OneDrive",
+                "CleanupTask",
+                "SoftwareDistributionTask",
+                "TempTask",
+                # other
                 "PostActions",
                 "Errors",
             ]
