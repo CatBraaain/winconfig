@@ -443,14 +443,6 @@ task_definitions:
     script:
       apply: InputMethod -English
       revert: InputMethod -Default
-  - id: Set-UserShellFolderLocation
-    name: RootSetUserShellFolderLocation
-    description:
-      Change user folders location to the root of any drive using an interactive
-      menu
-    script:
-      apply: Set-UserShellFolderLocation -Root
-      revert: Set-UserShellFolderLocation -Default
   - id: LatestInstalled.NET
     name: EnableLatestInstalledNet
     description: Use .NET Framework 4.8.1 for old apps

@@ -81,6 +81,7 @@ class SophiaDefinition(BaseModel):
                 "Export-Associations",
                 "Import-Associations",
                 "ScanRegistryPolicies",
+                "Set-UserShellFolderLocation",
                 "PostActions",
                 "Errors",
             ]
