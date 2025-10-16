@@ -7,8 +7,9 @@ from winconfig.powershell.script_generator import ScriptGenerator
 
 
 def test_apply_resitory(
-    powershell: PowershellRunspace, task_definition: TaskDefinition, revert: bool
+    runtime_set: tuple[PowershellRunspace, TaskDefinition], revert: bool
 ):
+    powershell, task_definition = runtime_set
     for registry in task_definition.registries:
         res = powershell.run(ScriptGenerator.registry_set(registry, revert=revert))
         if res == ACCESS_DENIED:
@@ -23,8 +24,9 @@ def test_apply_resitory(
 
 
 def test_apply_scheduled_task(
-    powershell: PowershellRunspace, task_definition: TaskDefinition, revert: bool
+    runtime_set: tuple[PowershellRunspace, TaskDefinition], revert: bool
 ):
+    powershell, task_definition = runtime_set
     for schtask in task_definition.scheduled_tasks:
         powershell.run(ScriptGenerator.schtask_set(schtask, revert=revert))
         current_state = powershell.run(ScriptGenerator.schtask_get(schtask))
@@ -35,8 +37,9 @@ def test_apply_scheduled_task(
 
 
 def test_apply_service(
-    powershell: PowershellRunspace, task_definition: TaskDefinition, revert: bool
+    runtime_set: tuple[PowershellRunspace, TaskDefinition], revert: bool
 ):
+    powershell, task_definition = runtime_set
     for service in task_definition.services:
         res = powershell.run(ScriptGenerator.service_set(service, revert=revert))
         if res == ACCESS_DENIED:
@@ -57,28 +60,40 @@ def test_apply_service(
 
 
 def test_apply_script(
-    powershell: PowershellRunspace, task_definition: TaskDefinition, revert: bool
+    runtime_set: tuple[PowershellRunspace, TaskDefinition], revert: bool
 ):
+    powershell, task_definition = runtime_set
     if task_definition.name in [
+        # winutil
         "DisableHibernation",
         "DisableTelemetry",
+        # sophia
+        "EnableWindowsSandbox",
     ]:
         pytest.skip("Windows Sandbox not supporting")
 
     if task_definition.name in [
+        # winutil
         "DisableExplorerAutomaticFolderDiscovery",
         "DisableStorageSense",
         "BlockRazerSoftwareInstalls",
         "AdobeDebloat",
+        # sophia
+        "WindowsTerminalDefaultTerminalApp",
+        "NoneFolderGroupBy",
     ]:
         pytest.xfail("Need error handling")
 
     if task_definition.name in [
+        # winutil
         "RunDiskCleanup",
         "CreateRestorePoint",
         "DisableMicrosoftCopilot",  # need winget
         "ChangeWindowsTerminalDefault",  # need winget
         "RemoveOneDrive",  # need winget
+        # sophia
+        "InstallDotNetRuntimes",
+        "InstallVcRedist",
     ]:
         pytest.skip("Save time")
 

@@ -16,9 +16,8 @@ def skip_this_test():
 # )
 
 
-def test_default_resitory(
-    powershell: PowershellRunspace, task_definition: TaskDefinition
-):
+def test_default_resitory(runtime_set: tuple[PowershellRunspace, TaskDefinition]):
+    powershell, task_definition = runtime_set
     for registry in task_definition.registries:
         script = ScriptGenerator.registry_get(registry)
         current_value = powershell.run(script)
@@ -28,9 +27,8 @@ def test_default_resitory(
         )
 
 
-def test_default_scheduled_task(
-    powershell: PowershellRunspace, task_definition: TaskDefinition
-):
+def test_default_scheduled_task(runtime_set: tuple[PowershellRunspace, TaskDefinition]):
+    powershell, task_definition = runtime_set
     for task in task_definition.scheduled_tasks:
         script = ScriptGenerator.schtask_get(task)
         current_state = powershell.run(script)
@@ -40,9 +38,8 @@ def test_default_scheduled_task(
         )
 
 
-def test_default_service(
-    powershell: PowershellRunspace, task_definition: TaskDefinition
-):
+def test_default_service(runtime_set: tuple[PowershellRunspace, TaskDefinition]):
+    powershell, task_definition = runtime_set
     for service in task_definition.services:
         script = ScriptGenerator.service_get(service)
         current_type = powershell.run(script)
