@@ -13,15 +13,6 @@ from pydantic import (
 
 from winconfig.powershell.constants import NotExistType
 
-# Why use PowerShell instead of reg.exe, sc.exe, or schtasks.exe?
-# ---------------------------------------------------------------
-# Tools like reg.exe, sc.exe, and schtasks.exe are effective for setting values
-# but not for retrieving them in a structured format.
-# PowerShell, on the other hand, allows reading and modifying system configuration
-# objects (e.g., registry entries, services, scheduled tasks) as native objects.
-# This makes it easier to verify that the expected values were applied correctly
-# during automated testing.
-
 type RegistryValueKind = Literal[
     "String",
     "ExpandString",
