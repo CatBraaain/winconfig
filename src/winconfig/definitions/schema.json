@@ -5,15 +5,19 @@
       "type": "string"
     },
     "RegistryDefinition": {
+      "description": "Represents a single registry value to be modified.",
       "properties": {
         "path": {
+          "description": "The path to the registry key.",
           "type": "string"
         },
         "name": {
+          "description": "The name of the registry value.",
           "type": "string"
         },
         "type": {
-          "$ref": "#/$defs/RegistryValueKind"
+          "$ref": "#/$defs/RegistryValueKind",
+          "description": "The type of the registry value."
         },
         "old_value": {
           "anyOf": [
@@ -23,7 +27,8 @@
             {
               "$ref": "#/$defs/NotExistType"
             }
-          ]
+          ],
+          "description": "The default value of the registry entry."
         },
         "new_value": {
           "anyOf": [
@@ -33,7 +38,8 @@
             {
               "$ref": "#/$defs/NotExistType"
             }
-          ]
+          ],
+          "description": "The desired value of the registry entry."
         }
       },
       "required": ["path", "name", "type", "old_value", "new_value"],
@@ -51,15 +57,19 @@
       "type": "string"
     },
     "SchtaskDefinition": {
+      "description": "Represents a scheduled task to be enabled or disabled.",
       "properties": {
         "full_path": {
+          "description": "The full path of the scheduled task.",
           "type": "string"
         },
         "old_state": {
-          "$ref": "#/$defs/SchtaskState"
+          "$ref": "#/$defs/SchtaskState",
+          "description": "The default state of the scheduled task."
         },
         "new_state": {
-          "$ref": "#/$defs/SchtaskState"
+          "$ref": "#/$defs/SchtaskState",
+          "description": "The desired state of the scheduled task."
         }
       },
       "required": ["full_path", "old_state", "new_state"],
@@ -70,6 +80,7 @@
       "type": "string"
     },
     "ScriptDefinition": {
+      "description": "Represents PowerShell scripts to be executed.",
       "properties": {
         "apply": {
           "anyOf": [
@@ -79,7 +90,8 @@
             {
               "type": "null"
             }
-          ]
+          ],
+          "description": "The script to run for the desired configuration."
         },
         "revert": {
           "anyOf": [
@@ -89,22 +101,27 @@
             {
               "type": "null"
             }
-          ]
+          ],
+          "description": "The script to run for the default configuration."
         }
       },
       "required": ["apply", "revert"],
       "type": "object"
     },
     "ServiceDefinition": {
+      "description": "Represents a Windows service to be modified.",
       "properties": {
         "name": {
+          "description": "The name of the service.",
           "type": "string"
         },
         "old_startup": {
-          "$ref": "#/$defs/ServiceStartupType"
+          "$ref": "#/$defs/ServiceStartupType",
+          "description": "The default startup type of the service."
         },
         "new_startup": {
-          "$ref": "#/$defs/ServiceStartupType"
+          "$ref": "#/$defs/ServiceStartupType",
+          "description": "The desired startup type of the service."
         }
       },
       "required": ["name", "old_startup", "new_startup"],
@@ -136,18 +153,23 @@
           "required": ["script"]
         }
       ],
+      "description": "A single, self-contained configuration task.",
       "properties": {
         "id": {
+          "description": "A unique identifier for the task.",
           "type": "string"
         },
         "name": {
+          "description": "The name of the task.",
           "type": "string"
         },
         "description": {
+          "description": "A description of the task's purpose.",
           "type": "string"
         },
         "registries": {
           "default": [],
+          "description": "The registry values to be modified.",
           "items": {
             "$ref": "#/$defs/RegistryDefinition"
           },
@@ -155,6 +177,7 @@
         },
         "scheduled_tasks": {
           "default": [],
+          "description": "The scheduled tasks to be modified.",
           "items": {
             "$ref": "#/$defs/SchtaskDefinition"
           },
@@ -162,6 +185,7 @@
         },
         "services": {
           "default": [],
+          "description": "The Windows services to be modified.",
           "items": {
             "$ref": "#/$defs/ServiceDefinition"
           },
@@ -172,16 +196,19 @@
           "default": {
             "apply": null,
             "revert": null
-          }
+          },
+          "description": "Custom PowerShell scripts for actions not covered by registry, services, or scheduled tasks."
         }
       },
       "required": ["id", "name", "description"],
       "type": "object"
     }
   },
+  "description": "The root model for a winconfig definition file.",
   "properties": {
     "task_definitions": {
       "default": [],
+      "description": "The list of configuration tasks to be applied.",
       "items": {
         "$ref": "#/$defs/TaskDefinition"
       },
@@ -196,7 +223,8 @@
           "type": "null"
         }
       ],
-      "default": null
+      "default": null,
+      "description": "Common PowerShell functions to be used by ScriptDefinition scripts."
     }
   },
   "type": "object"
