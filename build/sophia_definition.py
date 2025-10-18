@@ -88,10 +88,45 @@ class SophiaDefinition(BaseModel):
             SophiaTaskDefinition.from_definition(td_source) for td_source in td_sources
         ]
 
+        tds = [
+            td
+            for td in tds
+            if td.id
+            in [
+                "FolderGroupBy",
+                "SecondsInSystemClock",
+                "ClockInNotificationCenter",
+                "WindowsColorMode",
+                "AppColorMode",
+                "ShortcutsSuffix",
+                "RestorePreviousFolders",
+                "EditWithClipchampContext",
+                "EditWithPhotosContext",
+                "EditWithPaintContext",
+                "PrintCMDContext",
+                "CompressedFolderNewContext",
+                "MultipleInvokeContext",
+                "UseStoreOpenWith",
+                "OpenWindowsTerminalContext",
+                "OpenWindowsTerminalAdminContext",
+            ]
+        ]
+
         preload = "\n".join([httpx.get(url).text for url in preload_script_urls])
+
+        for td in tds:
+            td.calling = (
+                re.search(
+                    rf"^function {td.function_name}.*?^[}}]",
+                    preload,
+                    flags=re.MULTILINE | re.DOTALL,
+                ).group()
+                + "\n"
+                + td.calling
+            )
         return cls(
             task_definitions=tds,
-            preload=preload or None,
+            preload=None,
         )
 
     def for_winconfig(self) -> Definition:
