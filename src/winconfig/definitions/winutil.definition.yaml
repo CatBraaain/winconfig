@@ -1,7 +1,7 @@
 # yaml-language-server: $schema=./schema.json
 
 task_definitions:
-  - id: AH
+  - id: Activity
     name: DisableActivityHistory
     description: This erases recent docs, clipboard, and run history.
     registries:
@@ -76,19 +76,6 @@ task_definitions:
         Start-Process -FilePath powercfg -ArgumentList "/change standby-timeout-dc 15" -NoNewWindow -Wait
         Start-Process -FilePath powercfg -ArgumentList "/change monitor-timeout-ac 15" -NoNewWindow -Wait
         Start-Process -FilePath powercfg -ArgumentList "/change monitor-timeout-dc 15" -NoNewWindow -Wait
-  - id: Home
-    name: DisableHomegroup
-    description:
-      Disables HomeGroup - HomeGroup is a password-protected home networking
-      service that lets you share your stuff with other PCs that are currently running
-      and connected to your network.
-    services:
-      - name: HomeGroupListener
-        old_startup: Automatic
-        new_startup: Manual
-      - name: HomeGroupProvider
-        old_startup: Automatic
-        new_startup: Manual
   - id: Loc
     name: DisableLocationTracking
     description: Disables Location Tracking...DUH!
@@ -946,7 +933,7 @@ task_definitions:
         old_startup: Manual
         new_startup: Manual
   - id: BraveDebloat
-    name: DebloatBrave
+    name: BraveDebloat
     description:
       Disables various annoyances like Brave Rewards,Leo AI,Crypto Wallet
       and VPN
@@ -972,7 +959,7 @@ task_definitions:
         old_value: <NotExist>
         new_value: "0"
   - id: EdgeDebloat
-    name: DebloatEdge
+    name: EdgeDebloat
     description:
       Disables various telemetry options, popups, and other annoyances in
       Edge.
@@ -1361,13 +1348,6 @@ task_definitions:
         type: DWord
         old_value: <NotExist>
         new_value: "1"
-    script:
-      apply:
-        Get-ScheduledTask | Where-Object { $_.TaskName -like '*MicrosoftEdgeUpdate*'
-        } | Disable-ScheduledTask
-      revert:
-        Get-ScheduledTask | Where-Object { $_.TaskName -like '*MicrosoftEdgeUpdate*'
-        } | Enable-ScheduledTask
   - id: UTC
     name: SetTimeToUtc
     description:
@@ -1564,31 +1544,12 @@ task_definitions:
   - id: EndTaskOnTaskbar
     name: EnableEndTaskWithRightClick
     description: Enables option to end task when right clicking a program in the taskbar
-    script:
-      apply: |-
-        $path = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings"
-        $name = "TaskbarEndTask"
-        $value = 1
-
-        # Ensure the registry key exists
-        if (-not (Test-Path $path)) {
-          New-Item -Path $path -Force | Out-Null
-        }
-
-        # Set the property, creating it if it doesn't exist
-        New-ItemProperty -Path $path -Name $name -PropertyType DWord -Value $value -Force | Out-Null
-      revert: |-
-        $path = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings"
-        $name = "TaskbarEndTask"
-        $value = 0
-
-        # Ensure the registry key exists
-        if (-not (Test-Path $path)) {
-          New-Item -Path $path -Force | Out-Null
-        }
-
-        # Set the property, creating it if it doesn't exist
-        New-ItemProperty -Path $path -Name $name -PropertyType DWord -Value $value -Force | Out-Null
+    registries:
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings
+        name: TaskbarEndTask
+        type: DWord
+        old_value: <NotExist>
+        new_value: "1"
   - id: Powershell7
     name: ChangeWindowsTerminalDefault
     description:
@@ -1612,13 +1573,12 @@ task_definitions:
   - id: Storage
     name: DisableStorageSense
     description: Storage Sense deletes temp files automatically.
-    script:
-      apply:
-        Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy"
-        -Name "01" -Value 0 -Type Dword -Force
-      revert:
-        Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy"
-        -Name "01" -Value 1 -Type Dword -Force
+    registries:
+      - path: HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy
+        name: "01"
+        type: DWord
+        old_value: "1"
+        new_value: "0"
   - id: RemoveCopilot
     name: DisableMicrosoftCopilot
     description: Disables MS Copilot AI built into Windows since 23H2.
@@ -2028,99 +1988,23 @@ task_definitions:
       activation and telemetry servers. Credit: Ruddernation-Designs"
     script:
       apply: |-
-        # Define the URL of the remote HOSTS file and the local paths
-        $remoteHostsUrl = "https://raw.githubusercontent.com/Ruddernation-Designs/Adobe-URL-Block-List/master/hosts"
-        $localHostsPath = "C:\Windows\System32\drivers\etc\hosts"
-        $tempHostsPath = "C:\Windows\System32\drivers\etc\temp_hosts"
+        $hostsUrl = "https://github.com/Ruddernation-Designs/Adobe-URL-Block-List/raw/refs/heads/master/hosts"
+        $hosts = "$env:SystemRoot\System32\drivers\etc\hosts"
 
-        # Download the remote HOSTS file to a temporary location
-        try {
-            Invoke-WebRequest -Uri $remoteHostsUrl -OutFile $tempHostsPath
-            Write-Output "Downloaded the remote HOSTS file to a temporary location."
-        } catch {
-            Write-Error "Failed to download the HOSTS file. Error: $_"
-        }
+        Copy-Item $hosts "$hosts.bak"
+        Invoke-WebRequest $hostsUrl -OutFile $hosts
+        ipconfig flushdns
 
-        # Check if the AdobeNetBlock has already been started
-        try {
-            $localHostsContent = Get-Content $localHostsPath -ErrorAction Stop
-
-            # Check if AdobeNetBlock markers exist
-            $blockStartExists = $localHostsContent -like "*#AdobeNetBlock-start*"
-            if ($blockStartExists) {
-                Write-Output "AdobeNetBlock-start already exists. Skipping addition of new block."
-            } else {
-                # Load the new block from the downloaded file
-                $newBlockContent = Get-Content $tempHostsPath -ErrorAction Stop
-                $newBlockContent = $newBlockContent | Where-Object { $_ -notmatch "^\s*#" -and $_ -ne "" } # Exclude empty lines and comments
-                $newBlockHeader = "#AdobeNetBlock-start"
-                $newBlockFooter = "#AdobeNetBlock-end"
-
-                # Combine the contents, ensuring new block is properly formatted
-                $combinedContent = $localHostsContent + $newBlockHeader, $newBlockContent, $newBlockFooter | Out-String
-
-                # Write the combined content back to the original HOSTS file
-                $combinedContent | Set-Content $localHostsPath -Encoding ASCII
-                Write-Output "Successfully added the AdobeNetBlock."
-            }
-        } catch {
-            Write-Error "Error during processing: $_"
-        }
-
-        # Clean up temporary file
-        Remove-Item $tempHostsPath -ErrorAction Ignore
-
-        # Flush the DNS resolver cache
-        try {
-            Invoke-Expression "ipconfig /flushdns"
-            Write-Output "DNS cache flushed successfully."
-        } catch {
-            Write-Error "Failed to flush DNS cache. Error: $_"
-        }
+        Write-Host "Added Adobe url block list from host file"
       revert: |-
-        # Define the local path of the HOSTS file
-        $localHostsPath = "C:\Windows\System32\drivers\etc\hosts"
+        $hosts = "$env:SystemRoot\System32\drivers\etc\hosts"
+        $backup = "$hosts.bak"
 
-        # Load the content of the HOSTS file
-        try {
-            $hostsContent = Get-Content $localHostsPath -ErrorAction Stop
-        } catch {
-            Write-Error "Failed to load the HOSTS file. Error: $_"
-            return
-        }
+        Copy-Item $backup $hosts
+        Remove-Item $backup
+        ipconfig flushdns
 
-        # Initialize flags and buffer for new content
-        $recording = $true
-        $newContent = @()
-
-        # Iterate over each line of the HOSTS file
-        foreach ($line in $hostsContent) {
-            if ($line -match "#AdobeNetBlock-start") {
-                $recording = $false
-            }
-            if ($recording) {
-                $newContent += $line
-            }
-            if ($line -match "#AdobeNetBlock-end") {
-                $recording = $true
-            }
-        }
-
-        # Write the filtered content back to the HOSTS file
-        try {
-            $newContent | Set-Content $localHostsPath -Encoding ASCII
-            Write-Output "Successfully removed the AdobeNetBlock section from the HOSTS file."
-        } catch {
-            Write-Error "Failed to write back to the HOSTS file. Error: $_"
-        }
-
-        # Flush the DNS resolver cache
-        try {
-            Invoke-Expression "ipconfig /flushdns"
-            Write-Output "DNS cache flushed successfully."
-        } catch {
-            Write-Error "Failed to flush DNS cache. Error: $_"
-        }
+        Write-Host "Removed Adobe url block list from host file"
   - id: RightClickMenu
     name: SetClassicRightClickMenu
     description:
@@ -2149,8 +2033,8 @@ task_definitions:
     description: Erases TEMP Folders
     script:
       apply: |-
-        Get-ChildItem -Path "C:\Windows\Temp" *.* -Recurse | Remove-Item -Force -Recurse
-        Get-ChildItem -Path $env:TEMP *.* -Recurse | Remove-Item -Force -Recurse
+        Remove-Item -Path "$Env:Temp\*" -Recurse -Force
+        Remove-Item -Path "$Env:SystemRoot\Temp\*" -Recurse -Force
       revert: null
   - id: DVR
     name: DisableGameDvr
@@ -2334,7 +2218,7 @@ task_definitions:
         new_value: "1"
   - id: SnapFlyout
     name: SnapAssistFlyout
-    description: If enabled then Snap preview is disabled when maximize button is hovered.
+    description: If disabled then Snap preview is disabled when maximize button is hovered.
     registries:
       - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
         name: EnableSnapAssistFlyout
@@ -2413,7 +2297,7 @@ task_definitions:
         old_value: <NotExist>
         new_value: "0"
   - id: MultiplaneOverlay
-    name: MultiplaneOverlay
+    name: DisableMultiplaneOverlay
     description:
       Disable the Multiplane Overlay which can sometimes cause issues with
       Graphics Cards.
