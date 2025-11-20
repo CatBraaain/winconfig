@@ -4,7 +4,7 @@ from typing import Any, Literal, Self
 import httpx
 import yaml
 from casing import camelize, pascalize
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, RootModel
 
 from winconfig.model.definition import (
     Definition,
@@ -26,7 +26,7 @@ class WinutilRegistryDefinition(BaseModel):
     OriginalValue: str
     Value: str
 
-    def for_winconfig(self) -> RegistryDefinition:
+    def convert(self) -> RegistryDefinition:
         return RegistryDefinition(
             path=self.Path,
             name=self.Name,
@@ -41,7 +41,7 @@ class WinutilScheduledTaskDefinition(BaseModel):
     OriginalState: Literal["Enabled", "Disabled"]
     State: Literal["Enabled", "Disabled"]
 
-    def for_winconfig(self) -> SchtaskDefinition:
+    def convert(self) -> SchtaskDefinition:
         return SchtaskDefinition(
             full_path=self.Name,
             old_state=self.OriginalState,
@@ -54,7 +54,7 @@ class WinutilServiceDefinition(BaseModel):
     OriginalType: ServiceStartupType
     StartupType: ServiceStartupType
 
-    def for_winconfig(self) -> ServiceDefinition:
+    def convert(self) -> ServiceDefinition:
         return ServiceDefinition(
             name=self.Name,
             old_startup=self.OriginalType,
@@ -88,16 +88,16 @@ class WinutilTaskDefinition(BaseModel):
         populate_by_name=True,
     )
 
-    def for_winconfig(self) -> TaskDefinition:
+    def convert(self) -> TaskDefinition:
         return TaskDefinition(
             id=re.sub(r"WPFToggle|WPFTweaks", "", self.id),
             name=pascalize(re.sub(r"( [^\s\w]|[^\s\w] ).*", "", self.Content)),
             description=self.Description,
-            registries=[registry.for_winconfig() for registry in self.Registry],
+            registries=[registry.convert() for registry in self.Registry],
             scheduled_tasks=[
-                scheduled_task.for_winconfig() for scheduled_task in self.ScheduledTask
+                scheduled_task.convert() for scheduled_task in self.ScheduledTask
             ],
-            services=[service.for_winconfig() for service in self.Service],
+            services=[service.convert() for service in self.Service],
             script=ScriptDefinition(
                 apply=self.resolve_script(self.InvokeScript),
                 revert=self.resolve_script(self.UndoScript),
@@ -113,12 +113,12 @@ class WinutilTaskDefinition(BaseModel):
         return script.strip() or None
 
 
-class WinutilDefinition(BaseModel):
-    task_definitions: list[WinutilTaskDefinition]
-    preload: str | None = None
+class WinutilDefinition(RootModel):
+    root: list[WinutilTaskDefinition]
 
     @classmethod
-    def from_remote(cls, definition_url: str, preload_script_urls: list[str]) -> Self:
+    def pull(cls) -> Self:
+        definition_url = "https://raw.githubusercontent.com/ChrisTitusTech/winutil/refs/heads/main/config/tweaks.json"
         res = httpx.get(definition_url)
         invalid_json = res.text
         fixed_json = re.sub(
@@ -128,18 +128,16 @@ class WinutilDefinition(BaseModel):
             + x.group(3),
             invalid_json,
         )
-        preload = "\n".join([httpx.get(url).text for url in preload_script_urls])
         return cls(
-            task_definitions=[
+            [
                 WinutilTaskDefinition.model_validate({"id": key, **value})
                 for key, value in yaml.safe_load(fixed_json).items()
             ],
-            preload=preload or None,
         )
 
-    def for_winconfig(self) -> Definition:
-        target_tds = [td for td in self.task_definitions if td.Description != ""]
+    def convert(self) -> Definition:
+        target_tds = [td for td in self.root if td.Description != ""]
         return Definition(
-            task_definitions=[td.for_winconfig() for td in target_tds],
-            preload=self.preload,
+            task_definitions=[td.convert() for td in target_tds],
+            preload=None,
         )

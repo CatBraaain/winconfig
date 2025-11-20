@@ -1,10 +1,10 @@
 import re
 from itertools import groupby
-from typing import Self
+from typing import Self, cast
 
 import httpx
 from casing import pascalize
-from pydantic import BaseModel
+from pydantic import BaseModel, RootModel
 
 from winconfig.model.definition import (
     Definition,
@@ -22,7 +22,7 @@ class SophiaTaskDefinition(BaseModel):
     is_default: bool
 
     @classmethod
-    def from_definition(cls, definition_block: str) -> Self:
+    def pull(cls, definition_block: str) -> Self:
         definition_lines = definition_block.splitlines()
         calling = definition_lines[-1].removeprefix("# ").strip()
         name = cls.resolve_name(calling)
@@ -67,12 +67,12 @@ class SophiaTaskDefinition(BaseModel):
         return pascalize(name_src)
 
 
-class SophiaDefinition(BaseModel):
-    task_definitions: list[SophiaTaskDefinition] = []
-    preload: str | None = None
+class SophiaDefinition(RootModel):
+    root: list[SophiaTaskDefinition] = []
 
     @classmethod
-    def from_remote(cls, definition_url: str, preload_script_urls: list[str]) -> Self:
+    def pull(cls) -> Self:
+        definition_url = "https://raw.githubusercontent.com/farag2/Sophia-Script-for-Windows/refs/heads/master/src/Sophia_Script_for_Windows_11/Sophia.ps1"
         res = httpx.get(definition_url)
         sophia_script_block = re.sub(
             r".*#endregion Protection", "", res.text, flags=re.DOTALL
@@ -85,7 +85,7 @@ class SophiaDefinition(BaseModel):
             for block in td_sources
         ]
         tds: list[SophiaTaskDefinition] = [
-            SophiaTaskDefinition.from_definition(td_source) for td_source in td_sources
+            SophiaTaskDefinition.pull(td_source) for td_source in td_sources
         ]
 
         tds = [
@@ -112,27 +112,28 @@ class SophiaDefinition(BaseModel):
             ]
         ]
 
-        preload = "\n".join([httpx.get(url).text for url in preload_script_urls])
+        sophia_module_url = "https://raw.githubusercontent.com/farag2/Sophia-Script-for-Windows/refs/heads/master/src/Sophia_Script_for_Windows_11/Module/Sophia.psm1"
+        sophia_module = httpx.get(sophia_module_url).text
 
         for td in tds:
             td.calling = (
-                re.search(
-                    rf"^function {td.function_name}.*?^[}}]",
-                    preload,
-                    flags=re.MULTILINE | re.DOTALL,
+                cast(
+                    re.Match,
+                    re.search(
+                        rf"^function {td.function_name}.*?^[}}]",
+                        sophia_module,
+                        flags=re.MULTILINE | re.DOTALL,
+                    ),
                 ).group()
                 + "\n"
                 + td.calling
             )
-        return cls(
-            task_definitions=tds,
-            preload=None,
-        )
+        return cls(tds)
 
-    def for_winconfig(self) -> Definition:
+    def convert(self) -> Definition:
         target_tds = [
             td
-            for td in self.task_definitions
+            for td in self.root
             if not re.search(r"using \w+ pop-up", td.description)
             and td.function_name
             not in [
@@ -182,5 +183,5 @@ class SophiaDefinition(BaseModel):
 
         return Definition(
             task_definitions=tds,
-            preload=self.preload,
+            preload=None,
         )
