@@ -20,9 +20,6 @@ class SchtaskDefinition(BaseModel):
         description="The desired state of the scheduled task."
     )
 
-    def resolve_value(self, revert: bool) -> str:
-        return self.new_state if not revert else self.old_state
-
     @property
     def formatted_path(self) -> str:
         return "\\" + self.full_path.removeprefix("\\")
@@ -34,3 +31,6 @@ class SchtaskDefinition(BaseModel):
     @property
     def name(self) -> str:
         return Path(self.formatted_path).name
+
+    def resolve_value(self, revert: bool) -> str:
+        return self.new_state if not revert else self.old_state
