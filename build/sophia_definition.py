@@ -6,7 +6,7 @@ import httpx
 from casing import pascalize
 from pydantic import BaseModel, RootModel
 
-from winconfig.model.definition import (
+from winconfig.model.definition.definition import (
     Definition,
     ScriptDefinition,
     TaskDefinition,

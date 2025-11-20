@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 from winconfig.powershell.script_generator import ScriptGenerator
 
-from .definition import TaskDefinition
+from .definition.definition import TaskDefinition
 
 
 class Execution(BaseModel):

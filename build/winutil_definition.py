@@ -6,7 +6,7 @@ import yaml
 from casing import camelize, pascalize
 from pydantic import BaseModel, ConfigDict, RootModel
 
-from winconfig.model.definition import (
+from winconfig.model.definition.definition import (
     Definition,
     RegistryDefinition,
     RegistryValueKind,

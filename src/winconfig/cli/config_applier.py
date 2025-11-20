@@ -4,7 +4,7 @@ from typing import Literal
 import yaml
 
 from winconfig.model.config import Config, ConfigContainer
-from winconfig.model.definition import Definition
+from winconfig.model.definition.definition import Definition
 from winconfig.model.execution import Execution
 from winconfig.powershell.process import PowershellRunspace
 

@@ -1,6 +1,6 @@
 from textwrap import dedent
 
-from winconfig.model.definition import (
+from winconfig.model.definition.definition import (
     RegistryDefinition,
     SchtaskDefinition,
     ScriptDefinition,
