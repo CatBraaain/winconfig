@@ -12,3 +12,8 @@ apply:
 
 test:
   powershell.exe -ExecutionPolicy Bypass -File tests/run_wsb.ps1 -Headless false
+
+memo:
+  robocopy C:\winconfig-readonly C:\winconfig /s /xf .* /xd .*
+  cd C:\winconfig
+  uv run pytest --durations 0 tests/test_apply.py -v
