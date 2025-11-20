@@ -1,4 +1,5 @@
 import re
+from textwrap import dedent
 from typing import Annotated, Literal
 
 from pydantic import (
@@ -8,7 +9,7 @@ from pydantic import (
     field_validator,
 )
 
-from winconfig.powershell.constants import NotExistType
+from winconfig.powershell.constants import ACCESS_DENIED, NOT_EXIST, NotExistType
 
 type RegistryValueKind = Literal[
     "String",
@@ -63,3 +64,45 @@ class RegistryDefinition(BaseModel):
 
     def resolve_value(self, revert: bool) -> str:
         return self.new_value if not revert else self.old_value
+
+    def generate_set_script(self, revert: bool) -> str:
+        value = self.resolve_value(revert)
+
+        ensure_key = rf"""
+            If (!(Test-Path "{self.path}")) {{
+                New-Item -Path "{self.path}" -Force -ErrorAction Stop | Out-Null
+            }}
+        """
+        set_entry = rf"""
+            try {{
+                Set-ItemProperty -Path "{self.path}" -Name "{self.name}" -Type "{self.type}" -Value "{value}" -Force -ErrorAction Stop | Out-Null
+            }}
+            catch [System.UnauthorizedAccessException] {{
+                "{ACCESS_DENIED}"
+            }}
+        """
+        remove_entry = rf"""
+            try {{
+                Remove-ItemProperty -Path "{self.path}" -Name "{self.name}" -Force -ErrorAction Stop | Out-Null
+            }}
+            catch [System.Management.Automation.PSArgumentException] {{
+                "{NOT_EXIST}"
+            }}
+        """
+        script = ensure_key + (set_entry if value != NOT_EXIST else remove_entry)
+
+        return dedent(script)
+
+    def generate_get_script(self) -> str:
+        get_entry = rf"""
+            try {{
+                Get-ItemPropertyValue -Path "{self.path}" -Name "{self.name}" -ErrorAction Stop
+            }}
+            catch [System.Management.Automation.ItemNotFoundException] {{
+                "{NOT_EXIST}"
+            }}
+            catch [System.Management.Automation.PSArgumentException] {{
+                "{NOT_EXIST}"
+            }}
+        """
+        return dedent(get_entry)

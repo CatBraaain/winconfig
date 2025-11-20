@@ -2,8 +2,6 @@ from typing import Self
 
 from pydantic import BaseModel
 
-from winconfig.powershell.script_generator import ScriptGenerator
-
 from .definition.definition import TaskDefinition
 
 
@@ -13,9 +11,24 @@ class Execution(BaseModel):
     script: str
 
     @classmethod
-    def from_definition(cls, task_definition: TaskDefinition, revert: bool) -> Self:
+    def generate(cls, task_definition: TaskDefinition, revert: bool) -> Self:
+        script = "\n".join(
+            [
+                registry.generate_set_script(revert)
+                for registry in task_definition.registries
+            ]
+            + [
+                task.generate_set_script(revert)
+                for task in task_definition.scheduled_tasks
+            ]
+            + [
+                service.generate_set_script(revert)
+                for service in task_definition.services
+            ]
+            + [task_definition.script.generate_custom_script(revert)]
+        )
         return cls(
             name=task_definition.name,
             revert=revert,
-            script=ScriptGenerator.generate_execution(task_definition, revert),
+            script=script,
         )

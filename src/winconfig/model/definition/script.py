@@ -1,3 +1,5 @@
+from textwrap import dedent
+
 from pydantic import (
     BaseModel,
     Field,
@@ -16,3 +18,7 @@ class ScriptDefinition(BaseModel):
 
     def resolve_value(self, revert: bool) -> str | None:
         return self.apply if not revert else self.revert
+
+    def generate_custom_script(self, revert: bool) -> str:
+        script = self.resolve_value(revert) or ""
+        return dedent(script)

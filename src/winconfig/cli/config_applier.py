@@ -39,7 +39,7 @@ class ConfigApplier:
 
     def generate_executions(self, mode: ApplyMode) -> list[Execution]:
         executions = [
-            Execution.from_definition(
+            Execution.generate(
                 task_definition=self.definition.get_task_definition(config.name),
                 revert=self._resolve_revert(mode, config),
             )
