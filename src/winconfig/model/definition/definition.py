@@ -11,7 +11,11 @@ from pydantic import (
 
 from winconfig.powershell.constants import NotExistType  # noqa: F401
 
-from .registry import RegistryDefinition, RegistryValueKind  # noqa: F401
+from .registry import (  # noqa: F401
+    RegistryEntryDefinition,
+    RegistryKeyDefinition,
+    RegistryValueKind,
+)
 from .schtask import SchtaskDefinition, SchtaskState  # noqa: F401
 from .script import ScriptDefinition
 from .service import ServiceDefinition, ServiceStartupType  # noqa: F401
@@ -23,7 +27,7 @@ class TaskDefinition(BaseModel):
     id: str = Field(description="A unique identifier for the task.")
     name: str = Field(description="The name of the task.")
     description: str = Field(description="A description of the task's purpose.")
-    registries: list[RegistryDefinition] = Field(
+    registries: list[RegistryEntryDefinition | RegistryKeyDefinition] = Field(
         default=[], description="The registry values to be modified."
     )
     scheduled_tasks: list[SchtaskDefinition] = Field(

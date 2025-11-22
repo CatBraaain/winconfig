@@ -8,7 +8,7 @@ from pydantic import BaseModel, ConfigDict, RootModel
 
 from winconfig.model.definition.definition import (
     Definition,
-    RegistryDefinition,
+    RegistryEntryDefinition,
     RegistryValueKind,
     SchtaskDefinition,
     ScriptDefinition,
@@ -26,8 +26,8 @@ class WinutilRegistryDefinition(BaseModel):
     OriginalValue: str
     Value: str
 
-    def convert(self) -> RegistryDefinition:
-        return RegistryDefinition(
+    def convert(self) -> RegistryEntryDefinition:
+        return RegistryEntryDefinition(
             path=self.Path,
             name=self.Name,
             type=self.Type,

@@ -1,11 +1,15 @@
 {
   "$defs": {
+    "ExistType": {
+      "const": "<Exist>",
+      "type": "string"
+    },
     "NotExistType": {
       "const": "<NotExist>",
       "type": "string"
     },
-    "RegistryDefinition": {
-      "description": "Represents a single registry value to be modified.",
+    "RegistryEntryDefinition": {
+      "description": "Represents a single registry entry value to be modified.",
       "properties": {
         "path": {
           "description": "The path to the registry key.",
@@ -43,6 +47,39 @@
         }
       },
       "required": ["path", "name", "type", "old_value", "new_value"],
+      "type": "object"
+    },
+    "RegistryKeyDefinition": {
+      "description": "Represents a single registry key to be modified.",
+      "properties": {
+        "path": {
+          "description": "The path to the registry key.",
+          "type": "string"
+        },
+        "old_value": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ExistType"
+            },
+            {
+              "$ref": "#/$defs/NotExistType"
+            }
+          ],
+          "description": "The default value of the registry entry."
+        },
+        "new_value": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ExistType"
+            },
+            {
+              "$ref": "#/$defs/NotExistType"
+            }
+          ],
+          "description": "The desired value of the registry entry."
+        }
+      },
+      "required": ["path", "old_value", "new_value"],
       "type": "object"
     },
     "RegistryValueKind": {
@@ -171,7 +208,14 @@
           "default": [],
           "description": "The registry values to be modified.",
           "items": {
-            "$ref": "#/$defs/RegistryDefinition"
+            "anyOf": [
+              {
+                "$ref": "#/$defs/RegistryEntryDefinition"
+              },
+              {
+                "$ref": "#/$defs/RegistryKeyDefinition"
+              }
+            ]
           },
           "type": "array"
         },

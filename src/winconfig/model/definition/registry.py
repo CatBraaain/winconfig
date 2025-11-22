@@ -9,7 +9,13 @@ from pydantic import (
     field_validator,
 )
 
-from winconfig.powershell.constants import ACCESS_DENIED, NOT_EXIST, NotExistType
+from winconfig.powershell.constants import (
+    ACCESS_DENIED,
+    EXIST,
+    NOT_EXIST,
+    ExistType,
+    NotExistType,
+)
 
 type RegistryValueKind = Literal[
     "String",
@@ -21,22 +27,12 @@ type RegistryValueKind = Literal[
 ]
 
 
-class RegistryDefinition(BaseModel):
-    """Represents a single registry value to be modified."""
-
+class RegistryBaseDefinition(BaseModel):
     path: Annotated[
         str,
         PlainSerializer(lambda x: x.replace("Registry::", "")),
         Field(description="The path to the registry key."),
     ]
-    name: str = Field(description="The name of the registry value.")
-    type: RegistryValueKind = Field(description="The type of the registry value.")
-    old_value: str | NotExistType = Field(
-        description="The default value of the registry entry."
-    )
-    new_value: str | NotExistType = Field(
-        description="The desired value of the registry entry."
-    )
 
     @field_validator("path", mode="after")
     @staticmethod
@@ -58,9 +54,22 @@ class RegistryDefinition(BaseModel):
             )
         return value
 
+
+class RegistryEntryDefinition(RegistryBaseDefinition):
+    """Represents a single registry entry value to be modified."""
+
+    name: str = Field(description="The name of the registry value.")
+    type: RegistryValueKind = Field(description="The type of the registry value.")
+    old_value: str | NotExistType = Field(
+        description="The default value of the registry entry."
+    )
+    new_value: str | NotExistType = Field(
+        description="The desired value of the registry entry."
+    )
+
     @property
     def full_path(self) -> str:
-        return f"{self.path.replace('Registry::', '')}\\{self.name}"
+        return f"{self.path}\\{self.name}"
 
     def resolve_value(self, revert: bool) -> str:
         return self.new_value if not revert else self.old_value
@@ -102,6 +111,51 @@ class RegistryDefinition(BaseModel):
                 "{NOT_EXIST}"
             }}
             catch [System.Management.Automation.PSArgumentException] {{
+                "{NOT_EXIST}"
+            }}
+        """
+        return dedent(get_entry)
+
+
+class RegistryKeyDefinition(RegistryBaseDefinition):
+    """Represents a single registry key to be modified."""
+
+    old_value: ExistType | NotExistType = Field(
+        description="The default value of the registry entry."
+    )
+    new_value: ExistType | NotExistType = Field(
+        description="The desired value of the registry entry."
+    )
+
+    @property
+    def full_path(self) -> str:
+        return f"{self.path}"
+
+    def resolve_value(self, revert: bool) -> ExistType | NotExistType:
+        return self.new_value if not revert else self.old_value
+
+    def generate_set_script(self, revert: bool) -> str:
+        value = self.resolve_value(revert)
+
+        add_key = rf"""
+            If (!(Test-Path "{self.path}")) {{
+                New-Item -Path "{self.path}" -Force -ErrorAction Stop | Out-Null
+            }}
+        """
+        remove_key = rf"""
+            If (Test-Path "{self.path}") {{
+                Remove-Item -Path "{self.path}" -Force -ErrorAction Stop | Out-Null
+            }}
+        """
+        script = add_key if value != EXIST else remove_key
+
+        return dedent(script)
+
+    def generate_get_script(self) -> str:
+        get_entry = rf"""
+            If (Test-Path "{self.path}") {{
+                "{EXIST}"
+            }} else {{
                 "{NOT_EXIST}"
             }}
         """
