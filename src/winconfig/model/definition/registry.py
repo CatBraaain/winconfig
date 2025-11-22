@@ -30,11 +30,7 @@ type RegistryValueKind = Literal[
 
 
 class RegistryBaseDefinition(BaseModel):
-    path: Annotated[
-        str,
-        PlainSerializer(lambda x: x.replace("Registry::", "")),
-        Field(description="The path to the registry key."),
-    ]
+    path: str = Field(description="The path to the registry key.")
 
     @field_validator("path", mode="after")
     @staticmethod
@@ -49,8 +45,8 @@ class RegistryBaseDefinition(BaseModel):
 
         for pattern, repl in mapping.items():
             value = re.sub(
-                "^(Registry::)?" + pattern,
-                "Registry::" + repl,
+                "^(?:Registry::)?" + pattern,
+                repl,
                 value,
                 flags=re.IGNORECASE,
             )
