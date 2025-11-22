@@ -77,12 +77,10 @@ class RegistryEntryDefinition(RegistryBaseDefinition):
     def generate_set_script(self, revert: bool) -> str:
         value = self.resolve_value(revert)
 
-        ensure_key = rf"""
+        set_entry = rf"""
             If (!(Test-Path "{self.path}")) {{
                 New-Item -Path "{self.path}" -Force -ErrorAction Stop | Out-Null
             }}
-        """
-        set_entry = rf"""
             try {{
                 Set-ItemProperty -Path "{self.path}" -Name "{self.name}" -Type "{self.type}" -Value "{value}" -Force -ErrorAction Stop | Out-Null
             }}
@@ -91,6 +89,9 @@ class RegistryEntryDefinition(RegistryBaseDefinition):
             }}
         """
         remove_entry = rf"""
+            If (!(Test-Path "{self.path}")) {{
+                "{NOT_EXIST}"
+            }}
             try {{
                 Remove-ItemProperty -Path "{self.path}" -Name "{self.name}" -Force -ErrorAction Stop | Out-Null
             }}
@@ -98,7 +99,7 @@ class RegistryEntryDefinition(RegistryBaseDefinition):
                 "{NOT_EXIST}"
             }}
         """
-        script = ensure_key + (set_entry if value != NOT_EXIST else remove_entry)
+        script = set_entry if value != NOT_EXIST else remove_entry
 
         return dedent(script)
 
