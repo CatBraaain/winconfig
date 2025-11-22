@@ -78,7 +78,7 @@ class RegistryEntryDefinition(RegistryBaseDefinition):
         value = self.resolve_value(revert)
 
         set_entry = rf"""
-            If (!(Test-Path "{self.path}")) {{
+            if (!(Test-Path "{self.path}")) {{
                 New-Item -Path "{self.path}" -Force -ErrorAction Stop | Out-Null
             }}
             try {{
@@ -89,7 +89,7 @@ class RegistryEntryDefinition(RegistryBaseDefinition):
             }}
         """
         remove_entry = rf"""
-            If (!(Test-Path "{self.path}")) {{
+            if (!(Test-Path "{self.path}")) {{
                 "{NOT_EXIST}"
             }}
             try {{
@@ -139,12 +139,12 @@ class RegistryKeyDefinition(RegistryBaseDefinition):
         value = self.resolve_value(revert)
 
         add_key = rf"""
-            If (!(Test-Path "{self.path}")) {{
+            if (!(Test-Path "{self.path}")) {{
                 New-Item -Path "{self.path}" -Force -ErrorAction Stop | Out-Null
             }}
         """
         remove_key = rf"""
-            If (Test-Path "{self.path}") {{
+            if (Test-Path "{self.path}") {{
                 Remove-Item -Path "{self.path}" -Force -ErrorAction Stop | Out-Null
             }}
         """
@@ -154,7 +154,7 @@ class RegistryKeyDefinition(RegistryBaseDefinition):
 
     def generate_get_script(self) -> str:
         get_entry = rf"""
-            If (Test-Path "{self.path}") {{
+            if (Test-Path "{self.path}") {{
                 "{EXIST}"
             }} else {{
                 "{NOT_EXIST}"
