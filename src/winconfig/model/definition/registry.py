@@ -12,8 +12,10 @@ from pydantic import (
 from winconfig.powershell.constants import (
     ACCESS_DENIED,
     EXIST,
+    NOT_CHANGE,
     NOT_EXIST,
     ExistType,
+    NotChangeType,
     NotExistType,
 )
 
@@ -121,10 +123,10 @@ class RegistryEntryDefinition(RegistryBaseDefinition):
 class RegistryKeyDefinition(RegistryBaseDefinition):
     """Represents a single registry key to be modified."""
 
-    old_value: ExistType | NotExistType = Field(
+    old_value: NotChangeType | ExistType | NotExistType = Field(
         description="The default value of the registry entry."
     )
-    new_value: ExistType | NotExistType = Field(
+    new_value: NotChangeType | ExistType | NotExistType = Field(
         description="The desired value of the registry entry."
     )
 
@@ -132,7 +134,7 @@ class RegistryKeyDefinition(RegistryBaseDefinition):
     def full_path(self) -> str:
         return f"{self.path}"
 
-    def resolve_value(self, revert: bool) -> ExistType | NotExistType:
+    def resolve_value(self, revert: bool) -> NotChangeType | ExistType | NotExistType:
         return self.new_value if not revert else self.old_value
 
     def generate_set_script(self, revert: bool) -> str:
@@ -148,7 +150,14 @@ class RegistryKeyDefinition(RegistryBaseDefinition):
                 Remove-Item -Path "{self.path}" -Force -ErrorAction Stop | Out-Null
             }}
         """
-        script = add_key if value != EXIST else remove_key
+        if value == NOT_EXIST:
+            script = remove_key
+        elif value == EXIST:
+            script = add_key
+        elif value == NOT_CHANGE:
+            script = ""
+        else:
+            raise ValueError(f"Invalid value: {value}")
 
         return dedent(script)
 

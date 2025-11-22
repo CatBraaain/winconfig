@@ -4,6 +4,10 @@
       "const": "<Exist>",
       "type": "string"
     },
+    "NotChangeType": {
+      "const": "<NotChange>",
+      "type": "string"
+    },
     "NotExistType": {
       "const": "<NotExist>",
       "type": "string"
@@ -59,6 +63,9 @@
         "old_value": {
           "anyOf": [
             {
+              "$ref": "#/$defs/NotChangeType"
+            },
+            {
               "$ref": "#/$defs/ExistType"
             },
             {
@@ -69,6 +76,9 @@
         },
         "new_value": {
           "anyOf": [
+            {
+              "$ref": "#/$defs/NotChangeType"
+            },
             {
               "$ref": "#/$defs/ExistType"
             },

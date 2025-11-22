@@ -5,3 +5,5 @@ NOT_EXIST = "<NotExist>"
 type NotExistType = Literal["<NotExist>"]
 EXIST = "<Exist>"
 type ExistType = Literal["<Exist>"]
+NOT_CHANGE = "<NotChange>"
+type NotChangeType = Literal["<NotChange>"]
