@@ -249,6 +249,24 @@ task_definitions:
         type: DWord
         old_value: <NotExist>
         new_value: "0"
+  - name: EnableGodMode
+    description: |-
+      Create GodeMode Folder and make it searchable in Start Menu.
+      Optionally you can pin it to Start Menu by manually.
+    script:
+      apply: |-
+        $startMenuPath = "$env:AppData\Microsoft\Windows\Start Menu\Programs"
+        $shortcutPath = "$startMenuPath\GodMode.lnk"
+        $shortcut = (New-Object -ComObject WScript.Shell).CreateShortcut($shortcutPath)
+        $shortcut.TargetPath = "explorer.exe"
+        $shortcut.Arguments = "shell:::{ED7BA470-8E54-465E-825C-99712043E01C}"
+        # $shortcut.IconLocation = "imageres.dll,-30"
+        $shortcut.IconLocation = "$env:WinDir\System32\shell32.dll, 21"
+        $shortcut.Save()
+      revert: |-
+        $startMenuPath = "$env:AppData\Microsoft\Windows\Start Menu\Programs"
+        $shortcutPath = "$startMenuPath\GodMode.lnk"
+        Remove-Item -Path $shortcutPath
 
   # Mouse / Keyboard / Sound
   - name: DisableMouseAcceleration
