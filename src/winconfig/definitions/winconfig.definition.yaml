@@ -351,6 +351,14 @@ task_definitions:
             catch {}
           }
         }
+  - name: DisableTouchPad
+    description: Disable touchpad for laptop
+    registries:
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad\Status
+        name: Enabled
+        type: DWord
+        old_value: "1"
+        new_value: "0"
 
   # Taskbar
   - name: TaskbarAlignmentLeft
