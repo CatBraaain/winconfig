@@ -1,0 +1,851 @@
+# yaml-language-server: $schema=./schema.json
+
+task_definitions:
+  # Appearance
+  - id: DarkModeForSystemUI
+    name: EnableDarkModeForSystem
+    description: Enables dark mode for system
+    registries:
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize
+        name: SystemUsesLightTheme
+        type: DWord
+        old_value: "1"
+        new_value: "0"
+  - id: DarkModeForAppUI
+    name: EnableDarkModeForApps
+    description: Enables dark mode for apps
+    registries:
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize
+        name: AppsUseLightTheme
+        type: DWord
+        old_value: "1"
+        new_value: "0"
+
+  # Suggestions
+  - id: DisableWelcomeExperience
+    name: HideWindowsWelcomeExperience
+    description:
+      Hide the Windows welcome experiences after updates and occasionally
+      when I sign in to highlight what's new and suggested
+    registries:
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager
+        name: SubscribedContent-310093Enabled
+        type: DWord
+        old_value: "1"
+        new_value: "0"
+  - id: DisableWindowsTips
+    name: DisableWindowsTips
+    description: Do not get tips and suggestions when I use Windows
+    registries:
+      - path: HKLM\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager
+        name: SubscribedContent-338389Enabled
+        type: DWord
+        old_value: "0"
+        new_value: "1"
+  - id: DisableScoobeExperience
+    name: DisableWhatsNewInWindows
+    description:
+      Do not suggest ways to get the most out of Windows and finish setting
+      up this device
+    registries:
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\UserProfileEngagement
+        name: ScoobeSystemSettingEnabled
+        type: DWord
+        old_value: "1"
+        new_value: "0"
+
+  # Desktop / Side Panel / Settings
+  - id: RemoveRecycleBinIcon
+    name: RemoveRecycleBinIcon
+    description: Hide the "Recycle Bin" icon from Desktop
+    registries:
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel
+        name: "{645FF040-5081-101B-9F08-00AA002F954E}"
+        type: DWord
+        old_value: "0"
+        new_value: "1"
+  - id: ShowClockInSidePanel
+    name: ShowClockInNotificationCenter
+    description: Show time in Notification Center like in Windows 10
+    registries:
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+        name: ShowClockInNotificationCenter
+        type: DWord
+        old_value: "0"
+        new_value: "1"
+  - id: HideSettingsSuggestedContent
+    name: HideSuggestedContentFromSettings
+    description: Hide from me suggested content in the Settings app
+    registries:
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager
+        name: SubscribedContent-338393Enabled
+        type: DWord
+        old_value: "1"
+        new_value: "0"
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager
+        name: SubscribedContent-353694Enabled
+        type: DWord
+        old_value: "1"
+        new_value: "0"
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager
+        name: SubscribedContent-353696Enabled
+        type: DWord
+        old_value: "1"
+        new_value: "0"
+
+  # Explorer
+  - id: ShowHiddenFiles
+    name: ShowHiddenFiles
+    description: If Enabled then Hidden Files will be shown.
+    registries:
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+        name: Hidden
+        type: DWord
+        old_value: "0"
+        new_value: "1"
+  - id: ShowFileExtension
+    name: ShowFileExtensions
+    description: If enabled then File extensions (e.g., .txt, .jpg) are visible.
+    registries:
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+        name: HideFileExt
+        type: DWord
+        old_value: "1"
+        new_value: "0"
+  - id: HideHome
+    name: RemoveHomeFromExplorer
+    description: Removes the Home from Explorer and sets This PC as default
+    registries:
+      - path: HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}
+        name: (default)
+        type: String
+        old_value: CLSID_MSGraphHomeFolder
+        new_value: <NotExist>
+      - path: HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}
+        old_value: <Exist>
+        new_value: <NotExist>
+      - path: HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+        name: LaunchTo
+        type: DWord
+        old_value: <NotExist>
+        new_value: "1"
+  - id: HideGallery
+    name: RemoveGalleryFromExplorer
+    description: Removes the Gallery from Explorer and sets This PC as default
+    registries:
+      - path: HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}
+        name: (default)
+        type: String
+        old_value: "{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}"
+        new_value: <NotExist>
+      - path: HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}
+        old_value: <Exist>
+        new_value: <NotExist>
+      - path: HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+        name: LaunchTo
+        type: DWord
+        old_value: <NotExist>
+        new_value: "1"
+  - id: HideOneDrive
+    name: RemoveOneDrive
+    description: Moves OneDrive files to Default Home Folders and Uninstalls it.
+    script:
+      apply: |-
+        $OneDrivePath = $($env:OneDrive)
+        Write-Host "Removing OneDrive"
+
+        # Check both traditional and Microsoft Store installations
+        $regPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\OneDriveSetup.exe"
+        $msStorePath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Applications\*OneDrive*"
+
+        if (Test-Path $regPath) {
+            $OneDriveUninstallString = Get-ItemPropertyValue "$regPath" -Name "UninstallString"
+            $OneDriveExe, $OneDriveArgs = $OneDriveUninstallString.Split(" ")
+            Start-Process -FilePath $OneDriveExe -ArgumentList "$OneDriveArgs /silent" -NoNewWindow -Wait
+        } elseif (Test-Path $msStorePath) {
+            Write-Host "OneDrive appears to be installed via Microsoft Store" -ForegroundColor Yellow
+            # Attempt to uninstall via winget
+            Start-Process -FilePath winget -ArgumentList "uninstall -e --purge --accept-source-agreements Microsoft.OneDrive" -NoNewWindow -Wait
+        } else {
+            Write-Host "OneDrive doesn't seem to be installed" -ForegroundColor Red
+            Write-Host "Running cleanup if OneDrive path exists" -ForegroundColor Red
+        }
+
+        # Check if OneDrive got Uninstalled (both paths)
+        if (Test-Path $OneDrivePath) {
+          Write-Host "Copy downloaded Files from the OneDrive Folder to Root UserProfile"
+          Start-Process -FilePath powershell -ArgumentList "robocopy '$($OneDrivePath)' '$($env:USERPROFILE.TrimEnd())\' /mov /e /xj" -NoNewWindow -Wait
+
+          Write-Host "Removing OneDrive leftovers"
+          Remove-Item -Recurse -Force -ErrorAction SilentlyContinue "$env:localappdata\Microsoft\OneDrive"
+          Remove-Item -Recurse -Force -ErrorAction SilentlyContinue "$env:localappdata\OneDrive"
+          Remove-Item -Recurse -Force -ErrorAction SilentlyContinue "$env:programdata\Microsoft OneDrive"
+          Remove-Item -Recurse -Force -ErrorAction SilentlyContinue "$env:systemdrive\OneDriveTemp"
+          reg delete "HKEY_CURRENT_USER\Software\Microsoft\OneDrive" -f
+          # check if directory is empty before removing:
+          If ((Get-ChildItem "$OneDrivePath" -Recurse | Measure-Object).Count -eq 0) {
+              Remove-Item -Recurse -Force -ErrorAction SilentlyContinue "$OneDrivePath"
+          }
+
+          Write-Host "Remove Onedrive from Explorer sidebar"
+          Set-ItemProperty -Path "HKCR:\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}" -Name "System.IsPinnedToNameSpaceTree" -Value 0
+          Set-ItemProperty -Path "HKCR:\Wow6432Node\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}" -Name "System.IsPinnedToNameSpaceTree" -Value 0
+
+          Write-Host "Removing run hook for new users"
+          reg load "hku\Default" "C:\Users\Default\NTUSER.DAT"
+          reg delete "HKEY_USERS\Default\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v "OneDriveSetup" /f
+          reg unload "hku\Default"
+
+          Write-Host "Removing autostart key"
+          reg delete "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run" /v "OneDrive" /f
+
+          Write-Host "Removing startmenu entry"
+          Remove-Item -Force -ErrorAction SilentlyContinue "$env:userprofile\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\OneDrive.lnk"
+
+          Write-Host "Removing scheduled task"
+          Get-ScheduledTask -TaskPath '\' -TaskName 'OneDrive*' -ea SilentlyContinue | Unregister-ScheduledTask -Confirm:$false
+
+          # Add Shell folders restoring default locations
+          Write-Host "Shell Fixing"
+          Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" -Name "AppData" -Value "$env:userprofile\AppData\Roaming" -Type ExpandString
+          Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" -Name "Cache" -Value "$env:userprofile\AppData\Local\Microsoft\Windows\INetCache" -Type ExpandString
+          Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" -Name "Cookies" -Value "$env:userprofile\AppData\Local\Microsoft\Windows\INetCookies" -Type ExpandString
+          Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" -Name "Favorites" -Value "$env:userprofile\Favorites" -Type ExpandString
+          Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" -Name "History" -Value "$env:userprofile\AppData\Local\Microsoft\Windows\History" -Type ExpandString
+          Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" -Name "Local AppData" -Value "$env:userprofile\AppData\Local" -Type ExpandString
+          Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" -Name "My Music" -Value "$env:userprofile\Music" -Type ExpandString
+          Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" -Name "My Video" -Value "$env:userprofile\Videos" -Type ExpandString
+          Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" -Name "NetHood" -Value "$env:userprofile\AppData\Roaming\Microsoft\Windows\Network Shortcuts" -Type ExpandString
+          Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" -Name "PrintHood" -Value "$env:userprofile\AppData\Roaming\Microsoft\Windows\Printer Shortcuts" -Type ExpandString
+          Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" -Name "Programs" -Value "$env:userprofile\AppData\Roaming\Microsoft\Windows\Start Menu\Programs" -Type ExpandString
+          Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" -Name "Recent" -Value "$env:userprofile\AppData\Roaming\Microsoft\Windows\Recent" -Type ExpandString
+          Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" -Name "SendTo" -Value "$env:userprofile\AppData\Roaming\Microsoft\Windows\SendTo" -Type ExpandString
+          Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" -Name "Start Menu" -Value "$env:userprofile\AppData\Roaming\Microsoft\Windows\Start Menu" -Type ExpandString
+          Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" -Name "Startup" -Value "$env:userprofile\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup" -Type ExpandString
+          Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" -Name "Templates" -Value "$env:userprofile\AppData\Roaming\Microsoft\Windows\Templates" -Type ExpandString
+          Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" -Name "{374DE290-123F-4565-9164-39C4925E467B}" -Value "$env:userprofile\Downloads" -Type ExpandString
+          Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" -Name "Desktop" -Value "$env:userprofile\Desktop" -Type ExpandString
+          Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" -Name "My Pictures" -Value "$env:userprofile\Pictures" -Type ExpandString
+          Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" -Name "Personal" -Value "$env:userprofile\Documents" -Type ExpandString
+          Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" -Name "{F42EE2D3-909F-4907-8871-4C22FC0BF756}" -Value "$env:userprofile\Documents" -Type ExpandString
+          Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" -Name "{0DDD015D-B06C-45D5-8C4C-F59713854639}" -Value "$env:userprofile\Pictures" -Type ExpandString
+          Write-Host "Restarting explorer"
+          taskkill.exe /F /IM "explorer.exe"
+          Start-Process "explorer.exe"
+
+          Write-Host "Waiting for Explorer to complete loading"
+          Write-Host "Please Note - The OneDrive folder at $OneDrivePath may still have items in it. You must manually delete it, but all the files should already be copied to the base user folder."
+          Write-Host "If there are Files missing afterwards, please Login to Onedrive.com and Download them manually" -ForegroundColor Yellow
+          Start-Sleep 5
+        } else {
+          Write-Host "Nothing to Cleanup with OneDrive" -ForegroundColor Red
+        }
+      revert: |-
+        Write-Host "Install OneDrive"
+        Start-Process -FilePath winget -ArgumentList "install -e --accept-source-agreements --accept-package-agreements --silent Microsoft.OneDrive " -NoNewWindow -Wait
+  - id: DisableFolderGroup
+    name: NoneFolderGroupBy
+    description: Do not group files and folder in the Downloads folder
+    registries:
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\FolderTypes\{885a186e-a440-4ada-812b-db871b942259}\TopViews\{00000000-0000-0000-0000-000000000000}
+        name: GroupBy
+        type: String
+        old_value: "<NotExist>"
+        new_value: "System.Null"
+  - id: RestoreExplorerLastSession
+    name: EnableRestoreExplorerSession
+    description: Restore previous folder windows at logon
+    registries:
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+        name: PersistBrowsers
+        type: DWord
+        old_value: "0"
+        new_value: "1"
+  - id: DisableCheckBoxes
+    name: DisableCheckBoxes
+    description: Do not use item check boxes
+    registries:
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+        name: AutoCheckSelect
+        type: DWord
+        old_value: "1"
+        new_value: "0"
+  - id: HideRecentFiles
+    name: HideQuickAccessRecentFiles
+    description: Hide recently used files in Quick access
+    registries:
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer
+        name: ShowRecent
+        type: DWord
+        old_value: "1"
+        new_value: "0"
+  - id: HideFrequentFolders
+    name: HideQuickAccessFrequentFolders
+    description: Hide frequently used folders in Quick access
+    registries:
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer
+        name: ShowFrequent
+        type: DWord
+        old_value: "1"
+        new_value: "0"
+
+  # Files
+  - id: DisableShortcutsSuffix
+    name: DisableShortcutsSuffix
+    description: Do not add the "- Shortcut" suffix to the file name of created shortcuts
+    registries:
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer
+        name: link
+        type: DWord
+        old_value: "<NotExist>"
+        new_value: "<NotExist>"
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\NamingTemplates
+        name: ShortcutNameTemplate
+        type: String
+        old_value: "<NotExist>"
+        new_value: "%s.lnk"
+  - id: DisableUnsafeMarkingForDownloadedFiles
+    name: DisableSaveZoneInformation
+    description:
+      Disable the Attachment Manager marking files that have been downloaded
+      from the Internet as unsafe
+    registries:
+      - path: HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Attachments
+        name: SaveZoneInformation
+        type: DWord
+        old_value: "1"
+        new_value: "<NotExist>"
+
+  # Start Menu
+  - id: DisableBingSearch
+    name: BingSearchInStartMenu
+    description: Disables Bing Search in Start Menu search.
+    registries:
+      - path: HKCU\Software\Policies\Microsoft\Windows\Explorer
+        name: DisableSearchBoxSuggestions
+        type: DWord
+        old_value: "0"
+        new_value: "1"
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Search
+        name: BingSearchEnabled
+        type: DWord
+        old_value: "1"
+        new_value: "0"
+      - path: HKCU\Software\Policies\Microsoft\Windows\Explorer
+        name: DisableSearchBoxSuggestions
+        type: DWord
+        old_value: "0"
+        new_value: "1"
+  - id: HideStartRecommendations
+    name: HideStartRecommendations
+    description:
+      Do not show recommendations for tips, shortcuts, new apps, and more
+      in Start menu
+    registries:
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+        name: Start_IrisRecommendations
+        type: DWord
+        old_value: "1"
+        new_value: <NotExist>
+      - path: HKCU\Software\Policies\Microsoft\Windows\Explorer
+        name: HideRecommendedSection
+        type: DWord
+        old_value: <NotExist>
+        new_value: "1"
+  - id: HideStartAccountNotifications
+    name: HideStartAccountNotifications
+    description:
+      Do not show Microsoft account-related notifications on Start Menu in
+      Start menu
+    registries:
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+        name: Start_AccountNotifications
+        type: DWord
+        old_value: <NotExist>
+        new_value: "0"
+
+  # Mouse / Keyboard / Sound
+  - id: DisableMouseAcceleration
+    name: MouseAcceleration
+    description:
+      Disables Cursor movement affection by the speed of your physical
+      mouse movements.
+    registries:
+      - path: HKCU\Control Panel\Mouse
+        name: MouseSpeed
+        type: DWord
+        old_value: "1"
+        new_value: "0"
+      - path: HKCU\Control Panel\Mouse
+        name: MouseThreshold1
+        type: DWord
+        old_value: "6"
+        new_value: "0"
+      - path: HKCU\Control Panel\Mouse
+        name: MouseThreshold2
+        type: DWord
+        old_value: "10"
+        new_value: "0"
+  - id: DisableF1HelpPage
+    name: DisableF1HelpPage
+    description: Disable help lookup via F1
+    registries:
+      - path: Software\Classes\Typelib\{8cec5860-07a1-11d9-b15e-000d56bfe6ee}
+        old_value: <NotExist>
+        new_value: <Exist>
+      - path: Software\Classes\Typelib\{8cec5860-07a1-11d9-b15e-000d56bfe6ee}\1.0\0\win64
+        name: "(default)"
+        type: String
+        old_value: <NotExist>
+        new_value: ""
+  - id: DisableStickyShift
+    name: DisableStickyShift
+    description: Turn off pressing the Shift key 5 times to turn Sticky keys
+    registries:
+      - path: HKCU\Control Panel\Accessibility\StickyKeys
+        name: Flags
+        type: String
+        old_value: "510"
+        new_value: "506"
+  - id: FasterKeyRepeat
+    name: FastestKeyRepeat
+    description: Minimize key repeat delay and Maximize key repeat rate
+    registries:
+      - path: HKCU\Control Panel\Keyboard
+        name: KeyboardDelay
+        type: DWord
+        old_value: "1"
+        new_value: "0"
+      - path: HKCU\Control Panel\Keyboard
+        name: KeyboardSpeed
+        type: DWord
+        old_value: "31"
+        new_value: "31"
+  - id: NoSystemSound
+    name: NoSystemSound
+    description: Disable all system sounds
+    registries:
+      - path: HKCU\AppEvents\Schemes
+        name: "(Default)"
+        type: String
+        old_value: ".Default"
+        new_value: ".None"
+    script:
+      apply: |-
+        $events = Get-ChildItem -Path "registry::HKCU\AppEvents\Schemes\Apps" | Get-ChildItem
+        foreach ($event in $events) {
+          $soundSet = Get-ChildItem -Path "registry::$event"
+          try {
+            if (".default" -in $soundSet.PSChildName) {
+              $noneSound = ""
+              Set-ItemProperty -Path "registry::$($event.Name)\.current" -Name "(Default)" -Value $noneSound
+            }
+          } catch {}
+        }
+      revert: |-
+        $events = Get-ChildItem -Path "registry::HKCU\AppEvents\Schemes\Apps" | Get-ChildItem
+        foreach ($event in $events) {
+          $soundSet = Get-ChildItem -Path "registry::$event"
+          if ( (".current" -in $soundSet.PSChildName) -and (".default" -in $soundSet.PSChildName) ) {
+            try {
+              $defaultSound = Get-ItemPropertyValue -Path "registry::$($event.Name)\.default" -Name "(Default)" -ErrorAction SilentlyContinue
+              Set-ItemProperty -Path "registry::$($event.Name)\.current" -Name "(Default)" -Value $defaultSound
+            }
+            catch {}
+          }
+        }
+
+  # Taskbar
+  - id: TaskbarAlignmentLeft
+    name: LeftTaskbarItems
+    description:
+      "[Windows 11] If Enabled then the Taskbar Items will be shown on the
+      Center, otherwise the Taskbar Items will be shown on the Left."
+    registries:
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+        name: TaskbarAl
+        type: DWord
+        old_value: "1"
+        new_value: "0"
+  - id: EndTaskOnTaskbar
+    name: EnableEndTaskWithRightClick
+    description: Enables option to end task when right clicking a program in the taskbar
+    registries:
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings
+        name: TaskbarEndTask
+        type: DWord
+        old_value: <NotExist>
+        new_value: "1"
+  - id: HideSearch
+    name: SearchButtonInTaskbar
+    description: Hide Search Button on the taskbar.
+    registries:
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Search
+        name: SearchboxTaskbarMode
+        type: DWord
+        old_value: "1"
+        new_value: "0"
+  - id: HideTaskView
+    name: TaskViewButtonInTaskbar
+    description: Hide Task View Button in Taskbar.
+    registries:
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+        name: ShowTaskViewButton
+        type: DWord
+        old_value: "1"
+        new_value: "0"
+  - id: HideWidgets
+    name: WidgetsButtonInTaskbar
+    description: Hide Widgets Button from Taskbar.
+    registries:
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+        name: TaskbarDa
+        type: DWord
+        old_value: "1"
+        new_value: "0"
+  - id: RemoveCopilot
+    name: DisableMicrosoftCopilot
+    description: Disables MS Copilot AI built into Windows since 23H2.
+    registries:
+      - path: HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsCopilot
+        name: TurnOffWindowsCopilot
+        type: DWord
+        old_value: <NotExist>
+        new_value: "1"
+      - path: HKCU\Software\Policies\Microsoft\Windows\WindowsCopilot
+        name: TurnOffWindowsCopilot
+        type: DWord
+        old_value: <NotExist>
+        new_value: "1"
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+        name: ShowCopilotButton
+        type: DWord
+        old_value: "1"
+        new_value: "0"
+      - path: HKLM\SOFTWARE\Microsoft\Windows\Shell\Copilot
+        name: IsCopilotAvailable
+        type: DWord
+        old_value: <NotExist>
+        new_value: "0"
+      - path: HKLM\SOFTWARE\Microsoft\Windows\Shell\Copilot
+        name: CopilotDisabledReason
+        type: String
+        old_value: <NotExist>
+        new_value: IsEnabledForGeographicRegionFailed
+      - path: HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsCopilot
+        name: AllowCopilotRuntime
+        type: DWord
+        old_value: <NotExist>
+        new_value: "0"
+      - path: HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked
+        name: "{CB3B0003-8088-4EDE-8769-8B354AB2FF8C}"
+        type: String
+        old_value: <NotExist>
+        new_value: ""
+      - path: HKLM\SOFTWARE\Microsoft\Windows\Shell\Copilot\BingChat
+        name: IsUserEligible
+        type: DWord
+        old_value: <NotExist>
+        new_value: "0"
+    script:
+      apply: |-
+        Write-Host "Remove Copilot"
+        Get-Package | Where-Object Name -like '*copilot*'
+        Get-AppxPackage -AllUsers *Copilot* | Remove-AppxPackage -AllUsers
+        Get-AppxProvisionedPackage -Online | Where-Object PackageName -like '*Copilot*' | Remove-AppxProvisionedPackage -Online
+        dism /online /remove-package /package-name:Microsoft.Windows.Copilot
+      revert: |-
+        Write-Host "Install Copilot"
+        winget install --name "Microsoft Copilot" --source msstore --accept-package-agreements --accept-source-agreements --silent
+  - id: ShowSecondsInSystemClock
+    name: ShowSecondsInSystemClock
+    description: Show seconds on the taskbar clock
+    registries:
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+        name: ShowSecondsInSystemClock
+        type: DWord
+        old_value: "0"
+        new_value: "1"
+  - id: ShowTaskbarOnMultiMonitor
+    name: TaskbarOnMultiMonitor
+    description: Show taskbar on multiple monitors
+    registries:
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+        name: MMTaskbarEnabled
+        type: DWord
+        old_value: "0"
+        new_value: "1"
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+        name: MMTaskbarMode
+        type: DWord
+        old_value: "0"
+        new_value: "1"
+
+  # Startup / Background
+  - id: DisableStorageSense
+    name: DisableStorageSense
+    description: Storage Sense deletes temp files automatically.
+    registries:
+      - path: HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy
+        name: "01"
+        type: DWord
+        old_value: "1"
+        new_value: "0"
+  - id: DisableXboxGameBar
+    name: DisableXboxGameBar
+    description: Disable Xbox Game Bar
+    registries:
+      - path: HKCU:\Software\Microsoft\Windows\CurrentVersion\GameDVR
+        name: AppCaptureEnabled
+        type: DWord
+        old_value: "1"
+        new_value: "0"
+      - path: HKCU:\System\GameConfigStore
+        name: GameDVR_Enabled
+        type: DWord
+        old_value: "1"
+        new_value: "0"
+      - path: HKCU:\Software\Microsoft\GameBar
+        name: ShowStartupPanel
+        type: DWord
+        old_value: "1"
+        new_value: "0"
+  - id: RestoreWindowsLastSession
+    name: EnableSaveRestartableApps
+    description:
+      Automatically saving my restartable apps and restart them when I sign
+      back in
+    registries:
+      - path: HKCU:\Software\Microsoft\Windows NT\CurrentVersion\Winlogon
+        name: RestartApps
+        type: DWord
+        old_value: "0"
+        new_value: "1"
+
+  # Context Menu
+  - id: ClassicContextMenu
+    name: SetClassicContextMenu
+    description:
+      Great Windows 11 tweak to bring back good context menus when right
+      clicking things in explorer.
+    registries:
+      - path: HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}
+        old_value: <NotExist>
+        new_value: <Exist>
+      - path: HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}
+        name: InprocServer32
+        type: String
+        old_value: <NotExist>
+        new_value: ""
+  - id: FreeMultipleLimit
+    name: EnableMultipleInvokeContext
+    description:
+      Enable the "Open", "Print", and "Edit" context menu items for more
+      than 15 items selected
+    registries:
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer
+        name: MultipleInvokePromptMinimum
+        type: DWord
+        old_value: "<NotExist>"
+        new_value: "300"
+  - id: HideEditWithClipchamp
+    name: HideEditWithClipchampContext
+    description: Hide the "Edit with Clipchamp" item from the media files context menu
+    registries:
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked
+        name: "{8AB635F8-9A67-4698-AB99-784AD929F3B4}"
+        type: String
+        old_value: <NotExist>
+        new_value: ""
+  - id: HideEditWithPhotos
+    name: HideEditWithPhotosContext
+    description: Hide the "Edit with Photos" item from the media files context menu
+    registries:
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked
+        name: "{BFE0E2A4-C70C-4AD7-AC3D-10D1ECEBB5B4}"
+        type: String
+        old_value: <NotExist>
+        new_value: ""
+  - id: HideEditWithPaint
+    name: HideEditWithPaintContext
+    description: Hide the "Edit with Paint" item from the media files context menu
+    registries:
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked
+        name: "{2430F218-B743-4FD6-97BF-5C76541B4AE9}"
+        type: String
+        old_value: <NotExist>
+        new_value: ""
+  - id: HideEditWithNotepad
+    name: HideEditWithNotepadContext
+    description: Hide the "Edit with Notepad" item from the media files context menu
+    registries:
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked
+        name: "{CA6CC9F1-867A-481E-951E-A28C5E4F01EA}"
+        type: String
+        old_value: <NotExist>
+        new_value: ""
+  - id: HideExtractAll
+    name: HideExtractAllContext
+    description: Hide the "Extract all" item from the zipped files context menu
+    registries:
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked
+        name: "{b8cdcb65-b1bf-4b42-9428-1dfdb7ee92af}"
+        type: String
+        old_value: <NotExist>
+        new_value: ""
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked
+        name: "{EE07CEF5-3441-4CFB-870A-4002C724783A}"
+        type: String
+        old_value: <NotExist>
+        new_value: ""
+  - id: HideOpenInWindowsTerminal
+    name: HideOpenWindowsTerminalContext
+    description: Hide the "Open in Windows Terminal" item in the folders context menu
+    registries:
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked
+        name: "{9F156763-7844-4DC4-B2B1-901F640F5155}"
+        type: String
+        old_value: <NotExist>
+        new_value: ""
+  - id: HidePrint
+    name: HidePrintCmdContext
+    description: Hide the "Print" item from the .bat and .cmd context menu
+    registries:
+      - path: HKCR\batfile\shell\print
+        name: ProgrammaticAccessOnly
+        type: String
+        old_value: <NotExist>
+        new_value: ""
+      - path: HKCR\cmdfile\shell\print
+        name: ProgrammaticAccessOnly
+        type: String
+        old_value: <NotExist>
+        new_value: ""
+  - id: HideCompressedFolder
+    name: HideCompressedFolderNewContext
+    description: Hide the "Compressed (zipped) Folder" item from the "New" context menu
+    registries:
+      - path: HKCR\.zip\CompressedFolder\ShellNew
+        name: Data
+        type: Binary
+        old_value: <NotExist>
+        new_value: "([byte[]](80,75,5,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0))"
+      - path: HKCR\.zip\CompressedFolder\ShellNew
+        name: ItemName
+        type: ExpandString
+        old_value: <NotExist>
+        new_value: "@%SystemRoot%\\System32\\zipfldr.dll,-10194"
+  - id: HideSearchMsStore
+    name: HideUseStoreOpenWith
+    description:
+      Hide the "Look for an app in the Microsoft Store" item in the "Open
+      with" dialog
+    registries:
+      - path: HKLM\SOFTWARE\Policies\Microsoft\Windows\Explorer
+        name: NoUseStoreOpenWith
+        type: DWord
+        old_value: <NotExist>
+        new_value: "1"
+  - id: HideShare
+    name: HideShareContext
+    description: Remove all Sharing-related shell extensions and revert them if needed.
+    registries:
+      - path: HKCR\AllFilesystemObjects\shellex\ContextMenuHandlers\ModernSharing
+        name: "(default)"
+        type: DWord
+        old_value: "{e2bf9676-5f8f-435c-97eb-11607a5bedf7}"
+        new_value: ""
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked
+        name: "{e2bf9676-5f8f-435c-97eb-11607a5bedf7}"
+        type: String
+        old_value: "<NotExist>"
+        new_value: "Share"
+  - id: HideAddToFavorite
+    name: HideFavoriteFromContext
+    description: Disable the "Add to Favorites" menu item.
+    registries:
+      - path: HKEY_CLASSES_ROOT\*\shell\pintohomefile
+        name: "ProgrammaticAccessOnly"
+        type: String
+        old_value: "<NotExist>"
+        new_value: ""
+  - id: HidePreviousVersionsFiles
+    name: HidePreviousVerionsFilesFromContext
+    description: Remove "Previous Versions" tab from properties for files and folders.
+    registries:
+      - path: HKEY_CLASSES_ROOT\AllFilesystemObjects
+        name: "NoPreviousVersions"
+        type: String
+        old_value: "<NotExist>"
+        new_value: ""
+      - path: HKEY_CLASSES_ROOT\Drive
+        name: "NoPreviousVersions"
+        type: String
+        old_value: "<NotExist>"
+        new_value: ""
+  - id: HideSendTo
+    name: HideSendToFromContext
+    description: Disable the "Send To" context menu item.
+    registries:
+      - path: HKCR\AllFilesystemObjects\shellex\ContextMenuHandlers\SendTo
+        old_value: "<Exist>"
+        new_value: "<NotExist>"
+  - id: HideAddToLibrary
+    name: HideAddToLibraryFromContext
+    description: Disable the "Add to Library" context menu item for folders.
+    registries:
+      - path: HKCR\Folder\ShellEx\ContextMenuHandlers\Library Location
+        name: "(default)"
+        type: String
+        old_value: "{3dad6c5d-2167-4cae-9914-f99e41c12cfa}"
+        new_value: ""
+  - id: HideGiveAccessTo
+    name: HideGiveAccessToFromContext
+    description: Remove all Sharing-related shell extensions and revert them if needed.
+    registries:
+      - path: HKCR\*\shellex\ContextMenuHandlers\Sharing
+        name: "(default)"
+        type: String
+        old_value: "{f81e9010-6ea4-11ce-a7ff-00aa003ca9f6}"
+        new_value: ""
+      - path: HKCR\Directory\shellex\ContextMenuHandlers\Sharing
+        name: "(default)"
+        type: String
+        old_value: "{f81e9010-6ea4-11ce-a7ff-00aa003ca9f6}"
+        new_value: ""
+      - path: HKCR\Directory\Background\shellex\ContextMenuHandlers\Sharing
+        name: "(default)"
+        type: String
+        old_value: "{f81e9010-6ea4-11ce-a7ff-00aa003ca9f6}"
+        new_value: ""
+      - path: HKCR\Drive\shellex\ContextMenuHandlers\Sharing
+        name: "(default)"
+        type: String
+        old_value: "{f81e9010-6ea4-11ce-a7ff-00aa003ca9f6}"
+        new_value: ""
+      - path: HKCR\LibraryFolder\background\shellex\ContextMenuHandlers\Sharing
+        name: "(default)"
+        type: String
+        old_value: "{f81e9010-6ea4-11ce-a7ff-00aa003ca9f6}"
+        new_value: "<NotExist>"
+      - path: HKCR\UserLibraryFolder\shellex\ContextMenuHandlers\Sharing
+        name: "(default)"
+        type: String
+        old_value: "{f81e9010-6ea4-11ce-a7ff-00aa003ca9f6}"
+        new_value: "<NotExist>"
+
+  # PowerPlan
+  - id: HighPowerPlan
+    name: HighPowerPlan
+    description: Set power plan on "High performance".
+    script:
+      apply: powercfg /setactive SCHEME_MIN
+      revert: powercfg /setactive SCHEME_BALANCED
+  - id: NoSleepMonitor
+    name: NoSleepMonitor
+    description: Prevent monitor from turning off automatically
+    script:
+      apply: |-
+        powercfg /change monitor-timeout-ac 0
+        powercfg /change monitor-timeout-dc 0
+      revert: powercfg /setactive SCHEME_BALANCED
