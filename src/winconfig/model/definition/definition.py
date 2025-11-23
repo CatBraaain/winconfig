@@ -24,7 +24,6 @@ from .service import ServiceDefinition, ServiceStartupType  # noqa: F401
 class TaskDefinition(BaseModel):
     """A single, self-contained configuration task."""
 
-    id: str = Field(description="A unique identifier for the task.")
     name: str = Field(description="The name of the task.")
     description: str = Field(description="A description of the task's purpose.")
     registries: list[RegistryEntryDefinition | RegistryKeyDefinition] = Field(
