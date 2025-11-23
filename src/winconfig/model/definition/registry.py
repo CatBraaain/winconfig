@@ -1,11 +1,10 @@
 import re
 from textwrap import dedent
-from typing import Annotated, Literal
+from typing import Literal
 
 from pydantic import (
     BaseModel,
     Field,
-    PlainSerializer,
     field_validator,
 )
 
