@@ -22,6 +22,6 @@ class GenerateJsonSchemaNoTitles(GenerateJsonSchema):
 
 schema_json = Definition.model_json_schema(schema_generator=GenerateJsonSchemaNoTitles)
 
-dist = "src/winconfig/definitions/schema.json"
+dist = "src/winconfig/definitions/winconfig.definition.schema.json"
 Path(dist).write_text(json.dumps(schema_json, indent=2) + "\n")
 subprocess.run(["bunx", "prettier", "--write", f'"{dist}"'], check=True)
