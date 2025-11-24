@@ -1,3 +1,81 @@
-# - Services
-- RemoveHome
-- Tele
+# yaml-language-server: $schema=./winconfig.config.schema.json
+
+### Appearance ###
+- SystemDarkMode
+# - AppDarkMode
+
+### Suggestions ###
+- DisableWindowsSuggestions
+
+### Taskbar ###
+- TaskbarAlignmentLeft
+- EnableTaskbarEndTask
+- HideTaskbarSearch
+- HideTaskbarTaskView
+- HideTaskbarWidgets
+- RemoveCopilot
+- ShowClockSeconds
+- ShowMultiMonitorTaskbar
+
+### Desktop / Side Panel / Settings ###
+- HideDesktopRecycleBin
+- ShowSidePanelClock
+- HideSettingsSuggestions
+
+### Start Menu ###
+- DisableStartMenuBingSearch
+- HideStartMenuRecommendations
+- HideStartMenuAccountNotifications
+- EnableGodMode
+
+### Explorer ###
+- ShowHiddenFiles
+- ShowFileExtensions
+- HideExplorerHome
+- HideExplorerGallery
+- DisableOneDrive
+- DisableExplorerGroupView
+- EnableExplorerRestoreLastSession
+- DisableExplorerCheckBoxes
+- HideExplorerRecentFiles
+- HideExplorerFrequentFolders
+
+### Files ###
+- DisableShortcutsSuffix
+- DisableUnsafeFileWarning
+
+### Context Menu ###
+- EnableClassicContextMenu
+- DisableContextMenuLimit
+- HideClipchampContextMenu
+- HideEditWithPhotos
+- HideEditWithPaint
+- HideEditWithNotepad
+- HideExtractAll
+- HideOpenInWindowsTerminal
+- HidePrint
+- HideCompressedFolder
+- HideSearchMsStore
+- HideShare
+- HideAddToFavorite
+- HidePreviousVersions
+- HideSendTo
+- HideAddToLibrary
+- HideGiveAccessTo
+
+### Mouse / Keyboard / Sound ###
+- DisableMouseAcceleration
+- DisableF1HelpPage
+- DisableStickyShift
+- FastKeyRepeat
+- NoSystemSound
+- DisableTouchPad
+
+### Startup / Background ###
+- DisableAutoDeleteTemp
+- DisableXboxGameBar
+# - EnableWindowsRestoreLastSession
+
+### PowerPlan ###
+- EnableHighPowerPlan
+- DisableSleepMonitor
