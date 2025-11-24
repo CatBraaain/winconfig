@@ -402,12 +402,12 @@ task_definitions:
         old_value: "1"
         new_value: "0"
   - name: RemoveCopilot
-    description: Remove Microsoft Copilot and hide it from taskbar
+    description: |-
+      Remove Microsoft Copilot and hide it from taskbar.
+      Note: Uninstalling is the only way to disable this after 23H2.
     script:
-      apply: |-
-        Get-AppxPackage -AllUsers | Where-Object {$_.Name -Like '*Microsoft.Copilot*'} | Remove-AppxPackage -AllUsers -ErrorAction Continue
-      revert: |-
-        winget install --name "Microsoft Copilot" --source msstore --accept-package-agreements --accept-source-agreements --silent
+      apply: winget uninstall --name "Microsoft Copilot"
+      revert: winget install --name "Microsoft Copilot" --source msstore --accept-package-agreements --accept-source-agreements --silent
   - name: ShowSecondsInSystemClock
     description: Show seconds on the taskbar clock
     registries:
