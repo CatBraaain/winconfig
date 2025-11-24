@@ -60,6 +60,76 @@ task_definitions:
         old_value: "1"
         new_value: "0"
 
+  # Taskbar
+  - name: TaskbarAlignmentLeft
+    description: Show Taskbar Items on the Left
+    registries:
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+        name: TaskbarAl
+        type: DWord
+        old_value: "1"
+        new_value: "0"
+  - name: EnableTaskbarEndTask
+    description: Enables option to end task when right clicking a program in the taskbar
+    registries:
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings
+        name: TaskbarEndTask
+        type: DWord
+        old_value: <NotExist>
+        new_value: "1"
+  - name: HideTaskbarSearch
+    description: Hide Search Button on the taskbar.
+    registries:
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Search
+        name: SearchboxTaskbarMode
+        type: DWord
+        old_value: "1"
+        new_value: "0"
+  - name: HideTaskbarTaskView
+    description: Hide Task View Button in Taskbar.
+    registries:
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+        name: ShowTaskViewButton
+        type: DWord
+        old_value: "1"
+        new_value: "0"
+  - name: HideTaskbarWidgets
+    description: Hide Widgets Button from Taskbar.
+    registries:
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+        name: TaskbarDa
+        type: DWord
+        old_value: "1"
+        new_value: "0"
+  - name: RemoveCopilot
+    description: |-
+      Remove Microsoft Copilot and hide it from taskbar.
+      Note: Uninstalling is the only way to disable this after 23H2.
+    script:
+      apply: winget uninstall --name "Microsoft Copilot"
+      revert: winget install --name "Microsoft Copilot" --source msstore --accept-package-agreements --accept-source-agreements --silent
+  - name: ShowClockSeconds
+    description: Show seconds on the taskbar clock
+    registries:
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+        name: ShowSecondsInSystemClock
+        type: DWord
+        old_value: "0"
+        new_value: "1"
+  - name: ShowMultiMonitorTaskbar
+    description: Show taskbar on multiple monitors
+    registries:
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+        name: MMTaskbarEnabled
+        type: DWord
+        old_value: "0"
+        new_value: "1"
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+        name: MMTaskbarMode
+        type: DWord
+        old_value: "0"
+        new_value: "1"
+
   # Desktop / Side Panel / Settings
   - name: HideDesktopRecycleBin
     description: Hide the "Recycle Bin" icon from Desktop
@@ -95,6 +165,60 @@ task_definitions:
         type: DWord
         old_value: "1"
         new_value: "0"
+
+  # Start Menu
+  - name: DisableStartMenuBingSearch
+    description: Disables bing web search in Start Menu search.
+    registries:
+      - path: HKCU\Software\Policies\Microsoft\Windows\Explorer
+        name: DisableSearchBoxSuggestions
+        type: DWord
+        old_value: "0"
+        new_value: "1"
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Search
+        name: BingSearchEnabled
+        type: DWord
+        old_value: "1"
+        new_value: "0"
+  - name: HideStartMenuRecommendations
+    description: Hide recommendations in Start Menu
+    registries:
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+        name: Start_IrisRecommendations
+        type: DWord
+        old_value: "1"
+        new_value: <NotExist>
+      - path: HKCU\Software\Policies\Microsoft\Windows\Explorer
+        name: HideRecommendedSection
+        type: DWord
+        old_value: <NotExist>
+        new_value: "1"
+  - name: HideStartMenuAccountNotifications
+    description: Hide Microsoft account-related notifications in Start Menu
+    registries:
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+        name: Start_AccountNotifications
+        type: DWord
+        old_value: <NotExist>
+        new_value: "0"
+  - name: EnableGodMode
+    description: |-
+      Create GodeMode Folder and make it searchable in Start Menu.
+      Optionally you can pin it to Start Menu by manually.
+    script:
+      apply: |-
+        $startMenuPath = "$env:AppData\Microsoft\Windows\Start Menu\Programs"
+        $shortcutPath = "$startMenuPath\GodMode.lnk"
+        $shortcut = (New-Object -ComObject WScript.Shell).CreateShortcut($shortcutPath)
+        $shortcut.TargetPath = "explorer.exe"
+        $shortcut.Arguments = "shell:::{ED7BA470-8E54-465E-825C-99712043E01C}"
+        # $shortcut.IconLocation = "imageres.dll,-30"
+        $shortcut.IconLocation = "$env:WinDir\System32\shell32.dll, 21"
+        $shortcut.Save()
+      revert: |-
+        $startMenuPath = "$env:AppData\Microsoft\Windows\Start Menu\Programs"
+        $shortcutPath = "$startMenuPath\GodMode.lnk"
+        Remove-Item -Path $shortcutPath
 
   # Explorer
   - name: ShowHiddenFiles
@@ -212,258 +336,6 @@ task_definitions:
         name: SaveZoneInformation
         type: DWord
         old_value: "<NotExist>"
-        new_value: "1"
-
-  # Start Menu
-  - name: DisableStartMenuBingSearch
-    description: Disables bing web search in Start Menu search.
-    registries:
-      - path: HKCU\Software\Policies\Microsoft\Windows\Explorer
-        name: DisableSearchBoxSuggestions
-        type: DWord
-        old_value: "0"
-        new_value: "1"
-      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Search
-        name: BingSearchEnabled
-        type: DWord
-        old_value: "1"
-        new_value: "0"
-  - name: HideStartMenuRecommendations
-    description: Hide recommendations in Start Menu
-    registries:
-      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
-        name: Start_IrisRecommendations
-        type: DWord
-        old_value: "1"
-        new_value: <NotExist>
-      - path: HKCU\Software\Policies\Microsoft\Windows\Explorer
-        name: HideRecommendedSection
-        type: DWord
-        old_value: <NotExist>
-        new_value: "1"
-  - name: HideStartMenuAccountNotifications
-    description: Hide Microsoft account-related notifications in Start Menu
-    registries:
-      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
-        name: Start_AccountNotifications
-        type: DWord
-        old_value: <NotExist>
-        new_value: "0"
-  - name: EnableGodMode
-    description: |-
-      Create GodeMode Folder and make it searchable in Start Menu.
-      Optionally you can pin it to Start Menu by manually.
-    script:
-      apply: |-
-        $startMenuPath = "$env:AppData\Microsoft\Windows\Start Menu\Programs"
-        $shortcutPath = "$startMenuPath\GodMode.lnk"
-        $shortcut = (New-Object -ComObject WScript.Shell).CreateShortcut($shortcutPath)
-        $shortcut.TargetPath = "explorer.exe"
-        $shortcut.Arguments = "shell:::{ED7BA470-8E54-465E-825C-99712043E01C}"
-        # $shortcut.IconLocation = "imageres.dll,-30"
-        $shortcut.IconLocation = "$env:WinDir\System32\shell32.dll, 21"
-        $shortcut.Save()
-      revert: |-
-        $startMenuPath = "$env:AppData\Microsoft\Windows\Start Menu\Programs"
-        $shortcutPath = "$startMenuPath\GodMode.lnk"
-        Remove-Item -Path $shortcutPath
-
-  # Mouse / Keyboard / Sound
-  - name: DisableMouseAcceleration
-    description: Disables mouse acceleration
-    registries:
-      - path: HKCU\Control Panel\Mouse
-        name: MouseSpeed
-        type: DWord
-        old_value: "1"
-        new_value: "0"
-      - path: HKCU\Control Panel\Mouse
-        name: MouseThreshold1
-        type: DWord
-        old_value: "6"
-        new_value: "0"
-      - path: HKCU\Control Panel\Mouse
-        name: MouseThreshold2
-        type: DWord
-        old_value: "10"
-        new_value: "0"
-  - name: DisableF1HelpPage
-    description: Disable help lookup via F1
-    registries:
-      - path: HKCU\Software\Classes\Typelib\{8cec5860-07a1-11d9-b15e-000d56bfe6ee}
-        old_value: <NotExist>
-        new_value: <Exist>
-      - path: HKCU\Software\Classes\Typelib\{8cec5860-07a1-11d9-b15e-000d56bfe6ee}\1.0\0\win64
-        name: "(default)"
-        type: String
-        old_value: <NotExist>
-        new_value: ""
-  - name: DisableStickyShift
-    description: Turn off pressing the Shift key 5 times to turn Sticky keys
-    registries:
-      - path: HKCU\Control Panel\Accessibility\StickyKeys
-        name: Flags
-        type: String
-        old_value: "510"
-        new_value: "506"
-  - name: FastKeyRepeat
-    description: Minimize key repeat delay and Maximize key repeat rate
-    registries:
-      - path: HKCU\Control Panel\Keyboard
-        name: KeyboardDelay
-        type: DWord
-        old_value: "1"
-        new_value: "0"
-      - path: HKCU\Control Panel\Keyboard
-        name: KeyboardSpeed
-        type: DWord
-        old_value: "31"
-        new_value: "31"
-  - name: NoSystemSound
-    description: Disable all system sounds
-    registries:
-      - path: HKCU\AppEvents\Schemes
-        name: "(Default)"
-        type: String
-        old_value: ".Default"
-        new_value: ".None"
-    script:
-      apply: |-
-        $events = Get-ChildItem -Path "registry::HKCU\AppEvents\Schemes\Apps" | Get-ChildItem
-        foreach ($event in $events) {
-          $soundSet = Get-ChildItem -Path "registry::$($event.Name)"
-          try {
-            if (".default" -in $soundSet.PSChildName) {
-              $noneSound = ""
-              Set-ItemProperty -Path "registry::$($event.Name)\.current" -Name "(Default)" -Value $noneSound
-            }
-          } catch {}
-        }
-      revert: |-
-        $events = Get-ChildItem -Path "registry::HKCU\AppEvents\Schemes\Apps" | Get-ChildItem
-        foreach ($event in $events) {
-          $soundSet = Get-ChildItem -Path "registry::$($event.Name)"
-          if ( (".current" -in $soundSet.PSChildName) -and (".default" -in $soundSet.PSChildName) ) {
-            try {
-              $defaultSound = Get-ItemPropertyValue -Path "registry::$($event.Name)\.default" -Name "(Default)" -ErrorAction SilentlyContinue
-              Set-ItemProperty -Path "registry::$($event.Name)\.current" -Name "(Default)" -Value $defaultSound
-            }
-            catch {}
-          }
-        }
-  - name: DisableTouchPad
-    description: Disable touchpad for laptop
-    registries:
-      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad\Status
-        name: Enabled
-        type: DWord
-        old_value: "1"
-        new_value: "0"
-
-  # Taskbar
-  - name: TaskbarAlignmentLeft
-    description: Show Taskbar Items on the Left
-    registries:
-      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
-        name: TaskbarAl
-        type: DWord
-        old_value: "1"
-        new_value: "0"
-  - name: EnableTaskbarEndTask
-    description: Enables option to end task when right clicking a program in the taskbar
-    registries:
-      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings
-        name: TaskbarEndTask
-        type: DWord
-        old_value: <NotExist>
-        new_value: "1"
-  - name: HideTaskbarSearch
-    description: Hide Search Button on the taskbar.
-    registries:
-      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Search
-        name: SearchboxTaskbarMode
-        type: DWord
-        old_value: "1"
-        new_value: "0"
-  - name: HideTaskbarTaskView
-    description: Hide Task View Button in Taskbar.
-    registries:
-      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
-        name: ShowTaskViewButton
-        type: DWord
-        old_value: "1"
-        new_value: "0"
-  - name: HideTaskbarWidgets
-    description: Hide Widgets Button from Taskbar.
-    registries:
-      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
-        name: TaskbarDa
-        type: DWord
-        old_value: "1"
-        new_value: "0"
-  - name: RemoveCopilot
-    description: |-
-      Remove Microsoft Copilot and hide it from taskbar.
-      Note: Uninstalling is the only way to disable this after 23H2.
-    script:
-      apply: winget uninstall --name "Microsoft Copilot"
-      revert: winget install --name "Microsoft Copilot" --source msstore --accept-package-agreements --accept-source-agreements --silent
-  - name: ShowClockSeconds
-    description: Show seconds on the taskbar clock
-    registries:
-      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
-        name: ShowSecondsInSystemClock
-        type: DWord
-        old_value: "0"
-        new_value: "1"
-  - name: ShowMultiMonitorTaskbar
-    description: Show taskbar on multiple monitors
-    registries:
-      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
-        name: MMTaskbarEnabled
-        type: DWord
-        old_value: "0"
-        new_value: "1"
-      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
-        name: MMTaskbarMode
-        type: DWord
-        old_value: "0"
-        new_value: "1"
-
-  # Startup / Background
-  - name: DisableAutoDeleteTemp
-    description: Disables Storage Sense deleting temp files automatically
-    registries:
-      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy
-        name: "01"
-        type: DWord
-        old_value: "1"
-        new_value: "0"
-  - name: DisableXboxGameBar
-    description: Disable Xbox Game Bar
-    registries:
-      - path: HKCU:\Software\Microsoft\Windows\CurrentVersion\GameDVR
-        name: AppCaptureEnabled
-        type: DWord
-        old_value: "1"
-        new_value: "0"
-      - path: HKCU:\System\GameConfigStore
-        name: GameDVR_Enabled
-        type: DWord
-        old_value: "1"
-        new_value: "0"
-      - path: HKCU:\Software\Microsoft\GameBar
-        name: ShowStartupPanel
-        type: DWord
-        old_value: "1"
-        new_value: "0"
-  - name: EnableWindowsRestoreLastSession
-    description: Automatically reopen some apps that were opened last time when start OS
-    registries:
-      - path: HKCU:\Software\Microsoft\Windows NT\CurrentVersion\Winlogon
-        name: RestartApps
-        type: DWord
-        old_value: "0"
         new_value: "1"
 
   # Context Menu
@@ -631,6 +503,134 @@ task_definitions:
         type: String
         old_value: "<NotExist>"
         new_value: "Give access to"
+
+  # Mouse / Keyboard / Sound
+  - name: DisableMouseAcceleration
+    description: Disables mouse acceleration
+    registries:
+      - path: HKCU\Control Panel\Mouse
+        name: MouseSpeed
+        type: DWord
+        old_value: "1"
+        new_value: "0"
+      - path: HKCU\Control Panel\Mouse
+        name: MouseThreshold1
+        type: DWord
+        old_value: "6"
+        new_value: "0"
+      - path: HKCU\Control Panel\Mouse
+        name: MouseThreshold2
+        type: DWord
+        old_value: "10"
+        new_value: "0"
+  - name: DisableF1HelpPage
+    description: Disable help lookup via F1
+    registries:
+      - path: HKCU\Software\Classes\Typelib\{8cec5860-07a1-11d9-b15e-000d56bfe6ee}
+        old_value: <NotExist>
+        new_value: <Exist>
+      - path: HKCU\Software\Classes\Typelib\{8cec5860-07a1-11d9-b15e-000d56bfe6ee}\1.0\0\win64
+        name: "(default)"
+        type: String
+        old_value: <NotExist>
+        new_value: ""
+  - name: DisableStickyShift
+    description: Turn off pressing the Shift key 5 times to turn Sticky keys
+    registries:
+      - path: HKCU\Control Panel\Accessibility\StickyKeys
+        name: Flags
+        type: String
+        old_value: "510"
+        new_value: "506"
+  - name: FastKeyRepeat
+    description: Minimize key repeat delay and Maximize key repeat rate
+    registries:
+      - path: HKCU\Control Panel\Keyboard
+        name: KeyboardDelay
+        type: DWord
+        old_value: "1"
+        new_value: "0"
+      - path: HKCU\Control Panel\Keyboard
+        name: KeyboardSpeed
+        type: DWord
+        old_value: "31"
+        new_value: "31"
+  - name: NoSystemSound
+    description: Disable all system sounds
+    registries:
+      - path: HKCU\AppEvents\Schemes
+        name: "(Default)"
+        type: String
+        old_value: ".Default"
+        new_value: ".None"
+    script:
+      apply: |-
+        $events = Get-ChildItem -Path "registry::HKCU\AppEvents\Schemes\Apps" | Get-ChildItem
+        foreach ($event in $events) {
+          $soundSet = Get-ChildItem -Path "registry::$($event.Name)"
+          try {
+            if (".default" -in $soundSet.PSChildName) {
+              $noneSound = ""
+              Set-ItemProperty -Path "registry::$($event.Name)\.current" -Name "(Default)" -Value $noneSound
+            }
+          } catch {}
+        }
+      revert: |-
+        $events = Get-ChildItem -Path "registry::HKCU\AppEvents\Schemes\Apps" | Get-ChildItem
+        foreach ($event in $events) {
+          $soundSet = Get-ChildItem -Path "registry::$($event.Name)"
+          if ( (".current" -in $soundSet.PSChildName) -and (".default" -in $soundSet.PSChildName) ) {
+            try {
+              $defaultSound = Get-ItemPropertyValue -Path "registry::$($event.Name)\.default" -Name "(Default)" -ErrorAction SilentlyContinue
+              Set-ItemProperty -Path "registry::$($event.Name)\.current" -Name "(Default)" -Value $defaultSound
+            }
+            catch {}
+          }
+        }
+  - name: DisableTouchPad
+    description: Disable touchpad for laptop
+    registries:
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad\Status
+        name: Enabled
+        type: DWord
+        old_value: "1"
+        new_value: "0"
+
+  # Startup / Background
+  - name: DisableAutoDeleteTemp
+    description: Disables Storage Sense deleting temp files automatically
+    registries:
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy
+        name: "01"
+        type: DWord
+        old_value: "1"
+        new_value: "0"
+  - name: DisableXboxGameBar
+    description: Disable Xbox Game Bar
+    registries:
+      - path: HKCU:\Software\Microsoft\Windows\CurrentVersion\GameDVR
+        name: AppCaptureEnabled
+        type: DWord
+        old_value: "1"
+        new_value: "0"
+      - path: HKCU:\System\GameConfigStore
+        name: GameDVR_Enabled
+        type: DWord
+        old_value: "1"
+        new_value: "0"
+      - path: HKCU:\Software\Microsoft\GameBar
+        name: ShowStartupPanel
+        type: DWord
+        old_value: "1"
+        new_value: "0"
+  - name: EnableWindowsRestoreLastSession
+    description: Automatically reopen some apps that were opened last time when start OS
+    registries:
+      - path: HKCU:\Software\Microsoft\Windows NT\CurrentVersion\Winlogon
+        name: RestartApps
+        type: DWord
+        old_value: "0"
+        new_value: "1"
 
   # PowerPlan
   - name: EnableHighPowerPlan
