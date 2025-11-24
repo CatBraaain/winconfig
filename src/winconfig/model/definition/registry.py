@@ -51,6 +51,10 @@ class RegistryBaseDefinition(BaseModel):
             )
         return value
 
+    @property
+    def registry_path(self) -> str:
+        return f"Registry::{self.path}"
+
 
 class RegistryEntryDefinition(RegistryBaseDefinition):
     """Represents a single registry entry value to be modified."""
@@ -75,22 +79,22 @@ class RegistryEntryDefinition(RegistryBaseDefinition):
         value = self.resolve_value(revert)
 
         set_entry = rf"""
-            if (!(Test-Path "{self.path}")) {{
-                New-Item -Path "{self.path}" -Force -ErrorAction Stop | Out-Null
+            if (!(Test-Path "{self.registry_path}")) {{
+                New-Item -Path "{self.registry_path}" -Force -ErrorAction Stop | Out-Null
             }}
             try {{
-                Set-ItemProperty -Path "{self.path}" -Name "{self.name}" -Type "{self.type}" -Value "{value}" -Force -ErrorAction Stop | Out-Null
+                Set-ItemProperty -Path "{self.registry_path}" -Name "{self.name}" -Type "{self.type}" -Value "{value}" -Force -ErrorAction Stop | Out-Null
             }}
             catch [System.UnauthorizedAccessException] {{
                 "{ACCESS_DENIED}"
             }}
         """
         remove_entry = rf"""
-            if (!(Test-Path "{self.path}")) {{
+            if (!(Test-Path "{self.registry_path}")) {{
                 "{NOT_EXIST}"
             }}
             try {{
-                Remove-ItemProperty -Path "{self.path}" -Name "{self.name}" -Force -ErrorAction Stop | Out-Null
+                Remove-ItemProperty -Path "{self.registry_path}" -Name "{self.name}" -Force -ErrorAction Stop | Out-Null
             }}
             catch [System.Management.Automation.PSArgumentException] {{
                 "{NOT_EXIST}"
@@ -103,7 +107,7 @@ class RegistryEntryDefinition(RegistryBaseDefinition):
     def generate_get_script(self) -> str:
         get_entry = rf"""
             try {{
-                Get-ItemPropertyValue -Path "{self.path}" -Name "{self.name}" -ErrorAction Stop
+                Get-ItemPropertyValue -Path "{self.registry_path}" -Name "{self.name}" -ErrorAction Stop
             }}
             catch [System.Management.Automation.ItemNotFoundException] {{
                 "{NOT_EXIST}"
@@ -127,7 +131,7 @@ class RegistryKeyDefinition(RegistryBaseDefinition):
 
     @property
     def full_path(self) -> str:
-        return f"{self.path}"
+        return f"{self.registry_path}"
 
     def resolve_value(self, revert: bool) -> NotChangeType | ExistType | NotExistType:
         return self.new_value if not revert else self.old_value
@@ -136,13 +140,13 @@ class RegistryKeyDefinition(RegistryBaseDefinition):
         value = self.resolve_value(revert)
 
         add_key = rf"""
-            if (!(Test-Path "{self.path}")) {{
-                New-Item -Path "{self.path}" -Force -ErrorAction Stop | Out-Null
+            if (!(Test-Path "{self.registry_path}")) {{
+                New-Item -Path "{self.registry_path}" -Force -ErrorAction Stop | Out-Null
             }}
         """
         remove_key = rf"""
-            if (Test-Path "{self.path}") {{
-                Remove-Item -Path "{self.path}" -Force -ErrorAction Stop | Out-Null
+            if (Test-Path "{self.registry_path}") {{
+                Remove-Item -Path "{self.registry_path}" -Force -ErrorAction Stop | Out-Null
             }}
         """
         if value == NOT_EXIST:
@@ -158,7 +162,7 @@ class RegistryKeyDefinition(RegistryBaseDefinition):
 
     def generate_get_script(self) -> str:
         get_entry = rf"""
-            if (Test-Path "{self.path}") {{
+            if (Test-Path "{self.registry_path}") {{
                 "{EXIST}"
             }} else {{
                 "{NOT_EXIST}"
