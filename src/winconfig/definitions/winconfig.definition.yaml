@@ -405,7 +405,7 @@ task_definitions:
     description: Remove Microsoft Copilot and hide it from taskbar
     script:
       apply: |-
-        Get-AppxPackage -AllUsers | Where-Object {$_.Name -Like '*Microsoft.Copilot*'} | Remove-AppxPackage -AllUsers -ErrorAction Continue​
+        Get-AppxPackage -AllUsers | Where-Object {$_.Name -Like '*Microsoft.Copilot*'} | Remove-AppxPackage -AllUsers -ErrorAction Continue
       revert: |-
         winget install --name "Microsoft Copilot" --source msstore --accept-package-agreements --accept-source-agreements --silent
   - name: ShowSecondsInSystemClock
