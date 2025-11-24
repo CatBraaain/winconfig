@@ -53,7 +53,7 @@ class RegistryBaseDefinition(BaseModel):
 
     @property
     def registry_path(self) -> str:
-        return f"Registry::{self.path}"
+        return f"Registry::{self.path.replace('*', '``*')}"
 
 
 class RegistryEntryDefinition(RegistryBaseDefinition):
