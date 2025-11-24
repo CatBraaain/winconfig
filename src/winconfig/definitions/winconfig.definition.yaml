@@ -116,15 +116,15 @@ task_definitions:
   - name: HideHomeFromExplorer
     description: Hide the Home from Explorer and sets This PC as default
     registries:
-      - path: HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}
+      - path: HKLM\Software\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}
         old_value: <Exist>
         new_value: <NotExist>
-      - path: HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}
+      - path: HKLM\Software\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}
         name: (default)
         type: String
         old_value: CLSID_MSGraphHomeFolder
         new_value: <NotExist>
-      - path: HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
         name: LaunchTo
         type: DWord
         old_value: <NotExist>
@@ -132,15 +132,15 @@ task_definitions:
   - name: HideGalleryFromExplorer
     description: Hide the Gallery from Explorer and sets This PC as default
     registries:
-      - path: HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}
+      - path: HKLM\Software\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}
         old_value: <Exist>
         new_value: <NotExist>
-      - path: HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}
+      - path: HKLM\Software\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}
         name: (default)
         type: String
         old_value: "{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}"
         new_value: <NotExist>
-      - path: HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
         name: LaunchTo
         type: DWord
         old_value: <NotExist>
@@ -148,7 +148,7 @@ task_definitions:
   - name: DisableOneDrive
     description: Disables OneDrive and hide it from Explorer
     registries:
-      - path: HKLM\SOFTWARE\Policies\Microsoft\Windows\OneDrive
+      - path: HKLM\Software\Policies\Microsoft\Windows\OneDrive
         name: DisableFileSyncNGSC
         type: DWord
         old_value: <NotExist>
@@ -434,7 +434,7 @@ task_definitions:
   - name: NoAutoDeleteTemp
     description: Disables Storage Sense deleting temp files automatically
     registries:
-      - path: HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy
+      - path: HKCU\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy
         name: "01"
         type: DWord
         old_value: "1"
@@ -570,7 +570,7 @@ task_definitions:
   - name: HideSearchMsStore
     description: Hide the "Look for an app in the Microsoft Store" item in the "Open with" dialog
     registries:
-      - path: HKLM\SOFTWARE\Policies\Microsoft\Windows\Explorer
+      - path: HKLM\Software\Policies\Microsoft\Windows\Explorer
         name: NoUseStoreOpenWith
         type: DWord
         old_value: <NotExist>
