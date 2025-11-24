@@ -117,12 +117,12 @@ task_definitions:
     description: Hide the Home from Explorer and sets This PC as default
     registries:
       - path: HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}
+        old_value: <Exist>
+        new_value: <NotExist>
+      - path: HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}
         name: (default)
         type: String
         old_value: CLSID_MSGraphHomeFolder
-        new_value: <NotExist>
-      - path: HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}
-        old_value: <Exist>
         new_value: <NotExist>
       - path: HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced
         name: LaunchTo
@@ -133,12 +133,12 @@ task_definitions:
     description: Hide the Gallery from Explorer and sets This PC as default
     registries:
       - path: HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}
+        old_value: <Exist>
+        new_value: <NotExist>
+      - path: HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}
         name: (default)
         type: String
         old_value: "{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}"
-        new_value: <NotExist>
-      - path: HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}
-        old_value: <Exist>
         new_value: <NotExist>
       - path: HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced
         name: LaunchTo
