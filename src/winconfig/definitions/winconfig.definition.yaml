@@ -2,7 +2,7 @@
 
 task_definitions:
   # Appearance
-  - name: DarkModeForSystem
+  - name: SystemDarkMode
     description: Enables dark mode for system
     registries:
       - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize
@@ -10,7 +10,7 @@ task_definitions:
         type: DWord
         old_value: "1"
         new_value: "0"
-  - name: DarkModeForApp
+  - name: AppDarkMode
     description: Enables dark mode for apps
     registries:
       - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize
@@ -61,7 +61,7 @@ task_definitions:
         new_value: "0"
 
   # Desktop / Side Panel / Settings
-  - name: HideRecycleBinIconFromDesktop
+  - name: HideDesktopRecycleBin
     description: Hide the "Recycle Bin" icon from Desktop
     registries:
       - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel
@@ -69,7 +69,7 @@ task_definitions:
         type: DWord
         old_value: "0"
         new_value: "1"
-  - name: ShowClockInSidePanel
+  - name: ShowSidePanelClock
     description: Show time in Notification Center like as it in Windows 10
     registries:
       - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
@@ -77,7 +77,7 @@ task_definitions:
         type: DWord
         old_value: "0"
         new_value: "1"
-  - name: HideSuggestionFromSettings
+  - name: HideSettingsSuggestions
     description: Hide suggested content in the Settings
     registries:
       - path: HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager
@@ -113,7 +113,7 @@ task_definitions:
         type: DWord
         old_value: "1"
         new_value: "0"
-  - name: HideHomeFromExplorer
+  - name: HideExplorerHome
     description: Hide the Home from Explorer and sets This PC as default
     registries:
       - path: HKLM\Software\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}
@@ -129,7 +129,7 @@ task_definitions:
         type: DWord
         old_value: <NotExist>
         new_value: "1"
-  - name: HideGalleryFromExplorer
+  - name: HideExplorerGallery
     description: Hide the Gallery from Explorer and sets This PC as default
     registries:
       - path: HKLM\Software\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}
@@ -153,7 +153,7 @@ task_definitions:
         type: DWord
         old_value: <NotExist>
         new_value: "1"
-  - name: DisableGroupingExplorer
+  - name: DisableExplorerGroupView
     description: Do not group files and folder in the Downloads folder
     registries:
       - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\FolderTypes\{885a186e-a440-4ada-812b-db871b942259}\TopViews\{00000000-0000-0000-0000-000000000000}
@@ -161,7 +161,7 @@ task_definitions:
         type: String
         old_value: "<NotExist>"
         new_value: "System.Null"
-  - name: RestoreLastSessionExplorer
+  - name: EnableExplorerRestoreLastSession
     description: Restore the last session when open explroer
     registries:
       - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
@@ -169,7 +169,7 @@ task_definitions:
         type: DWord
         old_value: "0"
         new_value: "1"
-  - name: DisableCheckBoxesExplorer
+  - name: DisableExplorerCheckBoxes
     description: Do not use item check boxes
     registries:
       - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
@@ -177,7 +177,7 @@ task_definitions:
         type: DWord
         old_value: "1"
         new_value: "0"
-  - name: HideRecentFiles
+  - name: HideExplorerRecentFiles
     description: Hide recently used files in Explorer Quick Access
     registries:
       - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer
@@ -185,7 +185,7 @@ task_definitions:
         type: DWord
         old_value: "1"
         new_value: "0"
-  - name: HideFrequentFolders
+  - name: HideExplorerFrequentFolders
     description: Hide frequently used folders in Explorer Quick Access
     registries:
       - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer
@@ -195,7 +195,7 @@ task_definitions:
         new_value: "0"
 
   # Files
-  - name: NoAddingShortcutsSuffix
+  - name: DisableShortcutsSuffix
     description: Do not add the "- Shortcut" suffix to the file name of created shortcuts
     registries:
       - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\NamingTemplates
@@ -203,7 +203,7 @@ task_definitions:
         type: String
         old_value: "<NotExist>"
         new_value: "%s.lnk"
-  - name: NoWarningForDownloadedFile
+  - name: DisableUnsafeFileWarning
     description:
       Disables the Attachment Manager marking files that have been downloaded
       from the Internet as unsafe
@@ -215,7 +215,7 @@ task_definitions:
         new_value: "1"
 
   # Start Menu
-  - name: DisableBingInStartMenuSearch
+  - name: DisableStartMenuBingSearch
     description: Disables bing web search in Start Menu search.
     registries:
       - path: HKCU\Software\Policies\Microsoft\Windows\Explorer
@@ -228,7 +228,7 @@ task_definitions:
         type: DWord
         old_value: "1"
         new_value: "0"
-  - name: HideRecommendationsFromStart
+  - name: HideStartMenuRecommendations
     description: Hide recommendations in Start Menu
     registries:
       - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
@@ -241,7 +241,7 @@ task_definitions:
         type: DWord
         old_value: <NotExist>
         new_value: "1"
-  - name: HideAccountNotificationsFromStart
+  - name: HideStartMenuAccountNotifications
     description: Hide Microsoft account-related notifications in Start Menu
     registries:
       - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
@@ -306,7 +306,7 @@ task_definitions:
         type: String
         old_value: "510"
         new_value: "506"
-  - name: FasterKeyRepeat
+  - name: FastKeyRepeat
     description: Minimize key repeat delay and Maximize key repeat rate
     registries:
       - path: HKCU\Control Panel\Keyboard
@@ -369,7 +369,7 @@ task_definitions:
         type: DWord
         old_value: "1"
         new_value: "0"
-  - name: EndTaskOnTaskbar
+  - name: EnableTaskbarEndTask
     description: Enables option to end task when right clicking a program in the taskbar
     registries:
       - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings
@@ -377,7 +377,7 @@ task_definitions:
         type: DWord
         old_value: <NotExist>
         new_value: "1"
-  - name: HideSearchFromTaskbar
+  - name: HideTaskbarSearch
     description: Hide Search Button on the taskbar.
     registries:
       - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Search
@@ -385,7 +385,7 @@ task_definitions:
         type: DWord
         old_value: "1"
         new_value: "0"
-  - name: HideTaskViewFromTaskbar
+  - name: HideTaskbarTaskView
     description: Hide Task View Button in Taskbar.
     registries:
       - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
@@ -393,7 +393,7 @@ task_definitions:
         type: DWord
         old_value: "1"
         new_value: "0"
-  - name: HideWidgetsFromTaskbar
+  - name: HideTaskbarWidgets
     description: Hide Widgets Button from Taskbar.
     registries:
       - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
@@ -408,7 +408,7 @@ task_definitions:
     script:
       apply: winget uninstall --name "Microsoft Copilot"
       revert: winget install --name "Microsoft Copilot" --source msstore --accept-package-agreements --accept-source-agreements --silent
-  - name: ShowSecondsInSystemClock
+  - name: ShowClockSeconds
     description: Show seconds on the taskbar clock
     registries:
       - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
@@ -416,7 +416,7 @@ task_definitions:
         type: DWord
         old_value: "0"
         new_value: "1"
-  - name: ShowTaskbarOnMultiMonitor
+  - name: ShowMultiMonitorTaskbar
     description: Show taskbar on multiple monitors
     registries:
       - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
@@ -431,7 +431,7 @@ task_definitions:
         new_value: "1"
 
   # Startup / Background
-  - name: NoAutoDeleteTemp
+  - name: DisableAutoDeleteTemp
     description: Disables Storage Sense deleting temp files automatically
     registries:
       - path: HKCU\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy
@@ -457,7 +457,7 @@ task_definitions:
         type: DWord
         old_value: "1"
         new_value: "0"
-  - name: RestoreWindowsLastSession
+  - name: EnableWindowsRestoreLastSession
     description: Automatically reopen some apps that were opened last time when start OS
     registries:
       - path: HKCU:\Software\Microsoft\Windows NT\CurrentVersion\Winlogon
@@ -478,7 +478,7 @@ task_definitions:
         type: String
         old_value: <NotExist>
         new_value: ""
-  - name: FreeLimitOfContextMenu
+  - name: DisableContextMenuLimit
     description:
       Enable the "Open", "Print", and "Edit" context menu items for more
       than 15 items selected
@@ -488,7 +488,7 @@ task_definitions:
         type: DWord
         old_value: "<NotExist>"
         new_value: "300"
-  - name: HideEditWithClipchamp
+  - name: HideClipchampContextMenu
     description: Hide the "Edit with Clipchamp" item from context menu
     registries:
       - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked
@@ -633,12 +633,12 @@ task_definitions:
         new_value: "Give access to"
 
   # PowerPlan
-  - name: HighPowerPlan
+  - name: EnableHighPowerPlan
     description: Set power plan on "High performance".
     script:
       apply: powercfg /setactive SCHEME_MIN
       revert: powercfg /setactive SCHEME_BALANCED
-  - name: NoSleepMonitor
+  - name: DisableSleepMonitor
     description: Prevent monitor from turning off automatically
     script:
       apply: |-
