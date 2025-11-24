@@ -560,13 +560,13 @@ task_definitions:
       - path: HKCR\.zip\CompressedFolder\ShellNew
         name: Data
         type: Binary
-        old_value: <NotExist>
-        new_value: "([byte[]](80,75,5,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0))"
+        old_value: "80 75 5 6 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0"
+        new_value: <NotExist>
       - path: HKCR\.zip\CompressedFolder\ShellNew
         name: ItemName
         type: ExpandString
-        old_value: <NotExist>
-        new_value: "@%SystemRoot%\\System32\\zipfldr.dll,-10194"
+        old_value: "@C:\\Windows\\System32\\zipfldr.dll,-10194"
+        new_value: <NotExist>
   - name: HideSearchMsStore
     description: Hide the "Look for an app in the Microsoft Store" item in the "Open with" dialog
     registries:
