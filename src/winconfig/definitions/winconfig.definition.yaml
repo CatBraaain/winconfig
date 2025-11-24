@@ -591,7 +591,7 @@ task_definitions:
   - name: HideAddToFavorite
     description: Hide the "Add to Favorites" item from context menu
     registries:
-      - path: HKEY_CLASSES_ROOT\*\shell\pintohomefile
+      - path: HKCR\*\shell\pintohomefile
         name: "ProgrammaticAccessOnly"
         type: String
         old_value: "<NotExist>"
