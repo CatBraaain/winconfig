@@ -1,18 +1,6 @@
-import pytest
-
 from winconfig.model.definition.definition import TaskDefinition
 from winconfig.powershell.constants import NOT_EXIST
 from winconfig.powershell.process import PowershellRunspace
-
-
-@pytest.fixture(autouse=True)
-def skip_this_test():
-    pytest.skip("under consideration")
-
-
-# pytestmark = pytest.mark.xfail(
-#     strict=False, reason="under consideration"
-# )
 
 
 def test_default_resitory(runtime_set: tuple[PowershellRunspace, TaskDefinition]):
@@ -20,7 +8,7 @@ def test_default_resitory(runtime_set: tuple[PowershellRunspace, TaskDefinition]
     for registry in task_definition.registries:
         current_value = powershell.run(registry.generate_get_script())
         expected_value = registry.old_value
-        assert current_value in (NOT_EXIST, expected_value), (
+        assert current_value == expected_value, (
             f"[{registry.full_path}]'s value '{current_value}' != '{expected_value}'"
         )
 
