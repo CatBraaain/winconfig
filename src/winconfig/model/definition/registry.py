@@ -146,7 +146,7 @@ class RegistryKeyDefinition(RegistryBaseDefinition):
         """
         remove_key = rf"""
             if (Test-Path "{self.registry_path}") {{
-                Remove-Item -Path "{self.registry_path}" -Force -ErrorAction Stop | Out-Null
+                Remove-Item -Path "{self.registry_path}" -Force -Recurse -ErrorAction Stop | Out-Null
             }}
         """
         if value == NOT_EXIST:
