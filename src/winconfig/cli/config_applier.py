@@ -3,12 +3,12 @@ from typing import Literal
 
 import yaml
 
-from winconfig.model.config import Config, ConfigContainer
+from winconfig.model.config import ConfigContainer
 from winconfig.model.definition.definition import Definition
 from winconfig.model.execution import Execution
 from winconfig.powershell.process import PowershellRunspace
 
-type ApplyMode = Literal["apply", "revert", "auto"]
+type ApplyMode = Literal["apply", "revert"]
 
 
 class ConfigApplier:
@@ -21,7 +21,7 @@ class ConfigApplier:
     def __init__(
         self,
         config_path: str,
-        definition_path: str = "src/winconfig/definitions/winutil.definition.yaml",
+        definition_path: str = "src/winconfig/definitions/winconfig.definition.yaml",
     ) -> None:
         self.config_path = config_path
         self.definition_path = definition_path
@@ -41,17 +41,15 @@ class ConfigApplier:
         executions = [
             Execution.generate(
                 task_definition=self.definition.get_task_definition(config.name),
-                revert=self._resolve_revert(mode, config),
+                revert=self._resolve_revert(mode),
             )
             for config in self.config_container.root
         ]
         return executions
 
-    def _resolve_revert(self, mode: ApplyMode, config: Config) -> bool:
+    def _resolve_revert(self, mode: ApplyMode) -> bool:
         match mode:
             case "apply":
                 return False
             case "revert":
                 return True
-            case "auto":
-                return config.revert

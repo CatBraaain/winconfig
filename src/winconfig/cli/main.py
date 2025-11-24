@@ -14,7 +14,7 @@ app = typer.Typer()
 def apply(
     path: Annotated[str, typer.Option()],
 ) -> None:
-    ConfigApplier(config_path=path).apply(mode="auto")
+    ConfigApplier(config_path=path).apply(mode="apply")
 
 
 @app.command()
