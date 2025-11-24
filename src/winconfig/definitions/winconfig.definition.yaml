@@ -290,10 +290,10 @@ task_definitions:
   - name: DisableF1HelpPage
     description: Disable help lookup via F1
     registries:
-      - path: Software\Classes\Typelib\{8cec5860-07a1-11d9-b15e-000d56bfe6ee}
+      - path: HKCU\Software\Classes\Typelib\{8cec5860-07a1-11d9-b15e-000d56bfe6ee}
         old_value: <NotExist>
         new_value: <Exist>
-      - path: Software\Classes\Typelib\{8cec5860-07a1-11d9-b15e-000d56bfe6ee}\1.0\0\win64
+      - path: HKCU\Software\Classes\Typelib\{8cec5860-07a1-11d9-b15e-000d56bfe6ee}\1.0\0\win64
         name: "(default)"
         type: String
         old_value: <NotExist>
