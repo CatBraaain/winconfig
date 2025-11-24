@@ -1,7 +1,7 @@
 # yaml-language-server: $schema=./winconfig.definition.schema.json
 
 task_definitions:
-  # Appearance
+  ### Appearance ###
   - name: SystemDarkMode
     description: Enables dark mode for system
     registries:
@@ -19,7 +19,7 @@ task_definitions:
         old_value: "1"
         new_value: "0"
 
-  # Suggestions
+  ### Suggestions ###
   - name: DisableWindowsSuggestions
     description: Disables the Windows welcome experience, tips, scoobe experience
     registries:
@@ -60,7 +60,7 @@ task_definitions:
         old_value: "1"
         new_value: "0"
 
-  # Taskbar
+  ### Taskbar ###
   - name: TaskbarAlignmentLeft
     description: Show Taskbar Items on the Left
     registries:
@@ -130,7 +130,7 @@ task_definitions:
         old_value: "0"
         new_value: "1"
 
-  # Desktop / Side Panel / Settings
+  ### Desktop / Side Panel / Settings ###
   - name: HideDesktopRecycleBin
     description: Hide the "Recycle Bin" icon from Desktop
     registries:
@@ -166,7 +166,7 @@ task_definitions:
         old_value: "1"
         new_value: "0"
 
-  # Start Menu
+  ### Start Menu ###
   - name: DisableStartMenuBingSearch
     description: Disables bing web search in Start Menu search.
     registries:
@@ -220,7 +220,7 @@ task_definitions:
         $shortcutPath = "$startMenuPath\GodMode.lnk"
         Remove-Item -Path $shortcutPath
 
-  # Explorer
+  ### Explorer ###
   - name: ShowHiddenFiles
     description: Show hidden files in explorer
     registries:
@@ -318,7 +318,7 @@ task_definitions:
         old_value: "1"
         new_value: "0"
 
-  # Files
+  ### Files ###
   - name: DisableShortcutsSuffix
     description: Do not add the "- Shortcut" suffix to the file name of created shortcuts
     registries:
@@ -338,7 +338,7 @@ task_definitions:
         old_value: "<NotExist>"
         new_value: "1"
 
-  # Context Menu
+  ### Context Menu ###
   - name: EnableClassicContextMenu
     description: Enables good old context menus as it was like in win10
     registries:
@@ -504,7 +504,7 @@ task_definitions:
         old_value: "<NotExist>"
         new_value: "Give access to"
 
-  # Mouse / Keyboard / Sound
+  ### Mouse / Keyboard / Sound ###
   - name: DisableMouseAcceleration
     description: Disables mouse acceleration
     registries:
@@ -596,7 +596,7 @@ task_definitions:
         old_value: "1"
         new_value: "0"
 
-  # Startup / Background
+  ### Startup / Background ###
   - name: DisableAutoDeleteTemp
     description: Disables Storage Sense deleting temp files automatically
     registries:
@@ -632,7 +632,7 @@ task_definitions:
         old_value: "0"
         new_value: "1"
 
-  # PowerPlan
+  ### PowerPlan ###
   - name: EnableHighPowerPlan
     description: Set power plan on "High performance".
     script:
