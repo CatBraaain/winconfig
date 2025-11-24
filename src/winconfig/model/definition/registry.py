@@ -73,17 +73,22 @@ class RegistryEntryDefinition(RegistryBaseDefinition):
         return f"{self.path}\\{self.name}"
 
     def resolve_value(self, revert: bool) -> str:
-        return self.new_value if not revert else self.old_value
+        value = self.new_value if not revert else self.old_value
+        return value
 
     def generate_set_script(self, revert: bool) -> str:
         value = self.resolve_value(revert)
+        if self.type == "Binary":
+            psvalue = f'("{value}".split(" ") | % {{ [byte]$_ }})'
+        else:
+            psvalue = f'"{value}"'
 
         set_entry = rf"""
             if (!(Test-Path "{self.registry_path}")) {{
                 New-Item -Path "{self.registry_path}" -Force -ErrorAction Stop | Out-Null
             }}
             try {{
-                Set-ItemProperty -Path "{self.registry_path}" -Name "{self.name}" -Type "{self.type}" -Value "{value}" -Force -ErrorAction Stop | Out-Null
+                Set-ItemProperty -Path "{self.registry_path}" -Name "{self.name}" -Type "{self.type}" -Value {psvalue} -Force -ErrorAction Stop | Out-Null
             }}
             catch [System.UnauthorizedAccessException] {{
                 "{ACCESS_DENIED}"
