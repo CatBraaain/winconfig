@@ -580,7 +580,7 @@ task_definitions:
     registries:
       - path: HKCR\AllFilesystemObjects\shellex\ContextMenuHandlers\ModernSharing
         name: "(default)"
-        type: DWord
+        type: String
         old_value: "{e2bf9676-5f8f-435c-97eb-11607a5bedf7}"
         new_value: ""
       - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked
