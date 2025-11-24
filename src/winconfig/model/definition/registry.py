@@ -90,11 +90,11 @@ class RegistryEntryDefinition(RegistryBaseDefinition):
             }}
         """
         remove_entry = rf"""
-            if (!(Test-Path "{self.registry_path}")) {{
-                "{NOT_EXIST}"
-            }}
             try {{
                 Remove-ItemProperty -Path "{self.registry_path}" -Name "{self.name}" -Force -ErrorAction Stop | Out-Null
+            }}
+            catch [System.Management.Automation.ItemNotFoundException] {{
+                "{NOT_EXIST}"
             }}
             catch [System.Management.Automation.PSArgumentException] {{
                 "{NOT_EXIST}"
