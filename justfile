@@ -11,7 +11,7 @@ apply:
   uv run src/winconfig/cli/main.py apply --path winconfig.config.yaml
 
 test:
-  powershell.exe -ExecutionPolicy Bypass -File tests/run_wsb.ps1 -Headless false
+  powershell.exe -ExecutionPolicy Bypass -File tests/run_test_in_wsb.ps1 -Headless false
 
 memo:
   robocopy C:\winconfig-readonly C:\winconfig /s /xf .* /xd .*

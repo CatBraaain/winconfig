@@ -62,39 +62,39 @@ def test_apply_script(
     runtime_set: tuple[PowershellRunspace, TaskDefinition], revert: bool
 ):
     powershell, task_definition = runtime_set
-    if task_definition.name in [
-        # winutil
-        "DisableHibernation",
-        "DisableTelemetry",
-        # sophia
-        "EnableWindowsSandbox",
-    ]:
-        pytest.skip("Windows Sandbox not supporting")
+    # if task_definition.name in [
+    #     # winutil
+    #     "DisableHibernation",
+    #     "DisableTelemetry",
+    #     # sophia
+    #     "EnableWindowsSandbox",
+    # ]:
+    #     pytest.skip("Windows Sandbox not supporting")
 
-    if task_definition.name in [
-        # winutil
-        "DisableExplorerAutomaticFolderDiscovery",
-        "DisableStorageSense",
-        "BlockRazerSoftwareInstalls",
-        "AdobeDebloat",
-        # sophia
-        "WindowsTerminalDefaultTerminalApp",
-        "NoneFolderGroupBy",
-    ]:
-        pytest.xfail("Need error handling")
+    # if task_definition.name in [
+    #     # winutil
+    #     "DisableExplorerAutomaticFolderDiscovery",
+    #     "DisableStorageSense",
+    #     "BlockRazerSoftwareInstalls",
+    #     "AdobeDebloat",
+    #     # sophia
+    #     "WindowsTerminalDefaultTerminalApp",
+    #     "NoneFolderGroupBy",
+    # ]:
+    #     pytest.xfail("Need error handling")
 
-    if task_definition.name in [
-        # winutil
-        "RunDiskCleanup",
-        "CreateRestorePoint",
-        "DisableMicrosoftCopilot",  # need winget
-        "ChangeWindowsTerminalDefault",  # need winget
-        "RemoveOneDrive",  # need winget
-        # sophia
-        "InstallDotNetRuntimes",
-        "InstallVcRedist",
-    ]:
-        pytest.skip("Save time")
+    # if task_definition.name in [
+    #     # winutil
+    #     "RunDiskCleanup",
+    #     "CreateRestorePoint",
+    #     "DisableMicrosoftCopilot",  # need winget
+    #     "ChangeWindowsTerminalDefault",  # need winget
+    #     "RemoveOneDrive",  # need winget
+    #     # sophia
+    #     "InstallDotNetRuntimes",
+    #     "InstallVcRedist",
+    # ]:
+    #     pytest.skip("Save time")
 
     script = task_definition.script.generate_custom_script(revert=revert)
     powershell.run(script)
