@@ -1,6 +1,6 @@
 import subprocess
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 import yaml
 from pydantic import (
@@ -20,6 +20,8 @@ from .registry import (  # noqa: F401
 from .schtask import SchtaskDefinition, SchtaskState  # noqa: F401
 from .script import ScriptDefinition
 from .service import ServiceDefinition, ServiceStartupType  # noqa: F401
+
+type ApplyMode = Literal["apply", "revert"]
 
 
 class TaskDefinition(BaseModel):
@@ -53,6 +55,15 @@ class TaskDefinition(BaseModel):
             ]
         },
     )
+
+    def generate_script(self, revert: bool) -> str:
+        script = "\n".join(
+            [registry.generate_set_script(revert) for registry in self.registries]
+            + [task.generate_set_script(revert) for task in self.scheduled_tasks]
+            + [service.generate_set_script(revert) for service in self.services]
+            + [self.script.generate_custom_script(revert)]
+        )
+        return script
 
 
 class Definition(RootModel):

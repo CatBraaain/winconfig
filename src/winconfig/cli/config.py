@@ -4,7 +4,6 @@ from typing import Literal
 import yaml
 from pydantic import RootModel
 
-from winconfig.cli.execution import Execution
 from winconfig.models.definition import Definition
 from winconfig.powershell.process import PowershellRunspace
 
@@ -40,19 +39,12 @@ class WinConfig:
         )
 
     def apply(self, mode: ApplyMode) -> None:
-        executions = self.generate_executions(mode)
         powershell = PowershellRunspace()
-        results = [powershell.run(execution.script) for execution in executions]  # noqa: F841
-
-    def generate_executions(self, mode: ApplyMode) -> list[Execution]:
-        executions = [
-            Execution.generate(
-                task_definition=self.definition.get_task_definition(config.name),
-                revert=self._resolve_revert(mode),
-            )
-            for config in self.config.root
-        ]
-        return executions
+        should_revert = self._resolve_revert(mode)
+        for config in self.config.root:
+            task_definition = self.definition.get_task_definition(config.name)
+            script = task_definition.generate_script(revert=should_revert)
+            powershell.run(script)
 
     def _resolve_revert(self, mode: ApplyMode) -> bool:
         match mode:
