@@ -18,6 +18,8 @@ from winconfig.powershell.constants import (
     NotExistType,
 )
 
+from .mode import ApplyMode
+
 type RegistryValueKind = Literal[
     "String",
     "ExpandString",
@@ -72,12 +74,11 @@ class RegistryEntryDefinition(RegistryBaseDefinition):
     def full_path(self) -> str:
         return f"{self.path}\\{self.name}"
 
-    def resolve_value(self, revert: bool) -> str:
-        value = self.new_value if not revert else self.old_value
-        return value
+    def resolve_value(self, mode: ApplyMode) -> str:
+        return self.new_value if mode == "apply" else self.old_value
 
-    def generate_set_script(self, revert: bool) -> str:
-        value = self.resolve_value(revert)
+    def generate_set_script(self, mode: ApplyMode) -> str:
+        value = self.resolve_value(mode)
         if self.type == "Binary":
             psvalue = f'("{value}".split(" ") | % {{ [byte]$_ }})'
         else:
@@ -138,11 +139,13 @@ class RegistryKeyDefinition(RegistryBaseDefinition):
     def full_path(self) -> str:
         return f"{self.registry_path}"
 
-    def resolve_value(self, revert: bool) -> NotChangeType | ExistType | NotExistType:
-        return self.new_value if not revert else self.old_value
+    def resolve_value(
+        self, mode: ApplyMode
+    ) -> NotChangeType | ExistType | NotExistType:
+        return self.new_value if mode == "apply" else self.old_value
 
-    def generate_set_script(self, revert: bool) -> str:
-        value = self.resolve_value(revert)
+    def generate_set_script(self, mode: ApplyMode) -> str:
+        value = self.resolve_value(mode)
 
         add_key = rf"""
             if (!(Test-Path "{self.registry_path}")) {{

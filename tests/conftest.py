@@ -3,7 +3,7 @@ from pathlib import Path
 import pytest
 import yaml
 
-from winconfig.models.definition import Definition, TaskDefinition
+from winconfig.models.definition import ApplyMode, Definition, TaskDefinition
 from winconfig.powershell.process import PowershellRunspace
 
 
@@ -49,9 +49,6 @@ def runtime_set(
     return request.param
 
 
-@pytest.fixture(
-    params=[False, True],
-    ids=["Apply", "Revert"],
-)
-def revert(request: pytest.FixtureRequest):
+@pytest.fixture(params=["apply", "revert"], ids=["Apply", "Revert"])
+def mode(request: pytest.FixtureRequest) -> ApplyMode:
     return request.param

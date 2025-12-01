@@ -5,6 +5,8 @@ from pydantic import (
     Field,
 )
 
+from .mode import ApplyMode
+
 
 class ScriptDefinition(BaseModel):
     """Represents PowerShell scripts to be executed."""
@@ -16,9 +18,9 @@ class ScriptDefinition(BaseModel):
         description="The script to run for the default configuration."
     )
 
-    def resolve_value(self, revert: bool) -> str | None:
-        return self.apply if not revert else self.revert
+    def resolve_value(self, mode: ApplyMode) -> str | None:
+        return self.apply if mode == "apply" else self.revert
 
-    def generate_custom_script(self, revert: bool) -> str:
-        script = self.resolve_value(revert) or ""
+    def generate_custom_script(self, mode: ApplyMode) -> str:
+        script = self.resolve_value(mode) or ""
         return dedent(script)

@@ -8,6 +8,8 @@ from pydantic import (
 
 from winconfig.powershell.constants import ACCESS_DENIED, NOT_EXIST
 
+from .mode import ApplyMode
+
 type ServiceStartupType = Literal[
     "Automatic",
     "AutomaticDelayedStart",
@@ -28,11 +30,11 @@ class ServiceDefinition(BaseModel):
         description="The desired startup type of the service."
     )
 
-    def resolve_value(self, revert: bool) -> str:
-        return self.new_startup if not revert else self.old_startup
+    def resolve_value(self, mode: ApplyMode) -> str:
+        return self.new_startup if mode == "apply" else self.old_startup
 
-    def generate_set_script(self, revert: bool) -> str:
-        startup_type = self.resolve_value(revert)
+    def generate_set_script(self, mode: ApplyMode) -> str:
+        startup_type = self.resolve_value(mode)
 
         service_name = f"""
             $serviceName = "{self.name}"
@@ -56,9 +58,7 @@ class ServiceDefinition(BaseModel):
                 "{ACCESS_DENIED}"
             }}
         """
-        script = (
-            service_name if "*" not in self.name else service_name_by_glob
-        ) + body
+        script = (service_name if "*" not in self.name else service_name_by_glob) + body
         return dedent(script)
 
     def generate_get_script(self) -> str:

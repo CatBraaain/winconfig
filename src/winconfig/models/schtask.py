@@ -9,6 +9,8 @@ from pydantic import (
 
 from winconfig.powershell.constants import NOT_EXIST
 
+from .mode import ApplyMode
+
 type SchtaskState = Literal["Enabled", "Disabled"]
 
 
@@ -35,11 +37,11 @@ class SchtaskDefinition(BaseModel):
     def name(self) -> str:
         return Path(self.formatted_path).name
 
-    def resolve_value(self, revert: bool) -> str:
-        return self.new_state if not revert else self.old_state
+    def resolve_value(self, mode: ApplyMode) -> str:
+        return self.new_state if mode == "apply" else self.old_state
 
-    def generate_set_script(self, revert: bool) -> str:
-        state = self.resolve_value(revert)
+    def generate_set_script(self, mode: ApplyMode) -> str:
+        state = self.resolve_value(mode)
         enabled = "$true" if state == "Enabled" else "$false"
         script = f"""
             try {{

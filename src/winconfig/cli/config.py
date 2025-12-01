@@ -1,13 +1,10 @@
 from pathlib import Path
-from typing import Literal
 
 import yaml
 from pydantic import RootModel
 
-from winconfig.models.definition import Definition
+from winconfig.models.definition import ApplyMode, Definition
 from winconfig.powershell.process import PowershellRunspace
-
-type ApplyMode = Literal["apply", "revert"]
 
 
 class ConfigItem(RootModel):
@@ -40,15 +37,7 @@ class WinConfig:
 
     def apply(self, mode: ApplyMode) -> None:
         powershell = PowershellRunspace()
-        should_revert = self._resolve_revert(mode)
         for config in self.config.root:
             task_definition = self.definition.get_task_definition(config.name)
-            script = task_definition.generate_script(revert=should_revert)
+            script = task_definition.generate_script(mode)
             powershell.run(script)
-
-    def _resolve_revert(self, mode: ApplyMode) -> bool:
-        match mode:
-            case "apply":
-                return False
-            case "revert":
-                return True
