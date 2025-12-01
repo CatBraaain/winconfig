@@ -5,7 +5,7 @@ import yaml
 from pydantic import RootModel
 
 from winconfig.cli.execution import Execution
-from winconfig.definitions.models.definition import Definition
+from winconfig.models.definition import Definition
 from winconfig.powershell.process import PowershellRunspace
 
 type ApplyMode = Literal["apply", "revert"]

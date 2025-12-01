@@ -7,7 +7,7 @@ import yaml
 from pydantic import ConfigDict
 from pydantic.json_schema import GenerateJsonSchema, JsonSchemaValue
 
-from winconfig.definitions.models.definition import Definition
+from winconfig.models.definition import Definition
 
 
 def main() -> None:

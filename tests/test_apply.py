@@ -1,6 +1,6 @@
 import pytest
 
-from winconfig.definitions.models.definition import TaskDefinition
+from winconfig.models.definition import TaskDefinition
 from winconfig.powershell.constants import ACCESS_DENIED, NOT_EXIST
 from winconfig.powershell.process import PowershellRunspace
 

@@ -2,7 +2,7 @@ from typing import Self
 
 from pydantic import BaseModel
 
-from winconfig.definitions.models.definition import TaskDefinition
+from winconfig.models.definition import TaskDefinition
 
 
 class Execution(BaseModel):
