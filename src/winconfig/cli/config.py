@@ -23,11 +23,8 @@ class ConfigFile(RootModel):
     root: list[ConfigItem] = []
 
 
-class ConfigApplier:
-    config_path: str
-    definition_path: str
-
-    config_container: ConfigFile
+class WinConfig:
+    config: ConfigFile
     definition: Definition
 
     def __init__(
@@ -35,13 +32,11 @@ class ConfigApplier:
         config_path: str,
         definition_path: str = "src/winconfig/definitions/winconfig.definition.yaml",
     ) -> None:
-        self.config_path = config_path
-        self.definition_path = definition_path
-        self.config_container = ConfigFile.model_validate(
-            yaml.safe_load(Path(self.config_path).read_text())
+        self.config = ConfigFile.model_validate(
+            yaml.safe_load(Path(config_path).read_text())
         )
         self.definition = Definition.model_validate(
-            yaml.safe_load(Path(self.definition_path).read_text())
+            yaml.safe_load(Path(definition_path).read_text())
         )
 
     def apply(self, mode: ApplyMode) -> None:
@@ -55,7 +50,7 @@ class ConfigApplier:
                 task_definition=self.definition.get_task_definition(config.name),
                 revert=self._resolve_revert(mode),
             )
-            for config in self.config_container.root
+            for config in self.config.root
         ]
         return executions
 
