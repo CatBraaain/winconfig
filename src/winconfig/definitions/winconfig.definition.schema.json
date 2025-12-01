@@ -254,28 +254,10 @@
       "type": "object"
     }
   },
+  "default": [],
   "description": "The root model for a winconfig definition file.",
-  "properties": {
-    "task_definitions": {
-      "default": [],
-      "description": "The list of configuration tasks to be applied.",
-      "items": {
-        "$ref": "#/$defs/TaskDefinition"
-      },
-      "type": "array"
-    },
-    "preload": {
-      "anyOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "default": null,
-      "description": "Common PowerShell functions to be used by ScriptDefinition scripts."
-    }
+  "items": {
+    "$ref": "#/$defs/TaskDefinition"
   },
-  "type": "object"
+  "type": "array"
 }

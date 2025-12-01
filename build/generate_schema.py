@@ -39,7 +39,7 @@ def generate_definition_schema() -> None:
 def generate_config_schema() -> None:
     src = "./src/winconfig/definitions/winconfig.definition.yaml"
     definition = Definition.model_validate(yaml.safe_load(Path(src).read_text()))
-    task_names = [td.name for td in definition.task_definitions]
+    task_names = [td.name for td in definition.root]
     schema_json = {
         "$schema": "http://json-schema.org/draft/2020-12/schema",
         "type": "array",

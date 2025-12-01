@@ -7,6 +7,7 @@ from pydantic import (
     BaseModel,
     ConfigDict,
     Field,
+    RootModel,
 )
 
 from winconfig.powershell.constants import NotExistType  # noqa: F401
@@ -54,19 +55,15 @@ class TaskDefinition(BaseModel):
     )
 
 
-class Definition(BaseModel):
+class Definition(RootModel):
     """The root model for a winconfig definition file."""
 
-    task_definitions: list[TaskDefinition] = Field(
+    root: list[TaskDefinition] = Field(
         default=[], description="The list of configuration tasks to be applied."
-    )
-    preload: str | None = Field(
-        None,
-        description="Common PowerShell functions to be used by ScriptDefinition scripts.",
     )
 
     def get_task_definition(self, task_name: str) -> TaskDefinition:
-        task = next((x for x in self.task_definitions if x.name == task_name), None)
+        task = next((x for x in self.root if x.name == task_name), None)
         if task is None:
             raise ValueError(f"Task definition {task_name} not found")
         return task

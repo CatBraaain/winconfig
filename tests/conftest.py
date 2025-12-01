@@ -28,13 +28,12 @@ def generate_runtime_sets() -> list[tuple[PowershellRunspace, TaskDefinition]]:
         for definition_file in definition_files
     ]
     runspace_with_definition = [
-        (PowershellRunspace(preload=definition.preload), definition)
-        for definition in definitions
+        (PowershellRunspace(), definition) for definition in definitions
     ]
     runtime_sets = [
         (runspace, task_definition)
         for (runspace, definition) in runspace_with_definition
-        for task_definition in definition.task_definitions
+        for task_definition in definition.root
     ]
     return runtime_sets
 

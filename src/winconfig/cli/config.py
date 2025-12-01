@@ -41,7 +41,7 @@ class WinConfig:
 
     def apply(self, mode: ApplyMode) -> None:
         executions = self.generate_executions(mode)
-        powershell = PowershellRunspace(preload=self.definition.preload)
+        powershell = PowershellRunspace()
         results = [powershell.run(execution.script) for execution in executions]  # noqa: F841
 
     def generate_executions(self, mode: ApplyMode) -> list[Execution]:
