@@ -3,7 +3,7 @@ from pathlib import Path
 import pytest
 import yaml
 
-from winconfig.model.definition.definition import Definition, TaskDefinition
+from winconfig.definitions.models.definition import Definition, TaskDefinition
 from winconfig.powershell.process import PowershellRunspace
 
 

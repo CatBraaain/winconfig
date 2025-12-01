@@ -3,9 +3,9 @@ from typing import Literal
 
 import yaml
 
-from winconfig.model.config import ConfigContainer
-from winconfig.model.definition.definition import Definition
-from winconfig.model.execution import Execution
+from winconfig.cli.config import ConfigContainer
+from winconfig.cli.execution import Execution
+from winconfig.definitions.models.definition import Definition
 from winconfig.powershell.process import PowershellRunspace
 
 type ApplyMode = Literal["apply", "revert"]

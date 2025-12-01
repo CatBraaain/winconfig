@@ -4,8 +4,8 @@ from typing import Annotated
 
 import typer
 
+from winconfig.cli.config import ConfigContainer
 from winconfig.cli.config_applier import ConfigApplier
-from winconfig.model.config import ConfigContainer
 
 app = typer.Typer()
 
