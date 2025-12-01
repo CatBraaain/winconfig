@@ -4,8 +4,7 @@ from typing import Annotated
 
 import typer
 
-from winconfig.cli.config import ConfigContainer
-from winconfig.cli.config_applier import ConfigApplier
+from winconfig.cli.config import ConfigApplier, ConfigFile
 
 app = typer.Typer()
 
@@ -28,7 +27,7 @@ def revert(
 def schema(
     output: Annotated[str, typer.Option()],
 ) -> None:
-    schema = ConfigContainer.model_json_schema()
+    schema = ConfigFile.model_json_schema()
     Path(output).write_text(
         json.dumps(schema, ensure_ascii=False, indent=2),
         encoding="utf-8",
