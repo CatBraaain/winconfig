@@ -61,7 +61,7 @@
       "DisableXboxGameBar",
       "EnableWindowsRestoreLastSession",
       "EnableHighPowerPlan",
-      "DisableSleepMonitor"
+      "DisableMonitorTimeout"
     ]
   }
 }

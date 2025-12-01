@@ -638,7 +638,7 @@ task_definitions:
     script:
       apply: powercfg /setactive SCHEME_MIN
       revert: powercfg /setactive SCHEME_BALANCED
-  - name: DisableSleepMonitor
+  - name: DisableMonitorTimeout
     description: Prevent monitor from turning off automatically
     script:
       apply: |-

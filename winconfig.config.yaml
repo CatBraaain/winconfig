@@ -78,4 +78,4 @@
 
 ### PowerPlan ###
 - EnableHighPowerPlan
-- DisableSleepMonitor
+- DisableMonitorTimeout
