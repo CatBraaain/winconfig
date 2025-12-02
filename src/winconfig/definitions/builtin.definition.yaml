@@ -282,8 +282,8 @@
     - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\FolderTypes\{885a186e-a440-4ada-812b-db871b942259}\TopViews\{00000000-0000-0000-0000-000000000000}
       name: GroupBy
       type: String
-      new_value: "System.Null"
-      old_value: "<NotExist>"
+      new_value: System.Null
+      old_value: <NotExist>
 - name: EnableExplorerRestoreLastSession
   description: Restore the last session when open explroer
   registries:
@@ -330,7 +330,7 @@
       name: ShortcutNameTemplate
       type: String
       new_value: "%s.lnk"
-      old_value: "<NotExist>"
+      old_value: <NotExist>
 - name: DisableUnsafeFileWarning
   description:
     Disables the Attachment Manager marking files that have been downloaded
@@ -340,7 +340,7 @@
       name: SaveZoneInformation
       type: DWord
       new_value: "1"
-      old_value: "<NotExist>"
+      old_value: <NotExist>
 
 ### Context Menu ###
 - name: EnableClassicContextMenu
@@ -363,7 +363,7 @@
       name: MultipleInvokePromptMinimum
       type: DWord
       new_value: "300"
-      old_value: "<NotExist>"
+      old_value: <NotExist>
 - name: HideClipchampContextMenu
   description: Hide the "Edit with Clipchamp" item from context menu
   registries:
@@ -455,47 +455,47 @@
   description: Hide the "Share" item from context menu
   registries:
     - path: HKCR\AllFilesystemObjects\shellex\ContextMenuHandlers\ModernSharing
-      name: "(default)"
+      name: (default)
       type: String
       new_value: ""
       old_value: "{e2bf9676-5f8f-435c-97eb-11607a5bedf7}"
     - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked
       name: "{e2bf9676-5f8f-435c-97eb-11607a5bedf7}"
       type: String
-      new_value: "Share"
-      old_value: "<NotExist>"
+      new_value: Share
+      old_value: <NotExist>
 - name: HideAddToFavorite
   description: Hide the "Add to Favorites" item from context menu
   registries:
     - path: HKCR\*\shell\pintohomefile
-      name: "ProgrammaticAccessOnly"
+      name: ProgrammaticAccessOnly
       type: String
       new_value: ""
-      old_value: "<NotExist>"
+      old_value: <NotExist>
 - name: HidePreviousVersions
   description: Hide the "Previous Versions" item from context menu
   registries:
     - path: HKCU\Software\Classes\AllFilesystemObjects
-      name: "NoPreviousVersions"
+      name: NoPreviousVersions
       type: String
       new_value: ""
-      old_value: "<NotExist>"
+      old_value: <NotExist>
     - path: HKCU\Software\Classes\Folder
-      name: "NoPreviousVersions"
+      name: NoPreviousVersions
       type: String
       new_value: ""
-      old_value: "<NotExist>"
+      old_value: <NotExist>
 - name: HideSendTo
   description: Hide the "Send To" item from context menu
   registries:
     - path: HKCR\AllFilesystemObjects\shellex\ContextMenuHandlers\SendTo
-      new_value: "<NotExist>"
-      old_value: "<Exist>"
+      new_value: <NotExist>
+      old_value: <Exist>
 - name: HideAddToLibrary
   description: Hide the "Add to Library" item from context menu
   registries:
     - path: HKCR\Folder\ShellEx\ContextMenuHandlers\Library Location
-      name: "(default)"
+      name: (default)
       type: String
       new_value: ""
       old_value: "{3dad6c5d-2167-4cae-9914-f99e41c12cfa}"
@@ -505,8 +505,8 @@
     - path: HKCR\Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked
       name: "{f81e9010-6ea4-11ce-a7ff-00aa003ca9f6}"
       type: String
-      new_value: "Give access to"
-      old_value: "<NotExist>"
+      new_value: Give access to
+      old_value: <NotExist>
 
 ### Mouse / Keyboard ###
 - name: DisableMouseAcceleration
@@ -534,7 +534,7 @@
       new_value: <Exist>
       old_value: <NotExist>
     - path: HKCU\Software\Classes\Typelib\{8cec5860-07a1-11d9-b15e-000d56bfe6ee}\1.0\0\win64
-      name: "(default)"
+      name: (default)
       type: String
       new_value: ""
       old_value: <NotExist>
@@ -573,10 +573,10 @@
   description: Disable all system sounds
   registries:
     - path: HKCU\AppEvents\Schemes
-      name: "(Default)"
+      name: (Default)
       type: String
-      new_value: ".None"
-      old_value: ".Default"
+      new_value: .None
+      old_value: .Default
   script:
     apply: |-
       $events = Get-ChildItem -Path "registry::HKCU\AppEvents\Schemes\Apps" | Get-ChildItem
