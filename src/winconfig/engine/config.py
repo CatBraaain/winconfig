@@ -3,14 +3,13 @@ from pathlib import Path
 import yaml
 from pydantic import RootModel
 
-from winconfig.definitions.builtin_taskname import TaskName
 from winconfig.dsl.definition import Definition, TaskMode
 
 from .powershell import PowershellRunspace
 
 
 class ConfigFile(RootModel):
-    root: dict[TaskName, TaskMode] = {}
+    root: dict[str, TaskMode] = {}
 
 
 class WinConfig:
