@@ -63,13 +63,15 @@ HideSendTo: apply
 HideAddToLibrary: apply
 HideGiveAccessTo: apply
 
-### Mouse / Keyboard / Sound ###
+### Mouse / Keyboard ###
 DisableMouseAcceleration: apply
 DisableF1HelpPage: apply
 DisableStickyShift: apply
 FastKeyRepeat: apply
-NoSystemSound: apply
 DisableTouchPad: apply
+
+### Sound ###
+NoSystemSound: apply
 
 ### Startup / Background ###
 DisableAutoDeleteTemp: apply

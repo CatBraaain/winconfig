@@ -508,7 +508,7 @@
       new_value: "Give access to"
       old_value: "<NotExist>"
 
-### Mouse / Keyboard / Sound ###
+### Mouse / Keyboard ###
 - name: DisableMouseAcceleration
   description: Disables mouse acceleration
   registries:
@@ -559,6 +559,16 @@
       type: DWord
       new_value: "31"
       old_value: "31"
+- name: DisableTouchPad
+  description: Disable touchpad for laptop
+  registries:
+    - path: HKCU\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad\Status
+      name: Enabled
+      type: DWord
+      new_value: "0"
+      old_value: "1"
+
+### Sound ###
 - name: NoSystemSound
   description: Disable all system sounds
   registries:
@@ -591,14 +601,6 @@
           catch {}
         }
       }
-- name: DisableTouchPad
-  description: Disable touchpad for laptop
-  registries:
-    - path: HKCU\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad\Status
-      name: Enabled
-      type: DWord
-      new_value: "0"
-      old_value: "1"
 
 ### Startup / Background ###
 - name: DisableAutoDeleteTemp
