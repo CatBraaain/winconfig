@@ -13,14 +13,7 @@ app = typer.Typer()
 def apply(
     path: Annotated[str, typer.Option()],
 ) -> None:
-    WinConfig(config_path=path).apply(mode="apply")
-
-
-@app.command()
-def revert(
-    path: Annotated[str, typer.Option()],
-) -> None:
-    WinConfig(config_path=path).apply(mode="revert")
+    WinConfig(config_path=path).apply()
 
 
 @app.command()

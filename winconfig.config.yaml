@@ -1,81 +1,81 @@
 # yaml-language-server: $schema=./winconfig.config.schema.json
 
 ### Appearance ###
-- SystemDarkMode
-# - AppDarkMode
+SystemDarkMode: apply
+# AppDarkMode: revert
 
 ### Suggestions ###
-- DisableWindowsSuggestions
+DisableWindowsSuggestions: apply
 
 ### Taskbar ###
-- TaskbarAlignmentLeft
-- EnableTaskbarEndTask
-- HideTaskbarSearch
-- HideTaskbarTaskView
-- HideTaskbarWidgets
-- RemoveCopilot
-- ShowClockSeconds
-- ShowMultiMonitorTaskbar
+TaskbarAlignmentLeft: apply
+EnableTaskbarEndTask: apply
+HideTaskbarSearch: apply
+HideTaskbarTaskView: apply
+HideTaskbarWidgets: apply
+RemoveCopilot: apply
+ShowClockSeconds: apply
+ShowMultiMonitorTaskbar: apply
 
 ### Desktop / Side Panel / Settings ###
-- HideDesktopRecycleBin
-- ShowSidePanelClock
-- HideSettingsSuggestions
+HideDesktopRecycleBin: apply
+ShowSidePanelClock: apply
+HideSettingsSuggestions: apply
 
 ### Start Menu ###
-- DisableStartMenuBingSearch
-- HideStartMenuRecommendations
-- HideStartMenuAccountNotifications
-- EnableGodMode
+DisableStartMenuBingSearch: apply
+HideStartMenuRecommendations: apply
+HideStartMenuAccountNotifications: apply
+EnableGodMode: apply
 
 ### Explorer ###
-- ShowHiddenFiles
-- ShowFileExtensions
-- HideExplorerHome
-- HideExplorerGallery
-- DisableOneDrive
-- DisableExplorerGroupView
-- EnableExplorerRestoreLastSession
-- DisableExplorerCheckBoxes
-- HideExplorerRecentFiles
-- HideExplorerFrequentFolders
+ShowHiddenFiles: apply
+ShowFileExtensions: apply
+HideExplorerHome: apply
+HideExplorerGallery: apply
+DisableOneDrive: apply
+DisableExplorerGroupView: apply
+EnableExplorerRestoreLastSession: apply
+DisableExplorerCheckBoxes: apply
+HideExplorerRecentFiles: apply
+HideExplorerFrequentFolders: apply
 
 ### Files ###
-- DisableShortcutsSuffix
-- DisableUnsafeFileWarning
+DisableShortcutsSuffix: apply
+DisableUnsafeFileWarning: apply
 
 ### Context Menu ###
-- EnableClassicContextMenu
-- DisableContextMenuLimit
-- HideClipchampContextMenu
-- HideEditWithPhotos
-- HideEditWithPaint
-- HideEditWithNotepad
-- HideExtractAll
-- HideOpenInWindowsTerminal
-- HidePrint
-- HideCompressedFolder
-- HideSearchMsStore
-- HideShare
-- HideAddToFavorite
-- HidePreviousVersions
-- HideSendTo
-- HideAddToLibrary
-- HideGiveAccessTo
+EnableClassicContextMenu: apply
+DisableContextMenuLimit: apply
+HideClipchampContextMenu: apply
+HideEditWithPhotos: apply
+HideEditWithPaint: apply
+HideEditWithNotepad: apply
+HideExtractAll: apply
+HideOpenInWindowsTerminal: apply
+HidePrint: apply
+HideCompressedFolder: apply
+HideSearchMsStore: apply
+HideShare: apply
+HideAddToFavorite: apply
+HidePreviousVersions: apply
+HideSendTo: apply
+HideAddToLibrary: apply
+HideGiveAccessTo: apply
 
 ### Mouse / Keyboard / Sound ###
-- DisableMouseAcceleration
-- DisableF1HelpPage
-- DisableStickyShift
-- FastKeyRepeat
-- NoSystemSound
-- DisableTouchPad
+DisableMouseAcceleration: apply
+DisableF1HelpPage: apply
+DisableStickyShift: apply
+FastKeyRepeat: apply
+NoSystemSound: apply
+DisableTouchPad: apply
 
 ### Startup / Background ###
-- DisableAutoDeleteTemp
-- DisableXboxGameBar
-# - EnableWindowsRestoreLastSession
+DisableAutoDeleteTemp: apply
+DisableXboxGameBar: apply
+# EnableWindowsRestoreLastSession: revert
 
 ### PowerPlan ###
-- EnableHighPowerPlan
-- DisableMonitorTimeout
+EnableHighPowerPlan: apply
+DisableMonitorTimeout: apply

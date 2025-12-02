@@ -7,6 +7,7 @@ import yaml
 from pydantic import ConfigDict
 from pydantic.json_schema import GenerateJsonSchema, JsonSchemaValue
 
+from winconfig.cli.config import ConfigFile
 from winconfig.models.definition import Definition
 
 
@@ -36,15 +37,23 @@ def generate_definition_schema() -> None:
     subprocess.run(["bunx", "prettier", "--write", f'"{dist}"'], check=True)
 
 
-def generate_config_schema() -> None:
+def generate_taskname_type() -> None:
     src = "./src/winconfig/definitions/winconfig.definition.yaml"
     definition = Definition.model_validate(yaml.safe_load(Path(src).read_text()))
     task_names = [td.name for td in definition.root]
-    schema_json = {
-        "$schema": "http://json-schema.org/draft/2020-12/schema",
-        "type": "array",
-        "items": {"type": "string", "enum": task_names},
-    }
+    taskname_file = "./src/winconfig/definitions/winconfig_taskname.py"
+    taskname_script = (
+        "from typing import Literal\n"
+        f"type TaskName = Literal[{''.join([f'"{task_name}",' for task_name in task_names])}]"
+    )
+    Path(taskname_file).write_text(taskname_script)
+    subprocess.run(["uv", "run", "ruff", "format", taskname_file], check=True)
+
+
+def generate_config_schema() -> None:
+    schema_json = ConfigFile.model_json_schema(
+        schema_generator=GenerateJsonSchemaNoTitles
+    )
 
     dist = "./winconfig.config.schema.json"
     Path(dist).write_text(json.dumps(schema_json, indent=2) + "\n")

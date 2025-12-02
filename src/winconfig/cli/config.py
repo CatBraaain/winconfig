@@ -3,21 +3,14 @@ from pathlib import Path
 import yaml
 from pydantic import RootModel
 
+from winconfig.definitions.winconfig_taskname import TaskName
 from winconfig.models.definition import ApplyMode, Definition
 
 from .process import PowershellRunspace
 
 
-class ConfigItem(RootModel):
-    root: str
-
-    @property
-    def name(self) -> str:
-        return self.root
-
-
 class ConfigFile(RootModel):
-    root: list[ConfigItem] = []
+    root: dict[TaskName, ApplyMode] = {}
 
 
 class WinConfig:
@@ -36,9 +29,9 @@ class WinConfig:
             yaml.safe_load(Path(definition_path).read_text())
         )
 
-    def apply(self, mode: ApplyMode) -> None:
+    def apply(self) -> None:
         powershell = PowershellRunspace()
-        for config in self.config.root:
-            task_definition = self.definition.get_task_definition(config.name)
+        for task_name, mode in self.config.root.items():
+            task_definition = self.definition.get_task_definition(task_name)
             script = task_definition.generate_script(mode)
             powershell.run(script)
