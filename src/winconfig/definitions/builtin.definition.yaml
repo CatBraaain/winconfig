@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=./winconfig.definition.schema.json
+# yaml-language-server: $schema=./builtin.definition.schema.json
 
 ### Appearance ###
 - name: SystemDarkMode
