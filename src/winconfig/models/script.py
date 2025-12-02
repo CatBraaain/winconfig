@@ -5,7 +5,7 @@ from pydantic import (
     Field,
 )
 
-from .mode import ApplyMode
+from .const_types import ApplyMode
 
 
 class ScriptDefinition(BaseModel):

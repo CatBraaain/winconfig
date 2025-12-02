@@ -10,9 +10,10 @@ from pydantic import (
     RootModel,
 )
 
-from winconfig.powershell.constants import NotExistType  # noqa: F401
-
-from .mode import ApplyMode
+from .const_types import (  # noqa: F401
+    ApplyMode,
+    NotExistType,
+)
 from .registry import (  # noqa: F401
     RegistryEntryDefinition,
     RegistryKeyDefinition,

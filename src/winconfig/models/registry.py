@@ -8,17 +8,16 @@ from pydantic import (
     field_validator,
 )
 
-from winconfig.powershell.constants import (
+from .const_types import (
     ACCESS_DENIED,
     EXIST,
     NOT_CHANGE,
     NOT_EXIST,
+    ApplyMode,
     ExistType,
     NotChangeType,
     NotExistType,
 )
-
-from .mode import ApplyMode
 
 type RegistryValueKind = Literal[
     "String",

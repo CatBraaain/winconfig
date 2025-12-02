@@ -6,9 +6,7 @@ from pydantic import (
     Field,
 )
 
-from winconfig.powershell.constants import ACCESS_DENIED, NOT_EXIST
-
-from .mode import ApplyMode
+from .const_types import ACCESS_DENIED, NOT_EXIST, ApplyMode
 
 type ServiceStartupType = Literal[
     "Automatic",

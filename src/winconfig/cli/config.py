@@ -4,7 +4,8 @@ import yaml
 from pydantic import RootModel
 
 from winconfig.models.definition import ApplyMode, Definition
-from winconfig.powershell.process import PowershellRunspace
+
+from .process import PowershellRunspace
 
 
 class ConfigItem(RootModel):

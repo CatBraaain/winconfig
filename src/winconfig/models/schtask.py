@@ -7,9 +7,7 @@ from pydantic import (
     Field,
 )
 
-from winconfig.powershell.constants import NOT_EXIST
-
-from .mode import ApplyMode
+from .const_types import NOT_EXIST, ApplyMode
 
 type SchtaskState = Literal["Enabled", "Disabled"]
 
