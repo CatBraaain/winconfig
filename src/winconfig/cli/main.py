@@ -4,7 +4,7 @@ from typing import Annotated
 
 import typer
 
-from winconfig.cli.config import ConfigFile, WinConfig
+from winconfig.engine.config import ConfigFile, WinConfig
 
 app = typer.Typer()
 

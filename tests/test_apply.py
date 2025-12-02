@@ -1,8 +1,8 @@
 import pytest
 
-from winconfig.cli.process import PowershellRunspace
-from winconfig.models.const_types import ACCESS_DENIED, NOT_EXIST
-from winconfig.models.definition import TaskDefinition, TaskMode
+from winconfig.dsl.const_types import ACCESS_DENIED, NOT_EXIST
+from winconfig.dsl.definition import TaskDefinition, TaskMode
+from winconfig.engine.powershell import PowershellRunspace
 
 
 def test_apply_resitory(

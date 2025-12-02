@@ -3,8 +3,8 @@ from pathlib import Path
 import pytest
 import yaml
 
-from winconfig.cli.process import PowershellRunspace
-from winconfig.models.definition import Definition, TaskDefinition, TaskMode
+from winconfig.dsl.definition import Definition, TaskDefinition, TaskMode
+from winconfig.engine.powershell import PowershellRunspace
 
 
 @pytest.fixture(autouse=True, scope="session")

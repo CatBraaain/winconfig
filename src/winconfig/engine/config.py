@@ -4,9 +4,9 @@ import yaml
 from pydantic import RootModel
 
 from winconfig.definitions.builtin_taskname import TaskName
-from winconfig.models.definition import Definition, TaskMode
+from winconfig.dsl.definition import Definition, TaskMode
 
-from .process import PowershellRunspace
+from .powershell import PowershellRunspace
 
 
 class ConfigFile(RootModel):
