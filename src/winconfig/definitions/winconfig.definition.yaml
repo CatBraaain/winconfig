@@ -301,10 +301,15 @@
       old_value: "1"
       new_value: "0"
 - name: HideExplorerRecentFiles
-  description: Hide recently used files in Explorer Quick Access
+  description: Hide recently used files in Explorer Quick Access, Start Menu recommendations, and Taskbar jump lists.
   registries:
     - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer
       name: ShowRecent
+      type: DWord
+      old_value: "1"
+      new_value: "0"
+    - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+      name: Start_TrackDocs
       type: DWord
       old_value: "1"
       new_value: "0"
