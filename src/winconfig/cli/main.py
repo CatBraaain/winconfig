@@ -4,7 +4,7 @@ from typing import Annotated
 
 import typer
 
-from winconfig.engine.config import ConfigFile, WinConfig
+from winconfig.engine.task_builder import TaskBuilder, TaskPlan
 
 app = typer.Typer()
 
@@ -13,14 +13,14 @@ app = typer.Typer()
 def apply(
     path: Annotated[str, typer.Option()],
 ) -> None:
-    WinConfig(config_path=path).apply()
+    TaskBuilder(plan_path=path).apply()
 
 
 @app.command()
 def schema(
     output: Annotated[str, typer.Option()],
 ) -> None:
-    schema = ConfigFile.model_json_schema()
+    schema = TaskPlan.model_json_schema()
     Path(output).write_text(
         json.dumps(schema, ensure_ascii=False, indent=2),
         encoding="utf-8",

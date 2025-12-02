@@ -8,12 +8,12 @@ from pydantic import ConfigDict
 from pydantic.json_schema import GenerateJsonSchema, JsonSchemaValue
 
 from winconfig.dsl.definition import Definition
-from winconfig.engine.config import ConfigFile
+from winconfig.engine.task_builder import TaskPlan
 
 
 def main() -> None:
     generate_definition_schema()
-    generate_config_schema()
+    generate_plan_schema()
 
 
 class GenerateJsonSchemaNoTitles(GenerateJsonSchema):
@@ -37,12 +37,12 @@ def generate_definition_schema() -> None:
     subprocess.run(["bunx", "prettier", "--write", f'"{dist}"'], check=True)
 
 
-def generate_config_schema() -> None:
+def generate_plan_schema() -> None:
     src = "./src/winconfig/definitions/builtin.definition.yaml"
     definition = Definition.model_validate(yaml.safe_load(Path(src).read_text()))
     task_names = [td.name for td in definition.root]
 
-    schema_json = ConfigFile.model_json_schema(
+    schema_json = TaskPlan.model_json_schema(
         schema_generator=GenerateJsonSchemaNoTitles
     )
     schema_json["propertyNames"] = {
@@ -50,7 +50,7 @@ def generate_config_schema() -> None:
         "type": "string",
     }
 
-    dist = "./winconfig.config.schema.json"
+    dist = "./winconfig.tasks.schema.json"
     Path(dist).write_text(json.dumps(schema_json, indent=2) + "\n")
     subprocess.run(["bunx", "prettier", "--write", f'"{dist}"'], check=True)
 

@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=./winconfig.config.schema.json
+# yaml-language-server: $schema=./winconfig.tasks.schema.json
 
 ### Appearance ###
 SystemDarkMode: apply
