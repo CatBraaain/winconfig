@@ -4,13 +4,13 @@ import yaml
 from pydantic import RootModel
 
 from winconfig.definitions.winconfig_taskname import TaskName
-from winconfig.models.definition import ApplyMode, Definition
+from winconfig.models.definition import Definition, TaskMode
 
 from .process import PowershellRunspace
 
 
 class ConfigFile(RootModel):
-    root: dict[TaskName, ApplyMode] = {}
+    root: dict[TaskName, TaskMode] = {}
 
 
 class WinConfig:

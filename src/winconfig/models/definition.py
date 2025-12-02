@@ -13,6 +13,7 @@ from pydantic import (
 from .const_types import (  # noqa: F401
     ApplyMode,
     NotExistType,
+    TaskMode,
 )
 from .registry import (  # noqa: F401
     RegistryEntryDefinition,
@@ -56,7 +57,7 @@ class TaskDefinition(BaseModel):
         },
     )
 
-    def generate_script(self, mode: ApplyMode) -> str:
+    def generate_script(self, mode: TaskMode) -> str:
         script = "\n".join(
             [registry.generate_set_script(mode) for registry in self.registries]
             + [task.generate_set_script(mode) for task in self.scheduled_tasks]

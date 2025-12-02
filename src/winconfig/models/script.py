@@ -5,7 +5,7 @@ from pydantic import (
     Field,
 )
 
-from .const_types import ApplyMode
+from .const_types import ApplyMode, TaskMode
 
 
 class ScriptDefinition(BaseModel):
@@ -18,9 +18,16 @@ class ScriptDefinition(BaseModel):
         description="The script to run for the default configuration."
     )
 
-    def resolve_value(self, mode: ApplyMode) -> str | None:
-        return self.apply if mode == "apply" else self.revert
+    def resolve_value(self, mode: ApplyMode) -> str:
+        match mode:
+            case TaskMode.APPLY:
+                return self.apply or ""
+            case TaskMode.REVERT:
+                return self.revert or ""
+            case _:
+                raise ValueError(f"Invalid mode: {mode}")
 
-    def generate_custom_script(self, mode: ApplyMode) -> str:
-        script = self.resolve_value(mode) or ""
-        return dedent(script)
+    def generate_custom_script(self, mode: TaskMode) -> str:
+        if mode == TaskMode.SKIP:
+            return ""
+        return dedent(self.resolve_value(mode))

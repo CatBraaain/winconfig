@@ -17,6 +17,7 @@ from .const_types import (
     ExistType,
     NotChangeType,
     NotExistType,
+    TaskMode,
 )
 
 type RegistryValueKind = Literal[
@@ -74,9 +75,17 @@ class RegistryEntryDefinition(RegistryBaseDefinition):
         return f"{self.path}\\{self.name}"
 
     def resolve_value(self, mode: ApplyMode) -> str:
-        return self.new_value if mode == "apply" else self.old_value
+        match mode:
+            case TaskMode.APPLY:
+                return self.new_value
+            case TaskMode.REVERT:
+                return self.old_value
+            case _:
+                raise ValueError(f"Invalid mode: {mode}")
 
-    def generate_set_script(self, mode: ApplyMode) -> str:
+    def generate_set_script(self, mode: TaskMode) -> str:
+        if mode == TaskMode.SKIP:
+            return ""
         value = self.resolve_value(mode)
         if self.type == "Binary":
             psvalue = f'("{value}".split(" ") | % {{ [byte]$_ }})'
@@ -141,9 +150,17 @@ class RegistryKeyDefinition(RegistryBaseDefinition):
     def resolve_value(
         self, mode: ApplyMode
     ) -> NotChangeType | ExistType | NotExistType:
-        return self.new_value if mode == "apply" else self.old_value
+        match mode:
+            case TaskMode.APPLY:
+                return self.new_value
+            case TaskMode.REVERT:
+                return self.old_value
+            case _:
+                raise ValueError(f"Invalid mode: {mode}")
 
-    def generate_set_script(self, mode: ApplyMode) -> str:
+    def generate_set_script(self, mode: TaskMode) -> str:
+        if mode == TaskMode.SKIP:
+            return ""
         value = self.resolve_value(mode)
 
         add_key = rf"""

@@ -4,7 +4,7 @@ import pytest
 import yaml
 
 from winconfig.cli.process import PowershellRunspace
-from winconfig.models.definition import ApplyMode, Definition, TaskDefinition
+from winconfig.models.definition import Definition, TaskDefinition, TaskMode
 
 
 @pytest.fixture(autouse=True, scope="session")
@@ -49,6 +49,9 @@ def runtime_set(
     return request.param
 
 
-@pytest.fixture(params=["apply", "revert"], ids=["Apply", "Revert"])
-def mode(request: pytest.FixtureRequest) -> ApplyMode:
+@pytest.fixture(
+    params=[TaskMode.APPLY, TaskMode.REVERT, TaskMode.SKIP],
+    ids=lambda e: e.value,
+)
+def mode(request: pytest.FixtureRequest) -> TaskMode:
     return request.param

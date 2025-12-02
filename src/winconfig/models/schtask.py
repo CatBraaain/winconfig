@@ -7,7 +7,7 @@ from pydantic import (
     Field,
 )
 
-from .const_types import NOT_EXIST, ApplyMode
+from .const_types import NOT_EXIST, ApplyMode, TaskMode
 
 type SchtaskState = Literal["Enabled", "Disabled"]
 
@@ -36,9 +36,17 @@ class SchtaskDefinition(BaseModel):
         return Path(self.formatted_path).name
 
     def resolve_value(self, mode: ApplyMode) -> str:
-        return self.new_state if mode == "apply" else self.old_state
+        match mode:
+            case TaskMode.APPLY:
+                return self.new_state
+            case TaskMode.REVERT:
+                return self.old_state
+            case _:
+                raise ValueError(f"Invalid mode: {mode}")
 
-    def generate_set_script(self, mode: ApplyMode) -> str:
+    def generate_set_script(self, mode: TaskMode) -> str:
+        if mode == TaskMode.SKIP:
+            return ""
         state = self.resolve_value(mode)
         enabled = "$true" if state == "Enabled" else "$false"
         script = f"""

@@ -2,7 +2,7 @@
 
 ### Appearance ###
 SystemDarkMode: apply
-# AppDarkMode: revert
+AppDarkMode: revert
 
 ### Suggestions ###
 DisableWindowsSuggestions: apply
@@ -74,7 +74,7 @@ DisableTouchPad: apply
 ### Startup / Background ###
 DisableAutoDeleteTemp: apply
 DisableXboxGameBar: apply
-# EnableWindowsRestoreLastSession: revert
+EnableWindowsRestoreLastSession: skip
 
 ### PowerPlan ###
 EnableHighPowerPlan: apply

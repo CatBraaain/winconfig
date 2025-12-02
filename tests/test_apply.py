@@ -2,11 +2,11 @@ import pytest
 
 from winconfig.cli.process import PowershellRunspace
 from winconfig.models.const_types import ACCESS_DENIED, NOT_EXIST
-from winconfig.models.definition import ApplyMode, TaskDefinition
+from winconfig.models.definition import TaskDefinition, TaskMode
 
 
 def test_apply_resitory(
-    runtime_set: tuple[PowershellRunspace, TaskDefinition], mode: ApplyMode
+    runtime_set: tuple[PowershellRunspace, TaskDefinition], mode: TaskMode
 ):
     powershell, task_definition = runtime_set
     for registry in task_definition.registries:
@@ -16,6 +16,8 @@ def test_apply_resitory(
             continue
 
         current_value = powershell.run(registry.generate_get_script())
+        if mode == TaskMode.SKIP:
+            continue
         expected_value = registry.resolve_value(mode)
         assert current_value == expected_value, (
             f"[{registry.full_path}]'s value '{current_value}' != '{expected_value}'"
@@ -23,12 +25,14 @@ def test_apply_resitory(
 
 
 def test_apply_scheduled_task(
-    runtime_set: tuple[PowershellRunspace, TaskDefinition], mode: ApplyMode
+    runtime_set: tuple[PowershellRunspace, TaskDefinition], mode: TaskMode
 ):
     powershell, task_definition = runtime_set
     for schtask in task_definition.scheduled_tasks:
         powershell.run(schtask.generate_set_script(mode))
         current_state = powershell.run(schtask.generate_get_script())
+        if mode == TaskMode.SKIP:
+            continue
         expected_value = schtask.resolve_value(mode)
         assert current_state in (NOT_EXIST, expected_value), (
             f"[{schtask.full_path}]'s state '{current_state}' != '{expected_value}'"
@@ -36,7 +40,7 @@ def test_apply_scheduled_task(
 
 
 def test_apply_service(
-    runtime_set: tuple[PowershellRunspace, TaskDefinition], mode: ApplyMode
+    runtime_set: tuple[PowershellRunspace, TaskDefinition], mode: TaskMode
 ):
     powershell, task_definition = runtime_set
     for service in task_definition.services:
@@ -45,6 +49,8 @@ def test_apply_service(
             # pytest.skip("Access denied: need workaround")
             continue
         current_type = powershell.run(service.generate_get_script())
+        if mode == TaskMode.SKIP:
+            continue
         expected_type = service.resolve_value(mode)
         if powershell.version == 5 and (
             current_type == "AutomaticDelayedStart"
@@ -59,7 +65,7 @@ def test_apply_service(
 
 
 def test_apply_script(
-    runtime_set: tuple[PowershellRunspace, TaskDefinition], mode: ApplyMode
+    runtime_set: tuple[PowershellRunspace, TaskDefinition], mode: TaskMode
 ):
     powershell, task_definition = runtime_set
     if task_definition.name in [

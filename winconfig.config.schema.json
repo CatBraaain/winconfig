@@ -1,7 +1,8 @@
 {
   "$defs": {
-    "ApplyMode": {
-      "enum": ["apply", "revert"],
+    "TaskMode": {
+      "enum": ["apply", "revert", "skip"],
+      "title": "TaskMode",
       "type": "string"
     },
     "TaskName": {
@@ -69,7 +70,7 @@
     }
   },
   "additionalProperties": {
-    "$ref": "#/$defs/ApplyMode"
+    "$ref": "#/$defs/TaskMode"
   },
   "default": {},
   "propertyNames": {

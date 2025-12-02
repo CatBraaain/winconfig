@@ -6,7 +6,7 @@ from pydantic import (
     Field,
 )
 
-from .const_types import ACCESS_DENIED, NOT_EXIST, ApplyMode
+from .const_types import ACCESS_DENIED, NOT_EXIST, ApplyMode, TaskMode
 
 type ServiceStartupType = Literal[
     "Automatic",
@@ -29,9 +29,17 @@ class ServiceDefinition(BaseModel):
     )
 
     def resolve_value(self, mode: ApplyMode) -> str:
-        return self.new_startup if mode == "apply" else self.old_startup
+        match mode:
+            case TaskMode.APPLY:
+                return self.new_startup
+            case TaskMode.REVERT:
+                return self.old_startup
+            case _:
+                raise ValueError(f"Invalid mode: {mode}")
 
-    def generate_set_script(self, mode: ApplyMode) -> str:
+    def generate_set_script(self, mode: TaskMode) -> str:
+        if mode == TaskMode.SKIP:
+            return ""
         startup_type = self.resolve_value(mode)
 
         service_name = f"""
