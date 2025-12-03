@@ -73,5 +73,5 @@ def test_apply_script(
     ]:
         pytest.xfail("Windows Sandbox not supporting")
 
-    script = task_definition.script.generate_custom_script(mode)
+    script = task_definition.script.generate_set_script(mode)
     powershell.run(script)

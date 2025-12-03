@@ -31,16 +31,19 @@ class TaskDefinition(BaseModel):
     name: str = Field(description="The name of the task.")
     description: str = Field(description="A description of the task's purpose.")
     registries: list[RegistryEntryDefinition | RegistryKeyDefinition] = Field(
-        default=[], description="The registry values to be modified."
+        default=[],
+        description="The registry values to be modified.",
     )
     scheduled_tasks: list[SchtaskDefinition] = Field(
-        default=[], description="The scheduled tasks to be modified."
+        default=[],
+        description="The scheduled tasks to be modified.",
     )
     services: list[ServiceDefinition] = Field(
-        default=[], description="The Windows services to be modified."
+        default=[],
+        description="The Windows services to be modified.",
     )
     script: ScriptDefinition = Field(
-        default=ScriptDefinition(apply=None, revert=None),
+        default=ScriptDefinition(),
         description="Custom PowerShell scripts for actions not covered by registry, services, or scheduled tasks.",
     )
 
@@ -59,10 +62,15 @@ class TaskDefinition(BaseModel):
 
     def generate_script(self, mode: TaskMode) -> str:
         script = "\n".join(
-            [registry.generate_set_script(mode) for registry in self.registries]
-            + [task.generate_set_script(mode) for task in self.scheduled_tasks]
-            + [service.generate_set_script(mode) for service in self.services]
-            + [self.script.generate_custom_script(mode)]
+            [
+                e.generate_set_script(mode)
+                for e in (
+                    self.registries
+                    + self.scheduled_tasks
+                    + self.services
+                    + [self.script]
+                )
+            ]
         )
         return script
 

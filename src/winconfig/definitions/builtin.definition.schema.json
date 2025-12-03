@@ -130,29 +130,16 @@
       "description": "Represents PowerShell scripts to be executed.",
       "properties": {
         "apply": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "The script to run for the desired configuration."
+          "default": "",
+          "description": "The script to run for the desired configuration.",
+          "type": "string"
         },
         "revert": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "The script to run for the default configuration."
+          "default": "",
+          "description": "The script to run for the default configuration.",
+          "type": "string"
         }
       },
-      "required": ["apply", "revert"],
       "type": "object"
     },
     "ServiceDefinition": {
@@ -244,8 +231,8 @@
         "script": {
           "$ref": "#/$defs/ScriptDefinition",
           "default": {
-            "apply": null,
-            "revert": null
+            "apply": "",
+            "revert": ""
           },
           "description": "Custom PowerShell scripts for actions not covered by registry, services, or scheduled tasks."
         }

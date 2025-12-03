@@ -11,23 +11,25 @@ from .const_types import ApplyMode, TaskMode
 class ScriptDefinition(BaseModel):
     """Represents PowerShell scripts to be executed."""
 
-    apply: str | None = Field(
-        description="The script to run for the desired configuration."
+    apply: str = Field(
+        default="",
+        description="The script to run for the desired configuration.",
     )
-    revert: str | None = Field(
-        description="The script to run for the default configuration."
+    revert: str = Field(
+        default="",
+        description="The script to run for the default configuration.",
     )
 
     def resolve_value(self, mode: ApplyMode) -> str:
         match mode:
             case TaskMode.APPLY:
-                return self.apply or ""
+                return self.apply
             case TaskMode.REVERT:
-                return self.revert or ""
+                return self.revert
             case _:
                 raise ValueError(f"Invalid mode: {mode}")
 
-    def generate_custom_script(self, mode: TaskMode) -> str:
+    def generate_set_script(self, mode: TaskMode) -> str:
         if mode == TaskMode.SKIP:
             return ""
         return dedent(self.resolve_value(mode))
