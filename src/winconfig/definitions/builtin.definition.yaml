@@ -661,4 +661,6 @@
     apply: |-
       powercfg /change monitor-timeout-ac 0
       powercfg /change monitor-timeout-dc 0
-    revert: powercfg /setactive SCHEME_BALANCED
+    revert: |-
+      powercfg /change monitor-timeout-ac 5
+      powercfg /change monitor-timeout-dc 5
