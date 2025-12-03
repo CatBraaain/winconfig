@@ -13,6 +13,10 @@ apply:
 test:
   powershell.exe -ExecutionPolicy Bypass -File tests/run_test_in_wsb.ps1 -Headless false
 
+build:
+  uv run pyinstaller --onefile src/winconfig/cli/main.py -n winconfig --specpath dist --workpath dist --uac-admin --noconfirm
+  # uv run nuitka --mode=onefile src/winconfig/cli/main.py --output-filename=winconfig --mingw64 --output-dir=dist --windows-uac-admin --assume-yes-for-downloads
+
 memo:
   robocopy C:\winconfig-readonly C:\winconfig /s /xf .* /xd .*
   cd C:\winconfig
