@@ -580,7 +580,7 @@
       old_value: "1"
 
 ### Sound ###
-- name: NoSystemSound
+- name: DisableSystemSound
   description: Disable all system sounds
   registries:
     - path: HKCU\AppEvents\Schemes

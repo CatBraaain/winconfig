@@ -72,7 +72,7 @@ FastKeyRepeat: apply
 DisableTouchPad: apply
 
 ### Sound ###
-NoSystemSound: apply
+DisableSystemSound: apply
 
 ### Startup / Background ###
 DisableAutoDeleteTemp: apply
