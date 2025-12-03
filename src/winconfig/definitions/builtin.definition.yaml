@@ -321,9 +321,7 @@
       type: DWord
       new_value: "0"
       old_value: "1"
-
-### Files ###
-- name: DisableShortcutsSuffix
+- name: DisableAutoShortcutsSuffix
   description: Do not add the "- Shortcut" suffix to the file name of created shortcuts
   registries:
     - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\NamingTemplates
@@ -331,6 +329,8 @@
       type: String
       new_value: "%s.lnk"
       old_value: <NotExist>
+
+### Security ###
 - name: DisableUnsafeFileWarning
   description:
     Disables the Attachment Manager marking files that have been downloaded

@@ -39,9 +39,9 @@ EnableExplorerRestoreLastSession: apply
 DisableExplorerCheckBoxes: apply
 HideExplorerRecentFiles: apply
 HideExplorerFrequentFolders: apply
+DisableAutoShortcutsSuffix: apply
 
 ### Files ###
-DisableShortcutsSuffix: apply
 DisableUnsafeFileWarning: apply
 
 ### Context Menu ###

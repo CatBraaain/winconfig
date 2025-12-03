@@ -41,7 +41,7 @@
       "DisableExplorerCheckBoxes",
       "HideExplorerRecentFiles",
       "HideExplorerFrequentFolders",
-      "DisableShortcutsSuffix",
+      "DisableAutoShortcutsSuffix",
       "DisableUnsafeFileWarning",
       "EnableClassicContextMenu",
       "DisableContextMenuLimit",
