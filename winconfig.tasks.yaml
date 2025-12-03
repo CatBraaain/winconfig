@@ -2,7 +2,7 @@
 
 ### Appearance ###
 SystemDarkMode: apply
-AppDarkMode: revert
+AppDarkMode: apply
 
 ### Suggestions ###
 DisableWindowsSuggestions: apply
