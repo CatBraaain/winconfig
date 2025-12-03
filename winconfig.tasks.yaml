@@ -80,5 +80,5 @@ DisableXboxGameBar: apply
 EnableWindowsRestoreLastSession: skip
 
 ### PowerPlan ###
-EnableHighPowerPlan: apply
+EnableHighPerformancePlan: apply
 DisableAutoSleep: apply

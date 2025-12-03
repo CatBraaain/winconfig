@@ -650,7 +650,7 @@
       old_value: "0"
 
 ### PowerPlan ###
-- name: EnableHighPowerPlan
+- name: EnableHighPerformancePlan
   description: Set power plan on "High performance".
   script:
     apply: powercfg /setactive SCHEME_MIN
