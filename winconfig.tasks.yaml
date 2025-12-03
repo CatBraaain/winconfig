@@ -43,7 +43,7 @@ DisableAutoShortcutsSuffix: apply
 
 ### Files ###
 DisableUnsafeFileWarning: apply
-DisableSmartAppsControl: apply
+DisableSmartAppControl: apply
 
 ### Context Menu ###
 EnableClassicContextMenu: apply
