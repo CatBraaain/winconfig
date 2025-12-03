@@ -81,4 +81,4 @@ EnableWindowsRestoreLastSession: skip
 
 ### PowerPlan ###
 EnableHighPowerPlan: apply
-DisableMonitorTimeout: apply
+DisableAutoSleep: apply

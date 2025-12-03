@@ -71,7 +71,7 @@
       "DisableXboxGameBar",
       "EnableWindowsRestoreLastSession",
       "EnableHighPowerPlan",
-      "DisableMonitorTimeout"
+      "DisableAutoSleep"
     ],
     "type": "string"
   }

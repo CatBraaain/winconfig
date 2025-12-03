@@ -655,12 +655,16 @@
   script:
     apply: powercfg /setactive SCHEME_MIN
     revert: powercfg /setactive SCHEME_BALANCED
-- name: DisableMonitorTimeout
-  description: Prevent monitor from turning off automatically
+- name: DisableAutoSleep
+  description: Prevent system and monitor from going to sleep automatically
   script:
     apply: |-
       powercfg /change monitor-timeout-ac 0
       powercfg /change monitor-timeout-dc 0
+      powercfg /change standby-timeout-ac 0
+      powercfg /change standby-timeout-dc 0
     revert: |-
       powercfg /change monitor-timeout-ac 5
       powercfg /change monitor-timeout-dc 5
+      powercfg /change standby-timeout-ac 15
+      powercfg /change standby-timeout-dc 15
