@@ -43,6 +43,7 @@
       "HideExplorerFrequentFolders",
       "DisableAutoShortcutsSuffix",
       "DisableUnsafeFileWarning",
+      "DisableSmartAppControl",
       "EnableClassicContextMenu",
       "DisableContextMenuLimit",
       "HideClipchampContextMenu",

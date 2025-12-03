@@ -341,6 +341,17 @@
       type: DWord
       new_value: "1"
       old_value: <NotExist>
+- name: DisableSmartAppControl
+  description: ""
+  registries:
+    - path: HKLM\System\CurrentControlSet\Control\CI\Policy
+      name: VerifiedAndReputablePolicyState
+      type: DWord
+      new_value: "0"
+      old_value: <NotExist>
+  script:
+    apply: "CiTool --refresh"
+    revert: "CiTool --refresh"
 
 ### Context Menu ###
 - name: EnableClassicContextMenu
