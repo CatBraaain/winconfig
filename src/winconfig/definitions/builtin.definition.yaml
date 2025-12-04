@@ -562,12 +562,12 @@
   registries:
     - path: HKCU\Control Panel\Keyboard
       name: KeyboardDelay
-      type: DWord
+      type: String
       new_value: "0"
       old_value: "1"
     - path: HKCU\Control Panel\Keyboard
       name: KeyboardSpeed
-      type: DWord
+      type: String
       new_value: "31"
       old_value: "31"
 - name: DisableTouchPad
