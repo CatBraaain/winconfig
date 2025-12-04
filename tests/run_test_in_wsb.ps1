@@ -35,7 +35,7 @@ $command = "powershell -ExecutionPolicy ByPass -c """"irm https://astral.sh/uv/i
 echo "> $command"
 wsb exec --id $id --command $command --run-as $runAs
 
-$command = "uv venv --python 3.13"
+$command = "uv venv"
 echo "> $command"
 wsb exec --id $id --command $command --run-as $runAs --working-directory C:\winconfig
 
