@@ -14,7 +14,11 @@ test:
   powershell.exe -ExecutionPolicy Bypass -File tests/run_test_in_wsb.ps1 -Headless false
 
 build:
-  uv run pyinstaller --onefile src/winconfig/cli.py -n winconfig --specpath dist --workpath dist --uac-admin --noconfirm
+  uv run pyinstaller \
+    --onefile src/winconfig/cli.py \
+    --add-data "src/winconfig/resources:winconfig/resources" \
+    -n winconfig --workpath dist --uac-admin --noconfirm
+  # --add-data "src/winconfig/resources/builtin.definition.yaml:resources/builtin.definition.yaml" \
   # uv run nuitka --mode=onefile src/winconfig/cli.py --output-filename=winconfig --mingw64 --output-dir=dist --windows-uac-admin --assume-yes-for-downloads
 
 memo:

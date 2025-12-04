@@ -19,7 +19,9 @@ class TaskBuilder:
     def __init__(
         self,
         plan_path: str,
-        definition_path: str = "src/winconfig/resources/builtin.definition.yaml",
+        definition_path: str = str(
+            Path(__file__).parent.parent / "resources" / "builtin.definition.yaml"
+        ),
     ) -> None:
         self.plan = TaskPlan.model_validate(yaml.safe_load(Path(plan_path).read_text()))
         self.definition = Definition.model_validate(
