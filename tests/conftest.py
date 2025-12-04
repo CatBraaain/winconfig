@@ -20,7 +20,7 @@ def ensure_sandbox():
 
 
 def generate_runtime_sets() -> list[tuple[PowershellRunspace, TaskDefinition]]:
-    definition_files = list(Path().glob("src/winconfig/definitions/*.definition.yaml"))
+    definition_files = list(Path().glob("src/winconfig/resources/*.definition.yaml"))
     definitions = [
         Definition.model_validate(
             yaml.safe_load(definition_file.read_text(encoding="utf-8"))

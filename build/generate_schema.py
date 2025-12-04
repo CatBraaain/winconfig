@@ -32,13 +32,13 @@ def generate_definition_schema() -> None:
         schema_generator=GenerateJsonSchemaNoTitles
     )
 
-    dist = "./src/winconfig/definitions/builtin.definition.schema.json"
+    dist = "./src/winconfig/resources/builtin.definition.schema.json"
     Path(dist).write_text(json.dumps(schema_json, indent=2) + "\n")
     subprocess.run(["bunx", "prettier", "--write", f'"{dist}"'], check=True)
 
 
 def generate_plan_schema() -> None:
-    src = "./src/winconfig/definitions/builtin.definition.yaml"
+    src = "./src/winconfig/resources/builtin.definition.yaml"
     definition = Definition.model_validate(yaml.safe_load(Path(src).read_text()))
     task_names = [td.name for td in definition.root]
 
