@@ -49,22 +49,22 @@ def apply(
 
 
 @app.command(
-    no_args_is_help=True,
     help="Output the JSON schema of TaskPlan.",
 )
 def schema(
     output: Annotated[
-        str,
+        str | None,
         typer.Option(
             help="Path to the file where the schema will be saved.",
         ),
-    ],
+    ] = None,
 ) -> None:
-    schema = TaskPlan.model_json_schema()
-    Path(output).write_text(
-        json.dumps(schema, ensure_ascii=False, indent=2),
-        encoding="utf-8",
-    )
+    schema_dict = TaskPlan.model_json_schema()
+    schema = json.dumps(schema_dict, ensure_ascii=False, indent=2)
+    if output:
+        Path(output).write_text(schema, encoding="utf-8")
+    else:
+        typer.echo(schema)
 
 
 if __name__ == "__main__":
