@@ -50,7 +50,7 @@ def generate_plan_schema() -> None:
         "type": "string",
     }
 
-    dist = "./winconfig.tasks.schema.json"
+    dist = "./winconfig.plan.schema.json"
     Path(dist).write_text(json.dumps(schema_json, indent=2) + "\n")
     subprocess.run(["bunx", "prettier", "--write", f'"{dist}"'], check=True)
 
