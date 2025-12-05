@@ -11,9 +11,15 @@ app = typer.Typer()
 
 @app.command()
 def apply(
-    path: Annotated[str, typer.Option()],
+    plan_path: Annotated[str, typer.Option()],
+    extra_definition_paths: Annotated[list[str] | None, typer.Option()] = None,
 ) -> None:
-    TaskBuilder(plan_path=path).apply()
+    if extra_definition_paths is None:
+        extra_definition_paths = []
+    TaskBuilder(
+        plan_path=plan_path,
+        extra_definition_paths=extra_definition_paths,
+    ).apply()
 
 
 @app.command()

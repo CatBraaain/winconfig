@@ -83,7 +83,7 @@ class Definition(RootModel):
     )
 
     def get_task_definition(self, task_name: str) -> TaskDefinition:
-        task = next((x for x in self.root if x.name == task_name), None)
+        task = next((x for x in reversed(self.root) if x.name == task_name), None)
         if task is None:
             raise ValueError(f"Task definition {task_name} not found")
         return task
