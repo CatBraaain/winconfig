@@ -6,10 +6,12 @@ import typer
 
 from winconfig.engine.task_builder import TaskBuilder, TaskPlan
 
-app = typer.Typer()
+app = typer.Typer(
+    no_args_is_help=True,
+)
 
 
-@app.command()
+@app.command(no_args_is_help=True)
 def apply(
     plan_path: Annotated[str, typer.Option()],
     extra_definition_paths: Annotated[list[str] | None, typer.Option()] = None,
@@ -22,7 +24,7 @@ def apply(
     ).apply()
 
 
-@app.command()
+@app.command(no_args_is_help=True)
 def schema(
     output: Annotated[str, typer.Option()],
 ) -> None:
