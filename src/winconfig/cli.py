@@ -41,11 +41,20 @@ def apply(
             ),
         ),
     ],
+    dry_run: Annotated[
+        bool,
+        typer.Option(
+            "--dry-run",
+            help="Do not apply any changes. Useful for validating the task plan and definitions without executing them.",
+        ),
+    ] = False,
 ) -> None:
-    TaskBuilder(
+    task_builder = TaskBuilder(
         task_plan_path=task_plan_path,
         extra_definition_paths=extra_definition_paths,
-    ).apply()
+    )
+    if not dry_run:
+        task_builder.apply()
 
 
 @app.command(
