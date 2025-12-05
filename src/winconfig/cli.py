@@ -8,6 +8,7 @@ from winconfig.engine.task_builder import TaskBuilder, TaskPlan
 
 app = typer.Typer(
     no_args_is_help=True,
+    context_settings={"help_option_names": ["-h", "--help"]},
 )
 
 
