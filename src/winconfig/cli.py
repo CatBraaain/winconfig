@@ -14,13 +14,27 @@ app = typer.Typer(
 
 @app.command(no_args_is_help=True)
 def apply(
-    plan_path: Annotated[str, typer.Option()],
-    extra_definition_paths: Annotated[list[str] | None, typer.Option()] = None,
+    task_plan_path: Annotated[
+        Path,
+        typer.Argument(
+            exists=True,
+            file_okay=True,
+            dir_okay=False,
+            writable=False,
+            readable=True,
+            resolve_path=True,
+        ),
+    ],
+    extra_definition_paths: Annotated[
+        list[Path],
+        typer.Option(
+            *["-e", "--extra_definition_paths"],
+            default_factory=list,
+        ),
+    ],
 ) -> None:
-    if extra_definition_paths is None:
-        extra_definition_paths = []
     TaskBuilder(
-        plan_path=plan_path,
+        task_plan_path=task_plan_path,
         extra_definition_paths=extra_definition_paths,
     ).apply()
 
