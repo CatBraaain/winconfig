@@ -12,11 +12,15 @@ app = typer.Typer(
 )
 
 
-@app.command(no_args_is_help=True)
+@app.command(
+    no_args_is_help=True,
+    help="Apply the specified task plan. You can also load additional definition files.",
+)
 def apply(
     task_plan_path: Annotated[
         Path,
         typer.Argument(
+            help="Path to the task plan to apply.",
             exists=True,
             file_okay=True,
             dir_okay=False,
@@ -30,6 +34,11 @@ def apply(
         typer.Option(
             *["-e", "--extra_definition_paths"],
             default_factory=list,
+            help=(
+                "Path to an additional definition file. "
+                "Can be specified multiple times to include multiple files. "
+                "If the same definition exists, the last one specified overrides the previous ones."
+            ),
         ),
     ],
 ) -> None:
@@ -39,9 +48,17 @@ def apply(
     ).apply()
 
 
-@app.command(no_args_is_help=True)
+@app.command(
+    no_args_is_help=True,
+    help="Output the JSON schema of TaskPlan.",
+)
 def schema(
-    output: Annotated[str, typer.Option()],
+    output: Annotated[
+        str,
+        typer.Option(
+            help="Path to the file where the schema will be saved.",
+        ),
+    ],
 ) -> None:
     schema = TaskPlan.model_json_schema()
     Path(output).write_text(
