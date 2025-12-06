@@ -1,16 +1,13 @@
 from pathlib import Path
 
 import yaml
-from pydantic import RootModel, ValidationError
+from pydantic import ValidationError
 from yaml import YAMLError
 
-from winconfig.dsl.definition import Definition, TaskMode
+from winconfig.dsl.definition import Definition
+from winconfig.dsl.task_plan import TaskPlan
 
 from .powershell import PowershellRunspace
-
-
-class TaskPlan(RootModel):
-    root: dict[str, TaskMode] = {}
 
 
 class TaskBuilder:
