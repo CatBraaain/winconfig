@@ -28,7 +28,7 @@ TaskPlanPathParam = Annotated[
 ExtraDefinitionPathsParam = Annotated[
     list[Path] | None,
     typer.Option(
-        *["-e", "--extra_definition_paths"],
+        *["-e", "--extra-definition-path"],
         help=(
             "Path to an additional definition file. "
             "Can be specified multiple times to include multiple files. "
