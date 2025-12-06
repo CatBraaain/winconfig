@@ -21,8 +21,15 @@ class TaskBuilder:
         task_plan_path: Path,
         extra_definition_paths: list[Path],
     ) -> None:
-        self.plan = TaskPlan.model_validate(yaml.safe_load(task_plan_path.read_text()))
+        self.plan = self.load_task_plan(task_plan_path)
         self.definition = self.load_definitions(extra_definition_paths)
+
+    def load_task_plan(
+        self,
+        task_plan_path: Path,
+    ) -> TaskPlan:
+        task_plan_data = yaml.safe_load(task_plan_path.read_text())
+        return TaskPlan.model_validate(task_plan_data)
 
     def load_definitions(
         self,
