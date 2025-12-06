@@ -14,7 +14,6 @@ build:
     --onefile src/winconfig/cli/main.py \
     --add-data "src/winconfig/resources:winconfig/resources" \
     -n winconfig --workpath dist --uac-admin --noconfirm
-  # --add-data "src/winconfig/resources/builtin.definition.yaml:resources/builtin.definition.yaml" \
   # uv run nuitka --mode=onefile src/winconfig/cli/main.py --output-filename=winconfig --mingw64 --output-dir=dist --windows-uac-admin --assume-yes-for-downloads
 
 winconfig_schema_dist := "winconfig.plan.schema.json"
