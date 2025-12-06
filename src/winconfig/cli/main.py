@@ -7,6 +7,8 @@ import typer
 from winconfig.dsl.definition import Definition
 from winconfig.engine.task_builder import TaskBuilder, TaskPlan
 
+from .cli_utils import handle_cli_error
+
 app = typer.Typer(
     no_args_is_help=True,
     context_settings={"help_option_names": ["-h", "--help"]},
@@ -64,15 +66,13 @@ def apply(
         ),
     ] = False,
 ) -> None:
-    try:
+    with handle_cli_error():
         task_builder = TaskBuilder(
             task_plan_path=task_plan_path,
             extra_definition_paths=extra_definition_paths,
         )
         if not dry_run:
             task_builder.apply()
-    except Exception as e:
-        typer.echo(typer.style("Error: ", fg=typer.colors.RED, bold=True) + str(e))
 
 
 @schema_command.command(
