@@ -6,6 +6,7 @@ from yaml import YAMLError
 
 from winconfig.dsl.definition import Definition
 from winconfig.dsl.task_plan import TaskPlan
+from winconfig.resources import BUILTIN_DEFINITION_PATH
 
 
 class ModelLoader:
@@ -22,11 +23,7 @@ class ModelLoader:
 
     @classmethod
     def load_definitions(cls, extra_definition_paths: list[Path]) -> Definition:
-        winconfig_root = Path(__file__).parent.parent
-        builtin_definition_path = (
-            winconfig_root / "resources" / "builtin.definition.yaml"
-        )
-        definition_paths = [builtin_definition_path, *extra_definition_paths]
+        definition_paths = [BUILTIN_DEFINITION_PATH, *extra_definition_paths]
         definitions = [
             cls.load_yaml(definition_path, Definition)
             for definition_path in definition_paths
