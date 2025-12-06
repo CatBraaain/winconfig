@@ -1,6 +1,8 @@
 import json
+import sys
 
 import typer
+from loguru import logger
 
 from winconfig.cli.cli_utils import (
     DryRunParam,
@@ -14,6 +16,13 @@ from winconfig.cli.cli_utils import (
 from winconfig.dsl.definition import Definition
 from winconfig.engine.model_loader import ModelLoader
 from winconfig.engine.task_builder import TaskBuilder, TaskPlan
+
+logger.remove()
+logger.add(
+    sys.stderr,
+    format="<green>{time:HH:mm:ss.SSS}</green> | <level>{message}</level>",
+)
+
 
 app = typer.Typer(
     no_args_is_help=True,

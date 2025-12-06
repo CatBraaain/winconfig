@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import Annotated, Any
 
 import typer
+from loguru import logger
 from pydantic import BaseModel, ConfigDict, RootModel
 from pydantic.json_schema import GenerateJsonSchema, JsonSchemaValue
 
@@ -50,7 +51,7 @@ def handle_cli_error() -> Generator[None, Any, None]:
     try:
         yield
     except Exception as e:
-        typer.echo(typer.style("Error: ", fg=typer.colors.RED, bold=True) + str(e))
+        logger.error(str(e))
 
 
 def handle_output(content: str, output_path: str | None) -> None:
