@@ -3,6 +3,7 @@ import json
 import typer
 
 from winconfig.dsl.definition import Definition
+from winconfig.engine.model_loader import ModelLoader
 from winconfig.engine.task_builder import TaskBuilder, TaskPlan
 
 from .cli_utils import (
@@ -54,9 +55,17 @@ def apply(
 )
 def generate_task_plan_schema(
     output: OutputParam = None,
+    extra_definition_paths: ExtraDefinitionPathsParam = None,
 ) -> None:
+    if extra_definition_paths is None:
+        extra_definition_paths = []
     with handle_cli_error():
         schema_dict = generate_schema(TaskPlan)
+        definition = ModelLoader.load_definitions(extra_definition_paths)
+        schema_dict["propertyNames"] = {
+            "enum": [td.name for td in definition.root],
+            "type": "string",
+        }
         schema = json.dumps(schema_dict, ensure_ascii=False, indent=2)
         handle_output(content=schema, output_path=output)
 
