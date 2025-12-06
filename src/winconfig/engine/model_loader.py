@@ -1,0 +1,53 @@
+from pathlib import Path
+
+import yaml
+from pydantic import BaseModel, ValidationError
+from yaml import YAMLError
+
+from winconfig.dsl.definition import Definition
+from winconfig.dsl.task_plan import TaskPlan
+
+
+class ModelLoader:
+    @classmethod
+    def load_yaml[T: BaseModel](cls, file_path: Path, model_type: type[T]) -> T:
+        try:
+            return model_type.model_validate(yaml.safe_load(file_path.read_text()))
+        except YAMLError:
+            raise Exception(f"file {file_path} is invalid as yaml") from None
+        except ValidationError:
+            raise Exception(
+                f"file {file_path} is invalid as {model_type.__name__}"
+            ) from None
+
+    @classmethod
+    def load_definitions(cls, extra_definition_paths: list[Path]) -> Definition:
+        winconfig_root = Path(__file__).parent.parent
+        builtin_definition_path = (
+            winconfig_root / "resources" / "builtin.definition.yaml"
+        )
+        definition_paths = [builtin_definition_path, *extra_definition_paths]
+        definitions = [
+            cls.load_yaml(definition_path, Definition)
+            for definition_path in definition_paths
+        ]
+        merged_definition = Definition.model_validate(
+            [td for d in definitions for td in d.root]
+        )
+        return merged_definition
+
+    @classmethod
+    def load_task_plan(
+        cls, task_plan_path: Path, available_definition: Definition | None = None
+    ) -> TaskPlan:
+        task_plan = cls.load_yaml(task_plan_path, TaskPlan)
+
+        if available_definition is None:
+            available_definition = cls.load_definitions([])
+
+        available_tasks = {d.name for d in available_definition.root}
+        for task_name in task_plan.root:
+            if task_name not in available_tasks:
+                raise Exception(f"task {task_name} not found in definition")
+
+        return task_plan
