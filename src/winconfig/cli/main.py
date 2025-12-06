@@ -7,7 +7,10 @@ import typer
 from winconfig.dsl.definition import Definition
 from winconfig.engine.task_builder import TaskBuilder, TaskPlan
 
-from .cli_utils import handle_cli_error
+from .cli_utils import (
+    handle_cli_error,
+    handle_output,
+)
 
 app = typer.Typer(
     no_args_is_help=True,
@@ -99,13 +102,6 @@ def generate_definition_schema(
         schema_dict = Definition.model_json_schema()
         schema = json.dumps(schema_dict, ensure_ascii=False, indent=2)
         handle_output(content=schema, output_path=output)
-
-
-def handle_output(content: str, output_path: str | None) -> None:
-    if output_path:
-        Path(output_path).write_text(content, encoding="utf-8")
-    else:
-        typer.echo(content)
 
 
 if __name__ == "__main__":
