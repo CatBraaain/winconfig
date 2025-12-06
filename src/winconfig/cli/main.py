@@ -82,9 +82,10 @@ def apply(
 def generate_task_plan_schema(
     output: SchemaOutput = None,
 ) -> None:
-    schema_dict = TaskPlan.model_json_schema()
-    schema = json.dumps(schema_dict, ensure_ascii=False, indent=2)
-    handle_output(content=schema, output_path=output)
+    with handle_cli_error():
+        schema_dict = TaskPlan.model_json_schema()
+        schema = json.dumps(schema_dict, ensure_ascii=False, indent=2)
+        handle_output(content=schema, output_path=output)
 
 
 @schema_command.command(
@@ -94,9 +95,10 @@ def generate_task_plan_schema(
 def generate_definition_schema(
     output: SchemaOutput = None,
 ) -> None:
-    schema_dict = Definition.model_json_schema()
-    schema = json.dumps(schema_dict, ensure_ascii=False, indent=2)
-    handle_output(content=schema, output_path=output)
+    with handle_cli_error():
+        schema_dict = Definition.model_json_schema()
+        schema = json.dumps(schema_dict, ensure_ascii=False, indent=2)
+        handle_output(content=schema, output_path=output)
 
 
 def handle_output(content: str, output_path: str | None) -> None:
