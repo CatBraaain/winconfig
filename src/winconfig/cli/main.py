@@ -2,11 +2,7 @@ import json
 
 import typer
 
-from winconfig.dsl.definition import Definition
-from winconfig.engine.model_loader import ModelLoader
-from winconfig.engine.task_builder import TaskBuilder, TaskPlan
-
-from .cli_utils import (
+from winconfig.cli.cli_utils import (
     DryRunParam,
     ExtraDefinitionPathsParam,
     OutputParam,
@@ -15,6 +11,9 @@ from .cli_utils import (
     handle_cli_error,
     handle_output,
 )
+from winconfig.dsl.definition import Definition
+from winconfig.engine.model_loader import ModelLoader
+from winconfig.engine.task_builder import TaskBuilder, TaskPlan
 
 app = typer.Typer(
     no_args_is_help=True,
