@@ -26,8 +26,9 @@ class TaskBuilder:
         self.plan = self.load_task_plan(task_plan_path)
 
     def load_definitions(self, extra_definition_paths: list[Path]) -> Definition:
+        winconfig_root = Path(__file__).parent.parent
         builtin_definition_path = (
-            Path(__file__).parent.parent / "resources" / "builtin.definition.yaml"
+            winconfig_root / "resources" / "builtin.definition.yaml"
         )
         definition_paths = [builtin_definition_path, *extra_definition_paths]
         definitions = [
