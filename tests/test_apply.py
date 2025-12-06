@@ -71,7 +71,7 @@ def test_apply_script(
     if task_definition.name in [
         "RemoveCopilot",
     ]:
-        pytest.xfail("Windows Sandbox not supporting")
+        pytest.xfail("Not Supporting in Windows Sandbox")
 
     script = task_definition.script.generate_set_script(mode)
     powershell.run(script)
