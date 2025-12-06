@@ -8,18 +8,18 @@ json:
   uv run scripts/generate_definitions.py
 
 apply:
-  uv run src/winconfig/cli.py apply --path winconfig.config.yaml
+  uv run src/winconfig/cli/main.py apply --path winconfig.config.yaml
 
 test:
   powershell.exe -ExecutionPolicy Bypass -File tests/run_test_in_wsb.ps1 -Headless false
 
 build:
   uv run pyinstaller \
-    --onefile src/winconfig/cli.py \
+    --onefile src/winconfig/cli/main.py \
     --add-data "src/winconfig/resources:winconfig/resources" \
     -n winconfig --workpath dist --uac-admin --noconfirm
   # --add-data "src/winconfig/resources/builtin.definition.yaml:resources/builtin.definition.yaml" \
-  # uv run nuitka --mode=onefile src/winconfig/cli.py --output-filename=winconfig --mingw64 --output-dir=dist --windows-uac-admin --assume-yes-for-downloads
+  # uv run nuitka --mode=onefile src/winconfig/cli/main.py --output-filename=winconfig --mingw64 --output-dir=dist --windows-uac-admin --assume-yes-for-downloads
 
 memo:
   robocopy C:\winconfig-readonly C:\winconfig /s /xf .* /xd .*
