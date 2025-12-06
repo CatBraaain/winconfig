@@ -17,6 +17,14 @@ build:
   # --add-data "src/winconfig/resources/builtin.definition.yaml:resources/builtin.definition.yaml" \
   # uv run nuitka --mode=onefile src/winconfig/cli/main.py --output-filename=winconfig --mingw64 --output-dir=dist --windows-uac-admin --assume-yes-for-downloads
 
+winconfig_schema_dist := "winconfig.plan.schema.json"
+definition_schema_dist := "src/winconfig/resources/builtin.definition.schema.json"
+schema:
+  uv run src/winconfig/cli/main.py schema taskplan --output {{winconfig_schema_dist}}
+  bunx prettier --write "{{winconfig_schema_dist}}"
+  uv run src/winconfig/cli/main.py schema definition --output {{definition_schema_dist}}
+  bunx prettier --write {{definition_schema_dist}}
+
 memo:
   robocopy C:\winconfig-readonly C:\winconfig /s /xf .* /xd .*
   cd C:\winconfig
