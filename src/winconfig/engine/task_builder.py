@@ -57,11 +57,20 @@ class TaskBuilder:
         task_plan_path: Path,
     ) -> TaskPlan:
         try:
-            return TaskPlan.model_validate(yaml.safe_load(task_plan_path.read_text()))
+            task_plan = TaskPlan.model_validate(
+                yaml.safe_load(task_plan_path.read_text())
+            )
         except YAMLError:
             raise Exception(f"file {task_plan_path} is invalid as yaml") from None
         except ValidationError:
             raise Exception(f"file {task_plan_path} is invalid as task plan") from None
+
+        available_tasks = [d.name for d in self.definition.root]
+        for task_name in task_plan.root:
+            if task_name not in available_tasks:
+                raise Exception(f"task {task_name} not found in definition")
+
+        return task_plan
 
     def apply(self) -> None:
         powershell = PowershellRunspace()
