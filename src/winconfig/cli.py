@@ -4,12 +4,27 @@ from typing import Annotated
 
 import typer
 
+from winconfig.dsl.definition import Definition
 from winconfig.engine.task_builder import TaskBuilder, TaskPlan
 
 app = typer.Typer(
     no_args_is_help=True,
     context_settings={"help_option_names": ["-h", "--help"]},
 )
+schema_command = typer.Typer()
+app.add_typer(
+    schema_command,
+    name="schema",
+    no_args_is_help=True,
+    help="Generate JSON schemas.",
+)
+
+SchemaOutput = Annotated[
+    str | None,
+    typer.Option(
+        help="Path to the file where the schema will be saved.",
+    ),
+]
 
 
 @app.command(
@@ -60,23 +75,35 @@ def apply(
         typer.echo(typer.style("Error: ", fg=typer.colors.RED, bold=True) + str(e))
 
 
-@app.command(
+@schema_command.command(
+    "taskplan",
     help="Output the JSON schema of TaskPlan.",
 )
-def schema(
-    output: Annotated[
-        str | None,
-        typer.Option(
-            help="Path to the file where the schema will be saved.",
-        ),
-    ] = None,
+def generate_task_plan_schema(
+    output: SchemaOutput = None,
 ) -> None:
     schema_dict = TaskPlan.model_json_schema()
     schema = json.dumps(schema_dict, ensure_ascii=False, indent=2)
-    if output:
-        Path(output).write_text(schema, encoding="utf-8")
+    handle_output(content=schema, output_path=output)
+
+
+@schema_command.command(
+    "definition",
+    help="Output the JSON schema of Definition.",
+)
+def generate_definition_schema(
+    output: SchemaOutput = None,
+) -> None:
+    schema_dict = Definition.model_json_schema()
+    schema = json.dumps(schema_dict, ensure_ascii=False, indent=2)
+    handle_output(content=schema, output_path=output)
+
+
+def handle_output(content: str, output_path: str | None) -> None:
+    if output_path:
+        Path(output_path).write_text(content, encoding="utf-8")
     else:
-        typer.echo(schema)
+        typer.echo(content)
 
 
 if __name__ == "__main__":
