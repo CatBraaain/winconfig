@@ -49,12 +49,15 @@ def apply(
         ),
     ] = False,
 ) -> None:
-    task_builder = TaskBuilder(
-        task_plan_path=task_plan_path,
-        extra_definition_paths=extra_definition_paths,
-    )
-    if not dry_run:
-        task_builder.apply()
+    try:
+        task_builder = TaskBuilder(
+            task_plan_path=task_plan_path,
+            extra_definition_paths=extra_definition_paths,
+        )
+        if not dry_run:
+            task_builder.apply()
+    except Exception as e:
+        typer.echo(typer.style("Error: ", fg=typer.colors.RED, bold=True) + str(e))
 
 
 @app.command(

@@ -1,6 +1,5 @@
 from pathlib import Path
 
-import typer
 import yaml
 from pydantic import RootModel, ValidationError
 from yaml import YAMLError
@@ -49,11 +48,9 @@ class TaskBuilder:
                 yaml.safe_load(definition_path.read_text())
             )
         except YAMLError:
-            typer.echo(f"file {definition_path} is invalid as yaml", err=True)
-            raise typer.Exit(1) from None
+            raise Exception(f"file {definition_path} is invalid as yaml") from None
         except ValidationError:
-            typer.echo(f"file {definition_path} is invalid as task plan", err=True)
-            raise typer.Exit(1) from None
+            raise Exception(f"file {definition_path} is invalid as task plan") from None
 
     def load_task_plan(
         self,
@@ -61,14 +58,10 @@ class TaskBuilder:
     ) -> TaskPlan:
         try:
             return TaskPlan.model_validate(yaml.safe_load(task_plan_path.read_text()))
-        except YAMLError as e:
-            typer.echo(f"file {task_plan_path} is not valid as yaml: {e}", err=True)
-            raise typer.Exit(1) from None
-        except ValidationError as e:
-            typer.echo(
-                f"file {task_plan_path} is not valid as task plan: {e}", err=True
-            )
-            raise typer.Exit(1) from None
+        except YAMLError:
+            raise Exception(f"file {task_plan_path} is invalid as yaml") from None
+        except ValidationError:
+            raise Exception(f"file {task_plan_path} is invalid as task plan") from None
 
     def apply(self) -> None:
         powershell = PowershellRunspace()
