@@ -1,6 +1,4 @@
 import json
-from pathlib import Path
-from typing import Annotated
 
 import typer
 
@@ -8,6 +6,10 @@ from winconfig.dsl.definition import Definition
 from winconfig.engine.task_builder import TaskBuilder, TaskPlan
 
 from .cli_utils import (
+    DryRunParam,
+    ExtraDefinitionPathsParam,
+    OutputParam,
+    TaskPlanPathParam,
     handle_cli_error,
     handle_output,
 )
@@ -24,51 +26,18 @@ app.add_typer(
     help="Generate JSON schemas.",
 )
 
-SchemaOutput = Annotated[
-    str | None,
-    typer.Option(
-        help="Path to the file where the schema will be saved.",
-    ),
-]
-
 
 @app.command(
     no_args_is_help=True,
     help="Apply the specified task plan. You can also load additional definition files.",
 )
 def apply(
-    task_plan_path: Annotated[
-        Path,
-        typer.Argument(
-            help="Path to the task plan to apply.",
-            exists=True,
-            file_okay=True,
-            dir_okay=False,
-            writable=False,
-            readable=True,
-            resolve_path=True,
-        ),
-    ],
-    extra_definition_paths: Annotated[
-        list[Path],
-        typer.Option(
-            *["-e", "--extra_definition_paths"],
-            default_factory=list,
-            help=(
-                "Path to an additional definition file. "
-                "Can be specified multiple times to include multiple files. "
-                "If the same definition exists, the last one specified overrides the previous ones."
-            ),
-        ),
-    ],
-    dry_run: Annotated[
-        bool,
-        typer.Option(
-            "--dry-run",
-            help="Do not apply any changes. Useful for validating the task plan and definitions without executing them.",
-        ),
-    ] = False,
+    task_plan_path: TaskPlanPathParam,
+    extra_definition_paths: ExtraDefinitionPathsParam = None,
+    dry_run: DryRunParam = False,
 ) -> None:
+    if extra_definition_paths is None:
+        extra_definition_paths = []
     with handle_cli_error():
         task_builder = TaskBuilder(
             task_plan_path=task_plan_path,
@@ -83,7 +52,7 @@ def apply(
     help="Output the JSON schema of TaskPlan.",
 )
 def generate_task_plan_schema(
-    output: SchemaOutput = None,
+    output: OutputParam = None,
 ) -> None:
     with handle_cli_error():
         schema_dict = TaskPlan.model_json_schema()
@@ -96,7 +65,7 @@ def generate_task_plan_schema(
     help="Output the JSON schema of Definition.",
 )
 def generate_definition_schema(
-    output: SchemaOutput = None,
+    output: OutputParam = None,
 ) -> None:
     with handle_cli_error():
         schema_dict = Definition.model_json_schema()

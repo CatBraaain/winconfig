@@ -1,9 +1,46 @@
 from collections.abc import Generator
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Any
+from typing import Annotated, Any
 
 import typer
+
+OutputParam = Annotated[
+    str | None,
+    typer.Option(
+        help="Path to the file where the schema will be saved.",
+    ),
+]
+TaskPlanPathParam = Annotated[
+    Path,
+    typer.Argument(
+        help="Path to the task plan to apply.",
+        exists=True,
+        file_okay=True,
+        dir_okay=False,
+        writable=False,
+        readable=True,
+        resolve_path=True,
+    ),
+]
+ExtraDefinitionPathsParam = Annotated[
+    list[Path] | None,
+    typer.Option(
+        *["-e", "--extra_definition_paths"],
+        help=(
+            "Path to an additional definition file. "
+            "Can be specified multiple times to include multiple files. "
+            "If the same definition exists, the last one specified overrides the previous ones."
+        ),
+    ),
+]
+DryRunParam = Annotated[
+    bool,
+    typer.Option(
+        "--dry-run",
+        help="Do not apply any changes. Useful for validating the task plan and definitions without executing them.",
+    ),
+]
 
 
 @contextmanager
