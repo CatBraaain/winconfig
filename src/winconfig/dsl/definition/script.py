@@ -5,7 +5,7 @@ from pydantic import (
     Field,
 )
 
-from .task_plan import ApplyMode, TaskMode
+from winconfig.dsl.task_plan import ApplyMode, TaskMode
 
 
 class ScriptDefinition(BaseModel):

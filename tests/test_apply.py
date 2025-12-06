@@ -1,7 +1,6 @@
 import pytest
 
-from winconfig.dsl.const_types import ACCESS_DENIED, NOT_EXIST
-from winconfig.dsl.definition import TaskDefinition, TaskMode
+from winconfig.dsl.definition import ACCESS_DENIED, NOT_EXIST, TaskDefinition, TaskMode
 from winconfig.engine.powershell import PowershellRunspace
 
 

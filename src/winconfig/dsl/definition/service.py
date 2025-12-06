@@ -6,8 +6,9 @@ from pydantic import (
     Field,
 )
 
+from winconfig.dsl.task_plan import ApplyMode, TaskMode
+
 from .const_types import ACCESS_DENIED, NOT_EXIST
-from .task_plan import ApplyMode, TaskMode
 
 type ServiceStartupType = Literal[
     "Automatic",

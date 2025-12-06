@@ -8,6 +8,8 @@ from pydantic import (
     field_validator,
 )
 
+from winconfig.dsl.task_plan import ApplyMode, TaskMode
+
 from .const_types import (
     ACCESS_DENIED,
     EXIST,
@@ -17,7 +19,6 @@ from .const_types import (
     NotChangeType,
     NotExistType,
 )
-from .task_plan import ApplyMode, TaskMode
 
 type RegistryValueKind = Literal[
     "String",

@@ -10,7 +10,9 @@ from pydantic import (
     RootModel,
 )
 
-from .const_types import NotExistType  # noqa: F401
+from winconfig.dsl.task_plan import TaskMode
+
+from .const_types import ACCESS_DENIED, EXIST, NOT_CHANGE, NOT_EXIST  # noqa: F401
 from .registry import (  # noqa: F401
     RegistryEntryDefinition,
     RegistryKeyDefinition,
@@ -19,7 +21,6 @@ from .registry import (  # noqa: F401
 from .schtask import SchtaskDefinition, SchtaskState  # noqa: F401
 from .script import ScriptDefinition
 from .service import ServiceDefinition, ServiceStartupType  # noqa: F401
-from .task_plan import TaskMode
 
 
 class TaskDefinition(BaseModel):
