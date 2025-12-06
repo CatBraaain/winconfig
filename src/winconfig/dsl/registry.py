@@ -13,12 +13,11 @@ from .const_types import (
     EXIST,
     NOT_CHANGE,
     NOT_EXIST,
-    ApplyMode,
     ExistType,
     NotChangeType,
     NotExistType,
-    TaskMode,
 )
+from .task_plan import ApplyMode, TaskMode
 
 type RegistryValueKind = Literal[
     "String",

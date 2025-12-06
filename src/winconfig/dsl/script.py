@@ -5,7 +5,7 @@ from pydantic import (
     Field,
 )
 
-from .const_types import ApplyMode, TaskMode
+from .task_plan import ApplyMode, TaskMode
 
 
 class ScriptDefinition(BaseModel):

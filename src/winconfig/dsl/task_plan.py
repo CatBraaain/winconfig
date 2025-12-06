@@ -1,6 +1,16 @@
+from enum import Enum
+from typing import Literal
+
 from pydantic import RootModel
 
-from .const_types import TaskMode
+
+class TaskMode(Enum):
+    APPLY = "apply"
+    REVERT = "revert"
+    SKIP = "skip"
+
+
+type ApplyMode = Literal[TaskMode.APPLY, TaskMode.REVERT]
 
 
 class TaskPlan(RootModel):

@@ -7,7 +7,8 @@ from pydantic import (
     Field,
 )
 
-from .const_types import NOT_EXIST, ApplyMode, TaskMode
+from .const_types import NOT_EXIST
+from .task_plan import ApplyMode, TaskMode
 
 type SchtaskState = Literal["Enabled", "Disabled"]
 
