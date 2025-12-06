@@ -4,6 +4,8 @@ from pathlib import Path
 from typing import Annotated, Any
 
 import typer
+from pydantic import BaseModel, ConfigDict, RootModel
+from pydantic.json_schema import GenerateJsonSchema, JsonSchemaValue
 
 OutputParam = Annotated[
     str | None,
@@ -56,3 +58,18 @@ def handle_output(content: str, output_path: str | None) -> None:
         Path(output_path).write_text(content, encoding="utf-8")
     else:
         typer.echo(content)
+
+
+class GenerateJsonSchemaNoTitles(GenerateJsonSchema):
+    def field_title_should_be_set(self, schema: Any) -> bool:  # noqa: ANN401, ARG002
+        return False
+
+    def _update_class_schema(
+        self, json_schema: JsonSchemaValue, cls: type[Any], config: ConfigDict
+    ) -> None:
+        super()._update_class_schema(json_schema, cls, config)
+        json_schema.pop("title", None)
+
+
+def generate_schema(model_type: type[BaseModel | RootModel]) -> dict[str, Any]:
+    return model_type.model_json_schema(schema_generator=GenerateJsonSchemaNoTitles)

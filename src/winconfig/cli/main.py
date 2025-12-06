@@ -10,6 +10,7 @@ from .cli_utils import (
     ExtraDefinitionPathsParam,
     OutputParam,
     TaskPlanPathParam,
+    generate_schema,
     handle_cli_error,
     handle_output,
 )
@@ -55,7 +56,7 @@ def generate_task_plan_schema(
     output: OutputParam = None,
 ) -> None:
     with handle_cli_error():
-        schema_dict = TaskPlan.model_json_schema()
+        schema_dict = generate_schema(TaskPlan)
         schema = json.dumps(schema_dict, ensure_ascii=False, indent=2)
         handle_output(content=schema, output_path=output)
 
@@ -68,7 +69,7 @@ def generate_definition_schema(
     output: OutputParam = None,
 ) -> None:
     with handle_cli_error():
-        schema_dict = Definition.model_json_schema()
+        schema_dict = generate_schema(Definition)
         schema = json.dumps(schema_dict, ensure_ascii=False, indent=2)
         handle_output(content=schema, output_path=output)
 
