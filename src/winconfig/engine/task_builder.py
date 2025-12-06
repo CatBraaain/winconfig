@@ -1,7 +1,9 @@
 from pathlib import Path
 
+import typer
 import yaml
-from pydantic import RootModel
+from pydantic import RootModel, ValidationError
+from yaml import YAMLError
 
 from winconfig.dsl.definition import Definition, TaskMode
 
@@ -28,23 +30,45 @@ class TaskBuilder:
         self,
         task_plan_path: Path,
     ) -> TaskPlan:
-        task_plan_data = yaml.safe_load(task_plan_path.read_text())
-        return TaskPlan.model_validate(task_plan_data)
+        try:
+            return TaskPlan.model_validate(yaml.safe_load(task_plan_path.read_text()))
+        except YAMLError as e:
+            typer.echo(f"file {task_plan_path} is not valid as yaml: {e}", err=True)
+            raise typer.Exit(1) from None
+        except ValidationError as e:
+            typer.echo(
+                f"file {task_plan_path} is not valid as task plan: {e}", err=True
+            )
+            raise typer.Exit(1) from None
 
-    def load_definitions(
-        self,
-        extra_definition_paths: list[Path],
-    ) -> Definition:
+    def load_definitions(self, extra_definition_paths: list[Path]) -> Definition:
         builtin_definition_path = (
             Path(__file__).parent.parent / "resources" / "builtin.definition.yaml"
         )
         definition_paths = [builtin_definition_path, *extra_definition_paths]
         definitions = [
-            Definition.model_validate(yaml.safe_load(definition_path.read_text()))
+            self.load_definition(definition_path)
             for definition_path in definition_paths
         ]
-        all_task_definitions = [td for d in definitions for td in d.root]
-        return Definition.model_validate(all_task_definitions)
+        merged_definition = Definition.model_validate(
+            [td for d in definitions for td in d.root]
+        )
+        return merged_definition
+
+    def load_definition(
+        self,
+        definition_path: Path,
+    ) -> Definition:
+        try:
+            return Definition.model_validate(
+                yaml.safe_load(definition_path.read_text())
+            )
+        except YAMLError:
+            typer.echo(f"file {definition_path} is invalid as yaml", err=True)
+            raise typer.Exit(1) from None
+        except ValidationError:
+            typer.echo(f"file {definition_path} is invalid as task plan", err=True)
+            raise typer.Exit(1) from None
 
     def apply(self) -> None:
         powershell = PowershellRunspace()
