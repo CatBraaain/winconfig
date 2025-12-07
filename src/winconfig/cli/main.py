@@ -17,10 +17,13 @@ from winconfig.dsl.definition import Definition
 from winconfig.engine.model_loader import ModelLoader
 from winconfig.engine.task_builder import TaskBuilder, TaskPlan
 
-logger.remove()
-logger.add(
-    sys.stderr,
-    format="<green>{time:HH:mm:ss.SSS}</green> | <level>{message}</level>",
+logger.configure(
+    handlers=[
+        {
+            "sink": sys.stderr,
+            "format": "<green>{time:HH:mm:ss.SSS}</green> | <level>{message}</level>",
+        }
+    ]
 )
 
 
