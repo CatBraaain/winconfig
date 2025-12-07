@@ -1,7 +1,8 @@
+import sys
 from collections.abc import Generator
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Annotated, Any
+from typing import Annotated, Any, Literal
 
 import typer
 from loguru import logger
@@ -43,6 +44,33 @@ DryRunParam = Annotated[
         "--dry-run",
         help="Do not apply any changes. Useful for validating the task plan and definitions without executing them.",
     ),
+]
+
+
+def loglevel_callback(
+    loglevel: Annotated[
+        Literal["DEBUG", "INFO", "WARNING", "ERROR", "SILENT"],
+        typer.Option(help="Set the logging level"),
+    ] = "INFO",
+) -> None:
+    if loglevel == "SILENT":
+        logger.remove()
+    else:
+        logger.configure(
+            handlers=[
+                {
+                    "sink": sys.stderr,
+                    "format": "<green>{time:HH:mm:ss.SSS}</green> | <level>{message}</level>",
+                    "level": loglevel,
+                }
+            ]
+        )
+    logger.debug(f"Log level: {loglevel}")
+
+
+LogLevelParam = Annotated[
+    Literal["DEBUG", "INFO", "WARNING", "ERROR", "SILENT"],
+    typer.Option(help="Set the logging level", callback=loglevel_callback),
 ]
 
 

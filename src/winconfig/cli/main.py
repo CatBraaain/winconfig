@@ -1,12 +1,11 @@
 import json
-import sys
 
 import typer
-from loguru import logger
 
 from winconfig.cli.cli_utils import (
     DryRunParam,
     ExtraDefinitionPathsParam,
+    LogLevelParam,
     OutputParam,
     TaskPlanPathParam,
     generate_schema,
@@ -16,16 +15,6 @@ from winconfig.cli.cli_utils import (
 from winconfig.dsl.definition import Definition
 from winconfig.engine.model_loader import ModelLoader
 from winconfig.engine.task_builder import TaskBuilder, TaskPlan
-
-logger.configure(
-    handlers=[
-        {
-            "sink": sys.stderr,
-            "format": "<green>{time:HH:mm:ss.SSS}</green> | <level>{message}</level>",
-        }
-    ]
-)
-
 
 app = typer.Typer(
     no_args_is_help=True,
@@ -48,6 +37,7 @@ def apply(
     task_plan_path: TaskPlanPathParam,
     extra_definition_paths: ExtraDefinitionPathsParam = None,
     dry_run: DryRunParam = False,
+    loglevel: LogLevelParam = "INFO",  # noqa: ARG001
 ) -> None:
     if extra_definition_paths is None:
         extra_definition_paths = []
@@ -67,6 +57,7 @@ def apply(
 def generate_task_plan_schema(
     output: OutputParam = None,
     extra_definition_paths: ExtraDefinitionPathsParam = None,
+    loglevel: LogLevelParam = "INFO",  # noqa: ARG001
 ) -> None:
     if extra_definition_paths is None:
         extra_definition_paths = []
@@ -87,6 +78,7 @@ def generate_task_plan_schema(
 )
 def generate_definition_schema(
     output: OutputParam = None,
+    loglevel: LogLevelParam = "INFO",  # noqa: ARG001
 ) -> None:
     with handle_cli_error():
         schema_dict = generate_schema(Definition)
