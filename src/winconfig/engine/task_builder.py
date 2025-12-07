@@ -26,5 +26,4 @@ class TaskBuilder:
         powershell = PowershellRunspace()
         for task_name, mode in self.plan.root.items():
             task_definition = self.definition.get_task_definition(task_name)
-            script = task_definition.generate_script(mode)
-            powershell.run(script)
+            script = task_definition.generate_script(mode).strip()
