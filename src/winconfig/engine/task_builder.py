@@ -1,5 +1,7 @@
 from pathlib import Path
 
+from loguru import logger
+
 from winconfig.dsl.definition import Definition
 from winconfig.dsl.task_plan import TaskPlan
 
@@ -24,6 +26,18 @@ class TaskBuilder:
 
     def apply(self) -> None:
         powershell = PowershellRunspace()
+        logger.debug(f"Setup PowerShell: version {powershell.runspace.Version}")
+
         for task_name, mode in self.plan.root.items():
             task_definition = self.definition.get_task_definition(task_name)
             script = task_definition.generate_script(mode).strip()
+            try:
+                powershell.run(script)
+                logger.info(f"Success: {task_name}[{mode.value}]")
+            except Exception as e:
+                logger.error(f"Fail: {task_name}[{mode.value}]: {e}")
+                raise
+            finally:
+                logger.debug(
+                    f"{task_name}[{mode.value}]:\n```powershell\n{script}\n```"
+                )
