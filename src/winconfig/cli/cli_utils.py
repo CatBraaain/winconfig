@@ -18,7 +18,7 @@ OutputParam = Annotated[
 TaskPlanPathParam = Annotated[
     Path,
     typer.Argument(
-        help="Path to the task plan to apply.",
+        help="Path to the task plan.",
         exists=True,
         file_okay=True,
         dir_okay=False,
