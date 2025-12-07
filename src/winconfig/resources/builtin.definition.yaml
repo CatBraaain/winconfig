@@ -211,7 +211,6 @@
       $shortcut = (New-Object -ComObject WScript.Shell).CreateShortcut($shortcutPath)
       $shortcut.TargetPath = "explorer.exe"
       $shortcut.Arguments = "shell:::{ED7BA470-8E54-465E-825C-99712043E01C}"
-      # $shortcut.IconLocation = "imageres.dll,-30"
       $shortcut.IconLocation = "$env:WinDir\System32\shell32.dll, 21"
       $shortcut.Save()
     revert: |-
