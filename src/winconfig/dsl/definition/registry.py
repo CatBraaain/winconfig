@@ -89,9 +89,9 @@ class RegistryEntryDefinition(RegistryBaseDefinition):
             return ""
         value = self.resolve_value(mode)
         if self.type == "Binary":
-            psvalue = f'("{value}".split(" ") | % {{ [byte]$_ }})'
+            psvalue = f'("{value.replace('"', '`"')}".split(" ") | % {{ [byte]$_ }})'
         else:
-            psvalue = f'"{value}"'
+            psvalue = f'"{value.replace('"', '`"')}"'
 
         set_entry = rf"""
             if (!(Test-Path "{self.registry_path}")) {{
