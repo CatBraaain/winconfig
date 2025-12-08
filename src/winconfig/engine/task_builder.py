@@ -34,7 +34,7 @@ class TaskBuilder:
             try:
                 stdout = powershell.run(script)
                 logger.info(f"Success: {task_name}[{mode.value}]")
-                if stdout == PERMISSION_DENIED:
+                if PERMISSION_DENIED in stdout:
                     raise Exception(
                         "Administrator privileges required for this operation"
                     )
