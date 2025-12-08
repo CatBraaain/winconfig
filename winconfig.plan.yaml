@@ -35,7 +35,7 @@ HideExplorerHome: apply
 HideExplorerGallery: apply
 DisableOneDrive: apply
 DisableExplorerGroupView: apply
-EnableExplorerRestoreLastSession: apply
+EnableExplorerRestoreLastSession: revert
 DisableExplorerCheckBoxes: apply
 HideExplorerRecentFiles: apply
 HideExplorerFrequentFolders: apply
