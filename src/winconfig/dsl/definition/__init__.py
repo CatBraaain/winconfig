@@ -12,7 +12,13 @@ from pydantic import (
 
 from winconfig.dsl.task_plan import TaskMode
 
-from .const_types import ACCESS_DENIED, EXIST, NOT_CHANGE, NOT_EXIST  # noqa: F401
+from .const_types import (  # noqa: F401
+    ACCESS_DENIED,
+    EXIST,
+    NOT_CHANGE,
+    NOT_EXIST,
+    PERMISSION_DENIED,
+)
 from .registry import (  # noqa: F401
     RegistryEntryDefinition,
     RegistryKeyDefinition,

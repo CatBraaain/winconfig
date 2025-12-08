@@ -2,7 +2,7 @@ from pathlib import Path
 
 from loguru import logger
 
-from winconfig.dsl.definition import Definition
+from winconfig.dsl.definition import PERMISSION_DENIED, Definition
 from winconfig.dsl.task_plan import TaskPlan
 
 from .model_loader import ModelLoader
@@ -32,8 +32,12 @@ class TaskBuilder:
             task_definition = self.definition.get_task_definition(task_name)
             script = task_definition.generate_script(mode).strip()
             try:
-                powershell.run(script)
+                stdout = powershell.run(script)
                 logger.info(f"Success: {task_name}[{mode.value}]")
+                if stdout == PERMISSION_DENIED:
+                    raise Exception(
+                        "Administrator privileges required for this operation"
+                    )
             except Exception as e:
                 logger.error(f"Fail: {task_name}[{mode.value}]: {e}")
                 raise

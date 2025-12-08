@@ -15,6 +15,7 @@ from .const_types import (
     EXIST,
     NOT_CHANGE,
     NOT_EXIST,
+    PERMISSION_DENIED,
     ExistType,
     NotChangeType,
     NotExistType,
@@ -102,6 +103,9 @@ class RegistryEntryDefinition(RegistryBaseDefinition):
             catch [System.UnauthorizedAccessException] {{
                 "{ACCESS_DENIED}"
             }}
+            catch [System.Security.SecurityException] {{
+                "{PERMISSION_DENIED}"
+            }}
         """
         remove_entry = rf"""
             try {{
@@ -112,6 +116,9 @@ class RegistryEntryDefinition(RegistryBaseDefinition):
             }}
             catch [System.Management.Automation.PSArgumentException] {{
                 "{NOT_EXIST}"
+            }}
+            catch [System.Security.SecurityException] {{
+                "{PERMISSION_DENIED}"
             }}
         """
         script = set_entry if value != NOT_EXIST else remove_entry
