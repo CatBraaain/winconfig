@@ -95,7 +95,7 @@ class RegistryEntryDefinition(RegistryBaseDefinition):
 
         set_entry = rf"""
             if (!(Test-Path "{self.registry_path}")) {{
-                New-Item -Path "{self.registry_path}" -Force -ErrorAction Stop | Out-Null
+                New-Item -Path "{self.registry_path.replace("``*", "*")}" -Force -ErrorAction Stop | Out-Null
             }}
             try {{
                 Set-ItemProperty -Path "{self.registry_path}" -Name "{self.name}" -Type "{self.type}" -Value {psvalue} -Force -ErrorAction Stop | Out-Null
