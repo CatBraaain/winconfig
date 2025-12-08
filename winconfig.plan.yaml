@@ -82,3 +82,6 @@ EnableWindowsRestoreLastSession: skip
 ### PowerPlan ###
 EnableHighPerformancePlan: apply
 DisableAutoSleep: apply
+
+### Additional ###
+OpenWithCode: apply

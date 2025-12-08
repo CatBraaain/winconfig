@@ -71,7 +71,8 @@
       "DisableXboxGameBar",
       "EnableWindowsRestoreLastSession",
       "EnableHighPerformancePlan",
-      "DisableAutoSleep"
+      "DisableAutoSleep",
+      "OpenWithCode"
     ],
     "type": "string"
   }

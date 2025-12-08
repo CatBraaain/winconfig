@@ -19,7 +19,7 @@ build:
 winconfig_schema_dist := "winconfig.plan.schema.json"
 definition_schema_dist := "src/winconfig/resources/builtin.definition.schema.json"
 schema:
-  uv run src/winconfig/cli/main.py schema taskplan --output {{winconfig_schema_dist}}
+  uv run src/winconfig/cli/main.py schema taskplan --output {{winconfig_schema_dist}} -e winconfig.additional.definition.yaml
   bunx prettier --write "{{winconfig_schema_dist}}"
   uv run src/winconfig/cli/main.py schema definition --output {{definition_schema_dist}}
   bunx prettier --write {{definition_schema_dist}}
