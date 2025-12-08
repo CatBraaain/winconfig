@@ -105,8 +105,8 @@
     Remove Microsoft Copilot and hide it from taskbar.
     Note: Uninstalling is the only way to disable this after 23H2.
   script:
-    apply: winget uninstall --name "Microsoft Copilot"
-    revert: winget install --name "Microsoft Copilot" --source msstore --accept-package-agreements --accept-source-agreements --silent
+    apply: winget uninstall --name "Microsoft Copilot" --exact --source msstore
+    revert: winget install --name "Microsoft Copilot" --exact --source msstore --accept-package-agreements --accept-source-agreements --silent
 - name: ShowClockSeconds
   description: Show seconds on the taskbar clock
   registries:
