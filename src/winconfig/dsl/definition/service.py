@@ -1,4 +1,4 @@
-from textwrap import dedent
+from textwrap import dedent, indent
 from typing import Literal
 
 from pydantic import (
@@ -8,7 +8,7 @@ from pydantic import (
 
 from winconfig.dsl.task_plan import ApplyMode, TaskMode
 
-from .const_types import ACCESS_DENIED, NOT_EXIST
+from .const_types import NOT_EXIST
 
 type ServiceStartupType = Literal[
     "Automatic",
@@ -39,6 +39,22 @@ class ServiceDefinition(BaseModel):
             case _:
                 raise ValueError(f"Invalid mode: {mode}")
 
+    def with_error_handler(self, script: str) -> str:
+        return f"""
+            try {{
+                {indent(dedent(script), " " * 4).lstrip()}
+            }}
+            catch [System.Management.Automation.ParameterBindingException] {{
+                throw
+            }}
+            catch [System.InvalidOperationException] {{
+                "{NOT_EXIST}"
+            }}
+            catch [Microsoft.PowerShell.Commands.ServiceCommandException] {{
+                "{NOT_EXIST}"
+            }}
+        """
+
     def generate_set_script(self, mode: TaskMode) -> str:
         if mode == TaskMode.SKIP:
             return ""
@@ -52,34 +68,18 @@ class ServiceDefinition(BaseModel):
             if ($service -eq $null) {{ "{NOT_EXIST}"; return }}
             $serviceName = $service.Name
         """
-        body = f"""
-            try {{
-                Set-Service -Name "$serviceName" -StartupType "{startup_type.replace("DelayedStart", "")}" -ErrorAction Stop | Out-Null
-            }}
-            catch [System.Management.Automation.ParameterBindingException] {{
-                throw
-            }}
-            catch [System.InvalidOperationException] {{
-                "{NOT_EXIST}"
-            }}
-            catch [Microsoft.PowerShell.Commands.ServiceCommandException] {{
-                "{ACCESS_DENIED}"
-            }}
-        """
+        body = self.with_error_handler(f"""
+            Set-Service -Name "$serviceName" -StartupType "{startup_type.replace("DelayedStart", "")}" -ErrorAction Stop | Out-Null
+        """)
         script = (service_name if "*" not in self.name else service_name_by_glob) + body
         return dedent(script)
 
     def generate_get_script(self) -> str:
-        script = f"""
-            try {{
-                $startupType = (Get-Service -Name "{self.name}" -ErrorAction Stop).StartType
-                $isDelayed = (Get-ItemProperty "Registry::HKLM\\SYSTEM\\CurrentControlSet\\Services\\{self.name}").DelayedAutostart
-                if ($startupType -eq "Automatic" -and $isDelayed -eq 1) {{ $startupType = "AutomaticDelayedStart" }}
-                if ($startupType -eq $null) {{ $startupType = "{NOT_EXIST}" }}
-                $startupType
-            }}
-            catch [Microsoft.PowerShell.Commands.ServiceCommandException] {{
-                "{NOT_EXIST}"
-            }}
-        """
+        script = self.with_error_handler(f"""
+            $startupType = (Get-Service -Name "{self.name}" -ErrorAction Stop).StartType
+            $isDelayed = (Get-ItemProperty "Registry::HKLM\\SYSTEM\\CurrentControlSet\\Services\\{self.name}").DelayedAutostart
+            if ($startupType -eq "Automatic" -and $isDelayed -eq 1) {{ $startupType = "AutomaticDelayedStart" }}
+            if ($startupType -eq $null) {{ $startupType = "{NOT_EXIST}" }}
+            $startupType
+        """)
         return dedent(script)

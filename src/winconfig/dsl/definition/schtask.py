@@ -1,5 +1,5 @@
 from pathlib import Path
-from textwrap import dedent
+from textwrap import dedent, indent
 from typing import Literal
 
 from pydantic import (
@@ -46,34 +46,34 @@ class SchtaskDefinition(BaseModel):
             case _:
                 raise ValueError(f"Invalid mode: {mode}")
 
+    def with_error_handler(self, script: str) -> str:
+        return f"""
+            try {{
+                {indent(dedent(script), " " * 4).lstrip()}
+            }}
+            catch [System.IO.FileNotFoundException] {{
+                "{NOT_EXIST}"
+            }}
+        """
+
     def generate_set_script(self, mode: TaskMode) -> str:
         if mode == TaskMode.SKIP:
             return ""
         state = self.resolve_value(mode)
         enabled = "$true" if state == "Enabled" else "$false"
-        script = f"""
-            try {{
-                $service = New-Object -ComObject "Schedule.Service"
-                $service.Connect()
-                $service.GetFolder("\\").GetTask("{self.full_path}").Enabled = {enabled}
-            }}
-            catch [System.IO.FileNotFoundException] {{
-                "{NOT_EXIST}"
-            }}
-        """
+        script = self.with_error_handler(f"""
+            $service = New-Object -ComObject "Schedule.Service"
+            $service.Connect()
+            $service.GetFolder("\\").GetTask("{self.full_path}").Enabled = {enabled}
+        """)
         return dedent(script)
 
     def generate_get_script(self) -> str:
-        get_task = f"""
-            try {{
-                $service = New-Object -ComObject "Schedule.Service"
-                $service.Connect()
-                $enabled = $service.GetFolder("\\").GetTask("{self.full_path}").Enabled
-                $ret = if ($enabled) {{ "Enabled" }} else {{ "Disabled" }}
-                $ret
-            }}
-            catch [System.IO.FileNotFoundException] {{
-                "{NOT_EXIST}"
-            }}
-        """
+        get_task = self.with_error_handler(f"""
+            $service = New-Object -ComObject "Schedule.Service"
+            $service.Connect()
+            $enabled = $service.GetFolder("\\").GetTask("{self.full_path}").Enabled
+            $ret = if ($enabled) {{ "Enabled" }} else {{ "Disabled" }}
+            $ret
+        """)
         return dedent(get_task)

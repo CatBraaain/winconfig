@@ -1,5 +1,5 @@
 import re
-from textwrap import dedent
+from textwrap import dedent, indent
 from typing import Literal
 
 from pydantic import (
@@ -58,6 +58,25 @@ class RegistryBaseDefinition(BaseModel):
     def registry_path(self) -> str:
         return f"Registry::{self.path.replace('*', '``*')}"
 
+    def with_error_handler(self, script: str) -> str:
+        return f"""
+            try {{
+                {indent(dedent(script), " " * 4).lstrip()}
+            }}
+            catch [System.Management.Automation.ItemNotFoundException] {{
+                "{NOT_EXIST}"
+            }}
+            catch [System.Management.Automation.PSArgumentException] {{
+                "{NOT_EXIST}"
+            }}
+            catch [System.UnauthorizedAccessException] {{
+                "{ACCESS_DENIED}"
+            }}
+            catch [System.Security.SecurityException] {{
+                "{PERMISSION_DENIED}"
+            }}
+        """
+
 
 class RegistryEntryDefinition(RegistryBaseDefinition):
     """Represents a single registry entry value to be modified."""
@@ -97,46 +116,20 @@ class RegistryEntryDefinition(RegistryBaseDefinition):
             if (!(Test-Path "{self.registry_path}")) {{
                 New-Item -Path "{self.registry_path.replace("``*", "*")}" -Force -ErrorAction Stop | Out-Null
             }}
-            try {{
-                Set-ItemProperty -Path "{self.registry_path}" -Name "{self.name}" -Type "{self.type}" -Value {psvalue} -Force -ErrorAction Stop | Out-Null
-            }}
-            catch [System.UnauthorizedAccessException] {{
-                "{ACCESS_DENIED}"
-            }}
-            catch [System.Security.SecurityException] {{
-                "{PERMISSION_DENIED}"
-            }}
-        """
-        remove_entry = rf"""
-            try {{
-                Remove-ItemProperty -Path "{self.registry_path}" -Name "{self.name}" -Force -ErrorAction Stop | Out-Null
-            }}
-            catch [System.Management.Automation.ItemNotFoundException] {{
-                "{NOT_EXIST}"
-            }}
-            catch [System.Management.Automation.PSArgumentException] {{
-                "{NOT_EXIST}"
-            }}
-            catch [System.Security.SecurityException] {{
-                "{PERMISSION_DENIED}"
-            }}
-        """
+        """ + self.with_error_handler(rf"""
+            Set-ItemProperty -Path "{self.registry_path}" -Name "{self.name}" -Type "{self.type}" -Value {psvalue} -Force -ErrorAction Stop | Out-Null
+        """)
+        remove_entry = self.with_error_handler(rf"""
+            Remove-ItemProperty -Path "{self.registry_path}" -Name "{self.name}" -Force -ErrorAction Stop | Out-Null
+        """)
         script = set_entry if value != NOT_EXIST else remove_entry
 
         return dedent(script)
 
     def generate_get_script(self) -> str:
-        get_entry = rf"""
-            try {{
-                Get-ItemPropertyValue -Path "{self.registry_path}" -Name "{self.name}" -ErrorAction Stop
-            }}
-            catch [System.Management.Automation.ItemNotFoundException] {{
-                "{NOT_EXIST}"
-            }}
-            catch [System.Management.Automation.PSArgumentException] {{
-                "{NOT_EXIST}"
-            }}
-        """
+        get_entry = self.with_error_handler(rf"""
+            Get-ItemPropertyValue -Path "{self.registry_path}" -Name "{self.name}" -ErrorAction Stop
+        """)
         return dedent(get_entry)
 
 
