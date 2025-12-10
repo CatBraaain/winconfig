@@ -500,7 +500,7 @@
 - name: HideShare
   description: Hide the "Share" item from context menu
   registries:
-    - path: HKCR\AllFilesystemObjects\shellex\ContextMenuHandlers\ModernSharing
+    - path: HKCR\AllFilesystemObjects\ShellEx\ContextMenuHandlers\ModernSharing
       entries:
         - name: (default)
           type: String
@@ -539,7 +539,7 @@
 - name: HideSendTo
   description: Hide the "Send To" item from context menu
   registries:
-    - path: HKCR\AllFilesystemObjects\shellex\ContextMenuHandlers\SendTo
+    - path: HKCR\AllFilesystemObjects\ShellEx\ContextMenuHandlers\SendTo
       new_existance: <NotExist>
       old_existance: <Exist>
 - name: HideAddToLibrary
