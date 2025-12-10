@@ -4,85 +4,85 @@
   description: Add the "Open with Code" item to context menu
   registries:
     - path: HKCR\*\shell\VSCode
-      old_existance: <NotExist>
       new_existance: <Exist>
+      old_existance: <NotExist>
       entries:
         - name: (default)
           type: String
-          old_value: <NotExist>
           new_value: "Open with Code (&Q)"
+          old_value: <NotExist>
         - name: Icon
           type: ExpandString
-          old_value: <NotExist>
           new_value: "%LocalAppData%\\Programs\\Microsoft VS Code\\Code.exe"
+          old_value: <NotExist>
     - path: HKCR\*\shell\VSCode\command
-      old_existance: <NotExist>
       new_existance: <Exist>
+      old_existance: <NotExist>
       entries:
         - name: (default)
           type: ExpandString
-          old_value: <NotExist>
           new_value: "\"%LocalAppData%\\Programs\\Microsoft VS Code\\Code.exe\" \"%V\""
+          old_value: <NotExist>
 
     - path: HKCR\directory\shell\VSCode
-      old_existance: <NotExist>
       new_existance: <Exist>
+      old_existance: <NotExist>
       entries:
         - name: (default)
           type: String
-          old_value: <NotExist>
           new_value: "Open with Code (&Q)"
+          old_value: <NotExist>
         - name: Icon
           type: ExpandString
-          old_value: <NotExist>
           new_value: "%LocalAppData%\\Programs\\Microsoft VS Code\\Code.exe"
+          old_value: <NotExist>
     - path: HKCR\directory\shell\VSCode\command
-      old_existance: <NotExist>
       new_existance: <Exist>
+      old_existance: <NotExist>
       entries:
         - name: (default)
           type: ExpandString
-          old_value: <NotExist>
           new_value: "\"%LocalAppData%\\Programs\\Microsoft VS Code\\Code.exe\" \"%V\""
+          old_value: <NotExist>
 
     - path: HKCR\directory\background\shell\VSCode
-      old_existance: <NotExist>
       new_existance: <Exist>
+      old_existance: <NotExist>
       entries:
         - name: (default)
           type: String
-          old_value: <NotExist>
           new_value: "Open with Code (&Q)"
+          old_value: <NotExist>
         - name: Icon
           type: ExpandString
-          old_value: <NotExist>
           new_value: "%LocalAppData%\\Programs\\Microsoft VS Code\\Code.exe"
+          old_value: <NotExist>
     - path: HKCR\directory\background\shell\VSCode\command
-      old_existance: <NotExist>
       new_existance: <Exist>
+      old_existance: <NotExist>
       entries:
         - name: (default)
           type: ExpandString
-          old_value: <NotExist>
           new_value: "\"%LocalAppData%\\Programs\\Microsoft VS Code\\Code.exe\" \"%V\""
+          old_value: <NotExist>
 
     - path: HKCR\drive\shell\VSCode
-      old_existance: <NotExist>
       new_existance: <Exist>
+      old_existance: <NotExist>
       entries:
         - name: (default)
           type: String
-          old_value: <NotExist>
           new_value: "Open with Code (&Q)"
+          old_value: <NotExist>
         - name: Icon
           type: ExpandString
-          old_value: <NotExist>
           new_value: "%LocalAppData%\\Programs\\Microsoft VS Code\\Code.exe"
+          old_value: <NotExist>
     - path: HKCR\drive\shell\VSCode\command
-      old_existance: <NotExist>
       new_existance: <Exist>
+      old_existance: <NotExist>
       entries:
         - name: (default)
           type: ExpandString
-          old_value: <NotExist>
           new_value: "\"%LocalAppData%\\Programs\\Microsoft VS Code\\Code.exe\" \"%V\""
+          old_value: <NotExist>
