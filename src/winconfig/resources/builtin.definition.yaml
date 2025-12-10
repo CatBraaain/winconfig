@@ -383,11 +383,11 @@
 - name: EnableClassicContextMenu
   description: Enables good old context menus as it was like in win10
   registries:
-    - path: HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}
+    - path: HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32
       new_existance: <Exist>
       old_existance: <NotExist>
       entries:
-        - name: InprocServer32
+        - name: (default)
           type: String
           new_value: ""
           old_value: <NotExist>
