@@ -11,11 +11,12 @@ class TaskMode(Enum):
     REVERT = "revert"
     SKIP = "skip"
 
-    def opposite(self) -> TaskMode:
-        if self == TaskMode.APPLY:
-            return TaskMode.REVERT
-        if self == TaskMode.REVERT:
-            return TaskMode.APPLY
+    def resolve(self, reverse: bool) -> TaskMode:
+        if reverse:
+            if self == TaskMode.APPLY:
+                return TaskMode.REVERT
+            if self == TaskMode.REVERT:
+                return TaskMode.APPLY
         return self
 
 
