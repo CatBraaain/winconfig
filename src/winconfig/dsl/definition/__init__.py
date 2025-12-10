@@ -72,7 +72,7 @@ class TaskDefinition(BaseModel):
                     [
                         registry_item
                         for registry_path in self.registries
-                        for registry_item in [registry_path, *registry_path.entries]
+                        for registry_item in registry_path.items
                     ]
                     + self.scheduled_tasks
                     + self.services

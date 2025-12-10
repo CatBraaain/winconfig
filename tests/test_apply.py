@@ -3,8 +3,6 @@ import pytest
 from winconfig.dsl.definition import (
     ACCESS_DENIED,
     NOT_EXIST,
-    RegistryEntryDefinition,
-    RegistryPathDefinition,
     TaskDefinition,
     TaskMode,
 )
@@ -16,11 +14,7 @@ def test_apply_resitory(
 ):
     powershell, task_definition = runtime_set
     for registry_path in task_definition.registries:
-        registry_items: list[RegistryPathDefinition | RegistryEntryDefinition] = [
-            registry_path,
-            *registry_path.entries,
-        ]
-        for registry_item in registry_items:
+        for registry_item in registry_path.items:
             res = powershell.run(registry_item.generate_set_script(mode))
             if res == ACCESS_DENIED:
                 # pytest.skip("Access denied: need workaround")

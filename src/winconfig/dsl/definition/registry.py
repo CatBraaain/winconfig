@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 import re
 from textwrap import dedent, indent
-from typing import Any, Literal
+from typing import Any, Literal, Self
 
 from pydantic import BaseModel, ConfigDict, Field, PrivateAttr, field_validator
 
@@ -39,7 +41,7 @@ class RegistryPathDefinition(BaseModel):
         default=EXIST,
         description="The desired existance of the registry key.",
     )
-    entries: list["RegistryEntryDefinition"] = Field(
+    entries: list[RegistryEntryDefinition] = Field(
         default=[],
         description="The registry entries to be modified.",
     )
@@ -77,6 +79,10 @@ class RegistryPathDefinition(BaseModel):
     @property
     def full_path(self) -> str:
         return f"{self.path}"
+
+    @property
+    def items(self) -> list[Self | RegistryEntryDefinition]:
+        return [self, *self.entries]
 
     def resolve_value(
         self, mode: ApplyMode
