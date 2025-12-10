@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=./src/winconfig/resources/builtin.definition.schema.json
+# yaml-language-server: $schema=../src/winconfig/resources/builtin.definition.schema.json
 
 - name: OpenWithCode
   description: Add the "Open with Code" item to context menu
