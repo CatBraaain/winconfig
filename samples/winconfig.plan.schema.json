@@ -72,7 +72,9 @@
       "EnableWindowsRestoreLastSession",
       "EnableHighPerformancePlan",
       "DisableAutoSleep",
-      "OpenWithCode"
+      "OpenWithCode",
+      "EditMouseSensitivity",
+      "EditWindowsPATH"
     ],
     "type": "string"
   }

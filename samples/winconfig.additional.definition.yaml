@@ -86,3 +86,31 @@
           type: ExpandString
           new_value: "\"%LocalAppData%\\Programs\\Microsoft VS Code\\Code.exe\" \"%V\""
           old_value: <NotExist>
+
+- name: EditMouseSensitivity
+  description: Set mouse sensitivity
+  registries:
+    - path: HKCU\Control Panel\Mouse
+      entries:
+        - name: MouseSensitivity
+          type: DWord
+          new_value: "12"
+          old_value: "10"
+
+- name: EditWindowsPATH
+  description: Edit windows path
+  script:
+    apply: |-
+      $gitPath = "C:\Program Files\Git\bin"
+      $oldPath = [Environment]::GetEnvironmentVariable("Path", "User").Split(';')
+      if (-not ($oldPath -contains $gitPath)) {
+        $newPath = ($oldPath + $gitPath) -join ';'
+        [Environment]::SetEnvironmentVariable("Path", $newPath, "User")
+      }
+    revert: |-
+      $gitPath = "C:\Program Files\Git\bin"
+      $oldPath = [Environment]::GetEnvironmentVariable("Path", "User").Split(';')
+      if ($oldPath -contains $gitPath) {
+        $newPath = ($oldPath | ? { $_ -ne $gitPath }) -join ';'
+        [Environment]::SetEnvironmentVariable("Path", $newPath, "User")
+      }
