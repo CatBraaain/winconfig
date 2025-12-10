@@ -24,12 +24,14 @@ class TaskBuilder:
             available_definition=self.definition,
         )
 
-    def apply(self) -> None:
+    def apply(self, reverse: bool) -> None:
         powershell = PowershellRunspace()
         logger.debug(f"Setup PowerShell: version {powershell.runspace.Version}")
 
         for task_name, mode in self.plan.root.items():
             task_definition = self.definition.get_task_definition(task_name)
+            if reverse:
+                mode = mode.opposite()
             script = task_definition.generate_script(mode).strip()
             try:
                 stdout = powershell.run(script)

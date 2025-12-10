@@ -36,6 +36,7 @@ app.add_typer(
 def apply(
     task_plan_path: TaskPlanPathParam,
     extra_definition_paths: ExtraDefinitionPathsParam = None,
+    reverse: bool = False,
     dry_run: DryRunParam = False,
     loglevel: LogLevelParam = "INFO",  # noqa: ARG001
 ) -> None:
@@ -47,7 +48,7 @@ def apply(
             extra_definition_paths=extra_definition_paths,
         )
         if not dry_run:
-            task_builder.apply()
+            task_builder.apply(reverse=reverse)
 
 
 @schema_command.command(

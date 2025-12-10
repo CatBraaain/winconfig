@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from enum import Enum
 from typing import Literal
 
@@ -8,6 +10,13 @@ class TaskMode(Enum):
     APPLY = "apply"
     REVERT = "revert"
     SKIP = "skip"
+
+    def opposite(self) -> TaskMode:
+        if self == TaskMode.APPLY:
+            return TaskMode.REVERT
+        if self == TaskMode.REVERT:
+            return TaskMode.APPLY
+        return self
 
 
 type ApplyMode = Literal[TaskMode.APPLY, TaskMode.REVERT]
