@@ -112,6 +112,7 @@
       "type": "string"
     },
     "SchtaskDefinition": {
+      "additionalProperties": false,
       "description": "Represents a scheduled task to be enabled or disabled.",
       "properties": {
         "full_path": {
@@ -135,6 +136,7 @@
       "type": "string"
     },
     "ScriptDefinition": {
+      "additionalProperties": false,
       "description": "Represents PowerShell scripts to be executed.",
       "properties": {
         "apply": {
@@ -151,6 +153,7 @@
       "type": "object"
     },
     "ServiceDefinition": {
+      "additionalProperties": false,
       "description": "Represents a Windows service to be modified.",
       "properties": {
         "name": {

@@ -4,6 +4,7 @@ from typing import Literal
 
 from pydantic import (
     BaseModel,
+    ConfigDict,
     Field,
 )
 
@@ -24,6 +25,8 @@ class SchtaskDefinition(BaseModel):
     new_state: SchtaskState = Field(
         description="The desired state of the scheduled task."
     )
+
+    model_config = ConfigDict(extra="forbid")
 
     @property
     def formatted_path(self) -> str:

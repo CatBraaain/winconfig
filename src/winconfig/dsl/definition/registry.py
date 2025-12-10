@@ -30,8 +30,6 @@ type RegistryValueKind = Literal[
 class RegistryPathDefinition(BaseModel):
     """Represents a single registry key and entry(s) to be modified."""
 
-    model_config = ConfigDict(extra="forbid")
-
     path: str = Field(description="The path to the registry key.")
     old_existance: NotChangeType | ExistType | NotExistType = Field(
         default=EXIST,
@@ -45,6 +43,8 @@ class RegistryPathDefinition(BaseModel):
         default=[],
         description="The registry entries to be modified.",
     )
+
+    model_config = ConfigDict(extra="forbid")
 
     def model_post_init(self, _: Any) -> None:  # noqa: ANN401
         for entry in self.entries:
@@ -129,8 +129,6 @@ class RegistryPathDefinition(BaseModel):
 class RegistryEntryDefinition(BaseModel):
     """Represents a single registry entry value to be modified."""
 
-    model_config = ConfigDict(extra="forbid")
-
     name: str = Field(description="The name of the registry value.")
     type: RegistryValueKind = Field(description="The type of the registry value.")
     old_value: str | NotExistType = Field(
@@ -141,6 +139,8 @@ class RegistryEntryDefinition(BaseModel):
     )
 
     _parent: RegistryPathDefinition = PrivateAttr(default=None)  # pyright: ignore[reportAssignmentType]
+
+    model_config = ConfigDict(extra="forbid")
 
     @property
     def registry_path(self) -> str:

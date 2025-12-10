@@ -2,6 +2,7 @@ from textwrap import dedent
 
 from pydantic import (
     BaseModel,
+    ConfigDict,
     Field,
 )
 
@@ -19,6 +20,8 @@ class ScriptDefinition(BaseModel):
         default="",
         description="The script to run for the default configuration.",
     )
+
+    model_config = ConfigDict(extra="forbid")
 
     def resolve_value(self, mode: ApplyMode) -> str:
         match mode:

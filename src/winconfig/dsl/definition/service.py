@@ -3,6 +3,7 @@ from typing import Literal
 
 from pydantic import (
     BaseModel,
+    ConfigDict,
     Field,
 )
 
@@ -29,6 +30,8 @@ class ServiceDefinition(BaseModel):
     new_startup: ServiceStartupType = Field(
         description="The desired startup type of the service."
     )
+
+    model_config = ConfigDict(extra="forbid")
 
     def resolve_value(self, mode: ApplyMode) -> str:
         match mode:
