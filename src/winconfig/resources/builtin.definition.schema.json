@@ -13,12 +13,9 @@
       "type": "string"
     },
     "RegistryEntryDefinition": {
+      "additionalProperties": false,
       "description": "Represents a single registry entry value to be modified.",
       "properties": {
-        "path": {
-          "description": "The path to the registry key.",
-          "type": "string"
-        },
         "name": {
           "description": "The name of the registry value.",
           "type": "string"
@@ -50,17 +47,18 @@
           "description": "The desired value of the registry entry."
         }
       },
-      "required": ["path", "name", "type", "old_value", "new_value"],
+      "required": ["name", "type", "old_value", "new_value"],
       "type": "object"
     },
-    "RegistryKeyDefinition": {
-      "description": "Represents a single registry key to be modified.",
+    "RegistryPathDefinition": {
+      "additionalProperties": false,
+      "description": "Represents a single registry key and entry(s) to be modified.",
       "properties": {
         "path": {
           "description": "The path to the registry key.",
           "type": "string"
         },
-        "old_value": {
+        "old_existance": {
           "anyOf": [
             {
               "$ref": "#/$defs/NotChangeType"
@@ -72,9 +70,10 @@
               "$ref": "#/$defs/NotExistType"
             }
           ],
-          "description": "The default value of the registry entry."
+          "default": "<Exist>",
+          "description": "The default existance of the registry key."
         },
-        "new_value": {
+        "new_existance": {
           "anyOf": [
             {
               "$ref": "#/$defs/NotChangeType"
@@ -86,10 +85,19 @@
               "$ref": "#/$defs/NotExistType"
             }
           ],
-          "description": "The desired value of the registry entry."
+          "default": "<Exist>",
+          "description": "The desired existance of the registry key."
+        },
+        "entries": {
+          "default": [],
+          "description": "The registry entries to be modified.",
+          "items": {
+            "$ref": "#/$defs/RegistryEntryDefinition"
+          },
+          "type": "array"
         }
       },
-      "required": ["path", "old_value", "new_value"],
+      "required": ["path"],
       "type": "object"
     },
     "RegistryValueKind": {
@@ -201,14 +209,7 @@
           "default": [],
           "description": "The registry values to be modified.",
           "items": {
-            "anyOf": [
-              {
-                "$ref": "#/$defs/RegistryEntryDefinition"
-              },
-              {
-                "$ref": "#/$defs/RegistryKeyDefinition"
-              }
-            ]
+            "$ref": "#/$defs/RegistryPathDefinition"
           },
           "type": "array"
         },

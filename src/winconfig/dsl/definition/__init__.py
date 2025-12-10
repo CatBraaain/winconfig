@@ -21,7 +21,7 @@ from .const_types import (  # noqa: F401
 )
 from .registry import (  # noqa: F401
     RegistryEntryDefinition,
-    RegistryKeyDefinition,
+    RegistryPathDefinition,
     RegistryValueKind,
 )
 from .schtask import SchtaskDefinition, SchtaskState  # noqa: F401
@@ -34,7 +34,7 @@ class TaskDefinition(BaseModel):
 
     name: str = Field(description="The name of the task.")
     description: str = Field(description="A description of the task's purpose.")
-    registries: list[RegistryEntryDefinition | RegistryKeyDefinition] = Field(
+    registries: list[RegistryPathDefinition] = Field(
         default=[],
         description="The registry values to be modified.",
     )
@@ -69,7 +69,11 @@ class TaskDefinition(BaseModel):
             [
                 e.generate_set_script(mode)
                 for e in (
-                    self.registries
+                    [
+                        registry_item
+                        for registry_path in self.registries
+                        for registry_item in [registry_path, *registry_path.entries]
+                    ]
                     + self.scheduled_tasks
                     + self.services
                     + [self.script]

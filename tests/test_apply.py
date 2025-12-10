@@ -1,6 +1,13 @@
 import pytest
 
-from winconfig.dsl.definition import ACCESS_DENIED, NOT_EXIST, TaskDefinition, TaskMode
+from winconfig.dsl.definition import (
+    ACCESS_DENIED,
+    NOT_EXIST,
+    RegistryEntryDefinition,
+    RegistryPathDefinition,
+    TaskDefinition,
+    TaskMode,
+)
 from winconfig.engine.powershell import PowershellRunspace
 
 
@@ -8,19 +15,24 @@ def test_apply_resitory(
     runtime_set: tuple[PowershellRunspace, TaskDefinition], mode: TaskMode
 ):
     powershell, task_definition = runtime_set
-    for registry in task_definition.registries:
-        res = powershell.run(registry.generate_set_script(mode))
-        if res == ACCESS_DENIED:
-            # pytest.skip("Access denied: need workaround")
-            continue
+    for registry_path in task_definition.registries:
+        registry_items: list[RegistryPathDefinition | RegistryEntryDefinition] = [
+            registry_path,
+            *registry_path.entries,
+        ]
+        for registry_item in registry_items:
+            res = powershell.run(registry_item.generate_set_script(mode))
+            if res == ACCESS_DENIED:
+                # pytest.skip("Access denied: need workaround")
+                continue
 
-        current_value = powershell.run(registry.generate_get_script())
-        if mode == TaskMode.SKIP:
-            continue
-        expected_value = registry.resolve_value(mode)
-        assert current_value == expected_value, (
-            f"[{registry.full_path}]'s value '{current_value}' != '{expected_value}'"
-        )
+            current_value = powershell.run(registry_item.generate_get_script())
+            if mode == TaskMode.SKIP:
+                continue
+            expected_value = registry_item.resolve_value(mode)
+            assert current_value == expected_value, (
+                f"[{registry_item.full_path}]'s value '{current_value}' != '{expected_value}'"
+            )
 
 
 def test_apply_scheduled_task(

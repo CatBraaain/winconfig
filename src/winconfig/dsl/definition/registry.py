@@ -1,12 +1,8 @@
 import re
 from textwrap import dedent, indent
-from typing import Literal
+from typing import Any, Literal
 
-from pydantic import (
-    BaseModel,
-    Field,
-    field_validator,
-)
+from pydantic import BaseModel, ConfigDict, Field, PrivateAttr, field_validator
 
 from winconfig.dsl.task_plan import ApplyMode, TaskMode
 
@@ -31,8 +27,28 @@ type RegistryValueKind = Literal[
 ]
 
 
-class RegistryBaseDefinition(BaseModel):
+class RegistryPathDefinition(BaseModel):
+    """Represents a single registry key and entry(s) to be modified."""
+
+    model_config = ConfigDict(extra="forbid")
+
     path: str = Field(description="The path to the registry key.")
+    old_existance: NotChangeType | ExistType | NotExistType = Field(
+        default=EXIST,
+        description="The default existance of the registry key.",
+    )
+    new_existance: NotChangeType | ExistType | NotExistType = Field(
+        default=EXIST,
+        description="The desired existance of the registry key.",
+    )
+    entries: list["RegistryEntryDefinition"] = Field(
+        default=[],
+        description="The registry entries to be modified.",
+    )
+
+    def model_post_init(self, _: Any) -> None:  # noqa: ANN401
+        for entry in self.entries:
+            entry._parent = self  # noqa: SLF001
 
     @field_validator("path", mode="after")
     @staticmethod
@@ -58,103 +74,18 @@ class RegistryBaseDefinition(BaseModel):
     def registry_path(self) -> str:
         return f"Registry::{self.path.replace('*', '``*')}"
 
-    def with_error_handler(self, script: str) -> str:
-        return f"""
-            try {{
-                {indent(dedent(script), " " * 4).lstrip()}
-            }}
-            catch [System.Management.Automation.ItemNotFoundException] {{
-                "{NOT_EXIST}"
-            }}
-            catch [System.Management.Automation.PSArgumentException] {{
-                "{NOT_EXIST}"
-            }}
-            catch [System.UnauthorizedAccessException] {{
-                "{ACCESS_DENIED}"
-            }}
-            catch [System.Security.SecurityException] {{
-                "{PERMISSION_DENIED}"
-            }}
-        """
-
-
-class RegistryEntryDefinition(RegistryBaseDefinition):
-    """Represents a single registry entry value to be modified."""
-
-    name: str = Field(description="The name of the registry value.")
-    type: RegistryValueKind = Field(description="The type of the registry value.")
-    old_value: str | NotExistType = Field(
-        description="The default value of the registry entry."
-    )
-    new_value: str | NotExistType = Field(
-        description="The desired value of the registry entry."
-    )
-
     @property
     def full_path(self) -> str:
-        return f"{self.path}\\{self.name}"
-
-    def resolve_value(self, mode: ApplyMode) -> str:
-        match mode:
-            case TaskMode.APPLY:
-                return self.new_value
-            case TaskMode.REVERT:
-                return self.old_value
-            case _:
-                raise ValueError(f"Invalid mode: {mode}")
-
-    def generate_set_script(self, mode: TaskMode) -> str:
-        if mode == TaskMode.SKIP:
-            return ""
-        value = self.resolve_value(mode)
-        if self.type == "Binary":
-            psvalue = f'("{value.replace('"', '`"')}".split(" ") | % {{ [byte]$_ }})'
-        else:
-            psvalue = f'"{value.replace('"', '`"')}"'
-
-        set_entry = rf"""
-            if (!(Test-Path "{self.registry_path}")) {{
-                New-Item -Path "{self.registry_path.replace("``*", "*")}" -Force -ErrorAction Stop | Out-Null
-            }}
-        """ + self.with_error_handler(rf"""
-            Set-ItemProperty -Path "{self.registry_path}" -Name "{self.name}" -Type "{self.type}" -Value {psvalue} -Force -ErrorAction Stop | Out-Null
-        """)
-        remove_entry = self.with_error_handler(rf"""
-            Remove-ItemProperty -Path "{self.registry_path}" -Name "{self.name}" -Force -ErrorAction Stop | Out-Null
-        """)
-        script = set_entry if value != NOT_EXIST else remove_entry
-
-        return dedent(script)
-
-    def generate_get_script(self) -> str:
-        get_entry = self.with_error_handler(rf"""
-            Get-ItemPropertyValue -Path "{self.registry_path}" -Name "{self.name}" -ErrorAction Stop
-        """)
-        return dedent(get_entry)
-
-
-class RegistryKeyDefinition(RegistryBaseDefinition):
-    """Represents a single registry key to be modified."""
-
-    old_value: NotChangeType | ExistType | NotExistType = Field(
-        description="The default value of the registry entry."
-    )
-    new_value: NotChangeType | ExistType | NotExistType = Field(
-        description="The desired value of the registry entry."
-    )
-
-    @property
-    def full_path(self) -> str:
-        return f"{self.registry_path}"
+        return f"{self.path}"
 
     def resolve_value(
         self, mode: ApplyMode
     ) -> NotChangeType | ExistType | NotExistType:
         match mode:
             case TaskMode.APPLY:
-                return self.new_value
+                return self.new_existance
             case TaskMode.REVERT:
-                return self.old_value
+                return self.old_existance
             case _:
                 raise ValueError(f"Invalid mode: {mode}")
 
@@ -165,7 +96,7 @@ class RegistryKeyDefinition(RegistryBaseDefinition):
 
         add_key = rf"""
             if (!(Test-Path "{self.registry_path}")) {{
-                New-Item -Path "{self.registry_path}" -Force -ErrorAction Stop | Out-Null
+                New-Item -Path "{self.registry_path.replace("``*", "*")}" -Force -ErrorAction Stop | Out-Null
             }}
         """
         remove_key = rf"""
@@ -192,4 +123,82 @@ class RegistryKeyDefinition(RegistryBaseDefinition):
                 "{NOT_EXIST}"
             }}
         """
+        return dedent(get_entry)
+
+
+class RegistryEntryDefinition(BaseModel):
+    """Represents a single registry entry value to be modified."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    name: str = Field(description="The name of the registry value.")
+    type: RegistryValueKind = Field(description="The type of the registry value.")
+    old_value: str | NotExistType = Field(
+        description="The default value of the registry entry."
+    )
+    new_value: str | NotExistType = Field(
+        description="The desired value of the registry entry."
+    )
+
+    _parent: RegistryPathDefinition = PrivateAttr(default=None)  # pyright: ignore[reportAssignmentType]
+
+    @property
+    def registry_path(self) -> str:
+        return f"{self._parent.registry_path}"
+
+    @property
+    def full_path(self) -> str:
+        return f"{self._parent.path}\\{self.name}"
+
+    def resolve_value(self, mode: ApplyMode) -> str:
+        match mode:
+            case TaskMode.APPLY:
+                return self.new_value
+            case TaskMode.REVERT:
+                return self.old_value
+            case _:
+                raise ValueError(f"Invalid mode: {mode}")
+
+    def with_error_handler(self, script: str) -> str:
+        return f"""
+            try {{
+                {indent(dedent(script), " " * 4).lstrip()}
+            }}
+            catch [System.Management.Automation.ItemNotFoundException] {{
+                "{NOT_EXIST}"
+            }}
+            catch [System.Management.Automation.PSArgumentException] {{
+                "{NOT_EXIST}"
+            }}
+            catch [System.UnauthorizedAccessException] {{
+                "{ACCESS_DENIED}"
+            }}
+            catch [System.Security.SecurityException] {{
+                "{PERMISSION_DENIED}"
+            }}
+        """
+
+    def generate_set_script(self, mode: TaskMode) -> str:
+        if mode == TaskMode.SKIP:
+            return ""
+        value = self.resolve_value(mode)
+        if self.type == "Binary":
+            psvalue = f'("{value.replace('"', '`"')}".split(" ") | % {{ [byte]$_ }})'
+        else:
+            psvalue = f'"{value.replace('"', '`"')}"'
+
+        set_entry = self.with_error_handler(rf"""
+            Set-ItemProperty -Path "{self.registry_path}" -Name "{self.name}" -Type "{self.type}" -Value {psvalue} -Force -ErrorAction Stop | Out-Null
+        """)
+        remove_entry = self.with_error_handler(rf"""
+            Remove-ItemProperty -Path "{self.registry_path}" -Name "{self.name}" -Force -ErrorAction Stop | Out-Null
+        """)
+        script = set_entry if value != NOT_EXIST else remove_entry
+
+        return dedent(script)
+
+    def generate_get_script(self) -> str:
+        get_entry = self.with_error_handler(rf"""
+            Get-ItemPropertyValue -Path "{self.registry_path}" -Name "{self.name}" -ErrorAction Stop
+        """)
         return dedent(get_entry)
