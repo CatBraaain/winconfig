@@ -24,4 +24,4 @@ type ApplyMode = Literal[TaskMode.APPLY, TaskMode.REVERT]
 
 
 class TaskPlan(RootModel):
-    root: dict[str, TaskMode] = {}
+    root: dict[str, dict[str, TaskMode]] = {}

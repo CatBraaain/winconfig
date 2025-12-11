@@ -84,12 +84,15 @@ class TaskDefinition(TaskDefinitionBody):
 class Definition(RootModel):
     """The root model for a winconfig definition file."""
 
-    root: dict[str, TaskDefinitionBody] = Field(
+    root: dict[str, dict[str, TaskDefinitionBody]] = Field(
         default={}, description="The list of configuration tasks to be applied."
     )
 
-    def get_task_definition(self, task_name: str) -> TaskDefinition:
-        td_body = self.root.get(task_name)
+    def get_task_definition(self, task_group: str, task_name: str) -> TaskDefinition:
+        td_group = self.root.get(task_group)
+        if td_group is None:
+            raise ValueError(f"Task group {task_group} not found")
+        td_body = td_group.get(task_name)
         if td_body is None:
             raise ValueError(f"Task definition {task_name} not found")
         return TaskDefinition.model_validate(

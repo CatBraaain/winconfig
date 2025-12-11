@@ -1,6 +1,7 @@
 import json
 
 import typer
+from pydantic import BaseModel
 
 from winconfig.cli.cli_utils import (
     DryRunParam,
@@ -67,9 +68,17 @@ def generate_task_plan_schema(
         schema_dict = generate_schema(TaskPlan)
         if strict_names:
             definition = ModelLoader.load_definitions(extra_definition_paths)
-            schema_dict["propertyNames"] = {
-                "enum": list(definition.root.keys()),
-                "type": "string",
+            schema_dict["additionalProperties"] = False
+            schema_dict["properties"] = {
+                task_group_name: {
+                    "type": "object",
+                    "properties": {
+                        task_name: {"$ref": "#/$defs/TaskMode"}
+                        for task_name in task_group
+                    },
+                    "additionalProperties": False,
+                }
+                for task_group_name, task_group in definition.root.items()
             }
         schema = json.dumps(schema_dict, ensure_ascii=False, indent=2)
         handle_output(content=schema, output_path=output)

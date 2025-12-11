@@ -28,21 +28,24 @@ class TaskBuilder:
         powershell = PowershellRunspace()
         logger.debug(f"Setup PowerShell: version {powershell.runspace.Version}")
 
-        for task_name, planed_mode in self.plan.root.items():
-            task_definition = self.definition.get_task_definition(task_name)
-            mode = planed_mode.resolve(reverse)
-            script = task_definition.generate_script(mode).strip()
-            try:
-                stdout = powershell.run(script)
-                logger.info(f"Success: {task_name}[{mode.value}]")
-                if PERMISSION_DENIED in stdout:
-                    raise Exception(
-                        "Administrator privileges required for this operation"
-                    )
-            except Exception as e:
-                logger.error(f"Fail: {task_name}[{mode.value}]: {e}")
-                raise
-            finally:
-                logger.debug(
-                    f"{task_name}[{mode.value}]:\n```powershell\n{script}\n```"
+        for task_group_name, task_group in self.plan.root.items():
+            for task_name, planed_mode in task_group.items():
+                task_definition = self.definition.get_task_definition(
+                    task_group_name, task_name
                 )
+                mode = planed_mode.resolve(reverse)
+                script = task_definition.generate_script(mode).strip()
+                try:
+                    stdout = powershell.run(script)
+                    logger.info(f"Success: {task_name}[{mode.value}]")
+                    if PERMISSION_DENIED in stdout:
+                        raise Exception(
+                            "Administrator privileges required for this operation"
+                        )
+                except Exception as e:
+                    logger.error(f"Fail: {task_name}[{mode.value}]: {e}")
+                    raise
+                finally:
+                    logger.debug(
+                        f"{task_name}[{mode.value}]:\n```powershell\n{script}\n```"
+                    )

@@ -33,10 +33,11 @@ def generate_runtime_sets() -> list[tuple[PowershellRunspace, TaskDefinition]]:
     runtime_sets = [
         (
             runspace,
-            TaskDefinition.model_validate({"name": name, **td_body.model_dump()}),
+            definition.get_task_definition(task_group_name, task_name),
         )
         for (runspace, definition) in runspace_with_definition
-        for name, td_body in definition.root.items()
+        for task_group_name, task_group in definition.root.items()
+        for task_name in task_group
     ]
     return runtime_sets
 

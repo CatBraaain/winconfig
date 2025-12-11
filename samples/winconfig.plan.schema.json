@@ -6,76 +6,273 @@
       "type": "string"
     }
   },
-  "additionalProperties": {
-    "$ref": "#/$defs/TaskMode"
-  },
+  "additionalProperties": false,
   "default": {},
   "type": "object",
-  "propertyNames": {
-    "enum": [
-      "SystemDarkMode",
-      "AppDarkMode",
-      "DisableWindowsSuggestions",
-      "TaskbarAlignmentLeft",
-      "EnableTaskbarEndTask",
-      "HideTaskbarSearch",
-      "HideTaskbarTaskView",
-      "HideTaskbarWidgets",
-      "RemoveCopilot",
-      "ShowClockSeconds",
-      "ShowMultiMonitorTaskbar",
-      "HideDesktopRecycleBin",
-      "ShowSidePanelClock",
-      "HideSettingsSuggestions",
-      "DisableStartMenuBingSearch",
-      "HideStartMenuRecommendations",
-      "HideStartMenuAccountNotifications",
-      "EnableGodMode",
-      "ShowHiddenFiles",
-      "ShowFileExtensions",
-      "HideExplorerHome",
-      "HideExplorerGallery",
-      "DisableOneDrive",
-      "DisableExplorerGroupView",
-      "EnableExplorerRestoreLastSession",
-      "DisableExplorerCheckBoxes",
-      "HideExplorerRecentFiles",
-      "HideExplorerFrequentFolders",
-      "DisableAutoShortcutsSuffix",
-      "DisableUnsafeFileWarning",
-      "DisableSmartAppControl",
-      "EnableClassicContextMenu",
-      "DisableContextMenuLimit",
-      "HideClipchampContextMenu",
-      "HideEditWithPhotos",
-      "HideEditWithPaint",
-      "HideEditWithNotepad",
-      "HideExtractAll",
-      "HideOpenInWindowsTerminal",
-      "HidePrint",
-      "HideCompressedFolder",
-      "HideSearchMsStore",
-      "HideShare",
-      "HideAddToFavorite",
-      "HidePreviousVersions",
-      "HideSendTo",
-      "HideAddToLibrary",
-      "HideGiveAccessTo",
-      "DisableMouseAcceleration",
-      "DisableF1HelpPage",
-      "DisableStickyShift",
-      "FastKeyRepeat",
-      "DisableTouchPad",
-      "DisableSystemSound",
-      "DisableAutoDeleteTemp",
-      "DisableXboxGameBar",
-      "EnableWindowsRestoreLastSession",
-      "EnableHighPerformancePlan",
-      "DisableAutoSleep",
-      "OpenWithCode",
-      "EditMouseSensitivity",
-      "EditWindowsPATH"
-    ],
-    "type": "string"
+  "properties": {
+    "Appearance": {
+      "type": "object",
+      "properties": {
+        "SystemDarkMode": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "AppDarkMode": {
+          "$ref": "#/$defs/TaskMode"
+        }
+      },
+      "additionalProperties": false
+    },
+    "Suggestions": {
+      "type": "object",
+      "properties": {
+        "DisableWindowsSuggestions": {
+          "$ref": "#/$defs/TaskMode"
+        }
+      },
+      "additionalProperties": false
+    },
+    "Taskbar": {
+      "type": "object",
+      "properties": {
+        "TaskbarAlignmentLeft": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "EnableTaskbarEndTask": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "HideTaskbarSearch": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "HideTaskbarTaskView": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "HideTaskbarWidgets": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "RemoveCopilot": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "ShowClockSeconds": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "ShowMultiMonitorTaskbar": {
+          "$ref": "#/$defs/TaskMode"
+        }
+      },
+      "additionalProperties": false
+    },
+    "DesktopSidePanelSettings": {
+      "type": "object",
+      "properties": {
+        "HideDesktopRecycleBin": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "ShowSidePanelClock": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "HideSettingsSuggestions": {
+          "$ref": "#/$defs/TaskMode"
+        }
+      },
+      "additionalProperties": false
+    },
+    "StartMenu": {
+      "type": "object",
+      "properties": {
+        "DisableStartMenuBingSearch": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "HideStartMenuRecommendations": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "HideStartMenuAccountNotifications": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "EnableGodMode": {
+          "$ref": "#/$defs/TaskMode"
+        }
+      },
+      "additionalProperties": false
+    },
+    "Explorer": {
+      "type": "object",
+      "properties": {
+        "ShowHiddenFiles": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "ShowFileExtensions": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "HideExplorerHome": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "HideExplorerGallery": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "DisableOneDrive": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "DisableExplorerGroupView": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "EnableExplorerRestoreLastSession": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "DisableExplorerCheckBoxes": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "HideExplorerRecentFiles": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "HideExplorerFrequentFolders": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "DisableAutoShortcutsSuffix": {
+          "$ref": "#/$defs/TaskMode"
+        }
+      },
+      "additionalProperties": false
+    },
+    "Security": {
+      "type": "object",
+      "properties": {
+        "DisableUnsafeFileWarning": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "DisableSmartAppControl": {
+          "$ref": "#/$defs/TaskMode"
+        }
+      },
+      "additionalProperties": false
+    },
+    "Context Menu": {
+      "type": "object",
+      "properties": {
+        "EnableClassicContextMenu": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "DisableContextMenuLimit": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "HideClipchampContextMenu": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "HideEditWithPhotos": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "HideEditWithPaint": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "HideEditWithNotepad": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "HideExtractAll": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "HideOpenInWindowsTerminal": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "HidePrint": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "HideCompressedFolder": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "HideSearchMsStore": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "HideShare": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "HideAddToFavorite": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "HidePreviousVersions": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "HideSendTo": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "HideAddToLibrary": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "HideGiveAccessTo": {
+          "$ref": "#/$defs/TaskMode"
+        }
+      },
+      "additionalProperties": false
+    },
+    "MouseKeyboard": {
+      "type": "object",
+      "properties": {
+        "DisableMouseAcceleration": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "DisableF1HelpPage": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "DisableStickyShift": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "FastKeyRepeat": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "DisableTouchPad": {
+          "$ref": "#/$defs/TaskMode"
+        }
+      },
+      "additionalProperties": false
+    },
+    "Sound": {
+      "type": "object",
+      "properties": {
+        "DisableSystemSound": {
+          "$ref": "#/$defs/TaskMode"
+        }
+      },
+      "additionalProperties": false
+    },
+    "Background": {
+      "type": "object",
+      "properties": {
+        "DisableAutoDeleteTemp": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "DisableXboxGameBar": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "EnableWindowsRestoreLastSession": {
+          "$ref": "#/$defs/TaskMode"
+        }
+      },
+      "additionalProperties": false
+    },
+    "PowerPlan": {
+      "type": "object",
+      "properties": {
+        "EnableHighPerformancePlan": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "DisableAutoSleep": {
+          "$ref": "#/$defs/TaskMode"
+        }
+      },
+      "additionalProperties": false
+    },
+    "Personalization": {
+      "type": "object",
+      "properties": {
+        "OpenWithCode": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "EditMouseSensitivity": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "EditWindowsPATH": {
+          "$ref": "#/$defs/TaskMode"
+        }
+      },
+      "additionalProperties": false
+    }
   }
 }

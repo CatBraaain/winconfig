@@ -242,7 +242,10 @@
     }
   },
   "additionalProperties": {
-    "$ref": "#/$defs/TaskDefinitionBody"
+    "additionalProperties": {
+      "$ref": "#/$defs/TaskDefinitionBody"
+    },
+    "type": "object"
   },
   "default": {},
   "description": "The root model for a winconfig definition file.",
