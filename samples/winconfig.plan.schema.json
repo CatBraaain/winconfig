@@ -22,16 +22,19 @@
       },
       "additionalProperties": false
     },
-    "Suggestions": {
+    "Windows": {
       "type": "object",
       "properties": {
         "DisableWindowsSuggestions": {
+          "$ref": "#/$defs/TaskMode"
+        },
+        "EnableWindowsRestoreLastSession": {
           "$ref": "#/$defs/TaskMode"
         }
       },
       "additionalProperties": false
     },
-    "Taskbar": {
+    "DesktopTaskbar": {
       "type": "object",
       "properties": {
         "TaskbarAlignmentLeft": {
@@ -40,13 +43,13 @@
         "EnableTaskbarEndTask": {
           "$ref": "#/$defs/TaskMode"
         },
-        "HideTaskbarSearch": {
+        "HideSearch": {
           "$ref": "#/$defs/TaskMode"
         },
-        "HideTaskbarTaskView": {
+        "HideTaskView": {
           "$ref": "#/$defs/TaskMode"
         },
-        "HideTaskbarWidgets": {
+        "HideWidgets": {
           "$ref": "#/$defs/TaskMode"
         },
         "RemoveCopilot": {
@@ -57,19 +60,19 @@
         },
         "ShowMultiMonitorTaskbar": {
           "$ref": "#/$defs/TaskMode"
-        }
-      },
-      "additionalProperties": false
-    },
-    "DesktopSidePanelSettings": {
-      "type": "object",
-      "properties": {
+        },
         "HideDesktopRecycleBin": {
           "$ref": "#/$defs/TaskMode"
         },
         "ShowSidePanelClock": {
           "$ref": "#/$defs/TaskMode"
-        },
+        }
+      },
+      "additionalProperties": false
+    },
+    "SettingsApp": {
+      "type": "object",
+      "properties": {
         "HideSettingsSuggestions": {
           "$ref": "#/$defs/TaskMode"
         }
@@ -103,28 +106,28 @@
         "ShowFileExtensions": {
           "$ref": "#/$defs/TaskMode"
         },
-        "HideExplorerHome": {
+        "HideHome": {
           "$ref": "#/$defs/TaskMode"
         },
-        "HideExplorerGallery": {
+        "HideGallery": {
           "$ref": "#/$defs/TaskMode"
         },
         "DisableOneDrive": {
           "$ref": "#/$defs/TaskMode"
         },
-        "DisableExplorerGroupView": {
+        "DisableGroupView": {
           "$ref": "#/$defs/TaskMode"
         },
-        "EnableExplorerRestoreLastSession": {
+        "EnableRestoreLastSession": {
           "$ref": "#/$defs/TaskMode"
         },
-        "DisableExplorerCheckBoxes": {
+        "DisableCheckBoxes": {
           "$ref": "#/$defs/TaskMode"
         },
-        "HideExplorerRecentFiles": {
+        "HideRecentFiles": {
           "$ref": "#/$defs/TaskMode"
         },
-        "HideExplorerFrequentFolders": {
+        "HideFrequentFolders": {
           "$ref": "#/$defs/TaskMode"
         },
         "DisableAutoShortcutsSuffix": {
@@ -145,7 +148,7 @@
       },
       "additionalProperties": false
     },
-    "Context Menu": {
+    "ContextMenu": {
       "type": "object",
       "properties": {
         "EnableClassicContextMenu": {
@@ -154,7 +157,7 @@
         "DisableContextMenuLimit": {
           "$ref": "#/$defs/TaskMode"
         },
-        "HideClipchampContextMenu": {
+        "HideClipchamp": {
           "$ref": "#/$defs/TaskMode"
         },
         "HideEditWithPhotos": {
@@ -239,9 +242,6 @@
           "$ref": "#/$defs/TaskMode"
         },
         "DisableXboxGameBar": {
-          "$ref": "#/$defs/TaskMode"
-        },
-        "EnableWindowsRestoreLastSession": {
           "$ref": "#/$defs/TaskMode"
         }
       },

@@ -20,7 +20,7 @@ Appearance:
             new_value: "0"
             old_value: "1"
 
-Suggestions:
+Windows:
   DisableWindowsSuggestions:
     description: Disables the Windows welcome experience, tips, scoobe experience
     registries:
@@ -60,8 +60,17 @@ Suggestions:
             type: DWord
             new_value: "0"
             old_value: "1"
+  EnableWindowsRestoreLastSession:
+    description: Automatically reopen some apps that were opened last time when start OS
+    registries:
+      - path: HKCU:\Software\Microsoft\Windows NT\CurrentVersion\Winlogon
+        entries:
+          - name: RestartApps
+            type: DWord
+            new_value: "1"
+            old_value: "0"
 
-Taskbar:
+DesktopTaskbar:
   TaskbarAlignmentLeft:
     description: Show Taskbar Items on the Left
     registries:
@@ -80,7 +89,7 @@ Taskbar:
             type: DWord
             new_value: "1"
             old_value: <NotExist>
-  HideTaskbarSearch:
+  HideSearch:
     description: Hide Search Button on the taskbar.
     registries:
       - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Search
@@ -89,7 +98,7 @@ Taskbar:
             type: DWord
             new_value: "0"
             old_value: "1"
-  HideTaskbarTaskView:
+  HideTaskView:
     description: Hide Task View Button in Taskbar.
     registries:
       - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
@@ -98,7 +107,7 @@ Taskbar:
             type: DWord
             new_value: "0"
             old_value: "1"
-  HideTaskbarWidgets:
+  HideWidgets:
     description: Hide Widgets Button from Taskbar.
     registries:
       - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
@@ -136,8 +145,6 @@ Taskbar:
             type: DWord
             new_value: "1"
             old_value: "0"
-
-DesktopSidePanelSettings:
   HideDesktopRecycleBin:
     description: Hide the "Recycle Bin" icon from Desktop
     registries:
@@ -156,6 +163,8 @@ DesktopSidePanelSettings:
             type: DWord
             new_value: "1"
             old_value: "0"
+
+SettingsApp:
   HideSettingsSuggestions:
     description: Hide suggested content in the Settings
     registries:
@@ -251,7 +260,7 @@ Explorer:
             type: DWord
             new_value: "0"
             old_value: "1"
-  HideExplorerHome:
+  HideHome:
     description: Hide the Home from Explorer and sets This PC as default
     registries:
       - path: HKLM\Software\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}
@@ -268,7 +277,7 @@ Explorer:
             type: DWord
             new_value: "1"
             old_value: <NotExist>
-  HideExplorerGallery:
+  HideGallery:
     description: Hide the Gallery from Explorer and sets This PC as default
     registries:
       - path: HKLM\Software\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}
@@ -294,7 +303,7 @@ Explorer:
             type: DWord
             new_value: "1"
             old_value: <NotExist>
-  DisableExplorerGroupView:
+  DisableGroupView:
     description: Do not group files and folder in the Downloads folder
     registries:
       - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\FolderTypes\{885a186e-a440-4ada-812b-db871b942259}\TopViews\{00000000-0000-0000-0000-000000000000}
@@ -303,7 +312,7 @@ Explorer:
             type: String
             new_value: System.Null
             old_value: <NotExist>
-  EnableExplorerRestoreLastSession:
+  EnableRestoreLastSession:
     description: Restore the last session when open explroer
     registries:
       - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
@@ -312,7 +321,7 @@ Explorer:
             type: DWord
             new_value: "1"
             old_value: "0"
-  DisableExplorerCheckBoxes:
+  DisableCheckBoxes:
     description: Do not use item check boxes
     registries:
       - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
@@ -321,7 +330,7 @@ Explorer:
             type: DWord
             new_value: "0"
             old_value: "1"
-  HideExplorerRecentFiles:
+  HideRecentFiles:
     description: Hide recently used files in Explorer Quick Access, Start Menu recommendations, and Taskbar jump lists.
     registries:
       - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer
@@ -336,7 +345,7 @@ Explorer:
             type: DWord
             new_value: "0"
             old_value: "1"
-  HideExplorerFrequentFolders:
+  HideFrequentFolders:
     description: Hide frequently used folders in Explorer Quick Access
     registries:
       - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer
@@ -380,7 +389,7 @@ Security:
       apply: "CiTool --refresh --json"
       revert: "CiTool --refresh --json"
 
-Context Menu:
+ContextMenu:
   EnableClassicContextMenu:
     description: Enables good old context menus as it was like in win10
     registries:
@@ -403,7 +412,7 @@ Context Menu:
             type: DWord
             new_value: "300"
             old_value: <NotExist>
-  HideClipchampContextMenu:
+  HideClipchamp:
     description: Hide the "Edit with Clipchamp" item from context menu
     registries:
       - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked
@@ -689,15 +698,6 @@ Background:
             type: DWord
             new_value: "0"
             old_value: "1"
-  EnableWindowsRestoreLastSession:
-    description: Automatically reopen some apps that were opened last time when start OS
-    registries:
-      - path: HKCU:\Software\Microsoft\Windows NT\CurrentVersion\Winlogon
-        entries:
-          - name: RestartApps
-            type: DWord
-            new_value: "1"
-            old_value: "0"
 
 PowerPlan:
   EnableHighPerformancePlan:

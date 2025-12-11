@@ -4,22 +4,23 @@ Appearance:
   SystemDarkMode: apply
   AppDarkMode: apply
 
-Suggestions:
+Windows:
   DisableWindowsSuggestions: apply
+  EnableWindowsRestoreLastSession: skip
 
-Taskbar:
+DesktopTaskbar:
   TaskbarAlignmentLeft: apply
   EnableTaskbarEndTask: apply
-  HideTaskbarSearch: apply
-  HideTaskbarTaskView: apply
-  HideTaskbarWidgets: apply
+  HideSearch: apply
+  HideTaskView: apply
+  HideWidgets: apply
   RemoveCopilot: apply
   ShowClockSeconds: apply
   ShowMultiMonitorTaskbar: apply
-
-DesktopSidePanelSettings:
   HideDesktopRecycleBin: apply
   ShowSidePanelClock: apply
+
+SettingsApp:
   HideSettingsSuggestions: apply
 
 StartMenu:
@@ -31,24 +32,24 @@ StartMenu:
 Explorer:
   ShowHiddenFiles: apply
   ShowFileExtensions: apply
-  HideExplorerHome: apply
-  HideExplorerGallery: apply
+  HideHome: apply
+  HideGallery: apply
   DisableOneDrive: apply
-  DisableExplorerGroupView: apply
-  EnableExplorerRestoreLastSession: revert
-  DisableExplorerCheckBoxes: apply
-  HideExplorerRecentFiles: apply
-  HideExplorerFrequentFolders: apply
+  DisableGroupView: apply
+  EnableRestoreLastSession: revert
+  DisableCheckBoxes: apply
+  HideRecentFiles: apply
+  HideFrequentFolders: apply
   DisableAutoShortcutsSuffix: apply
 
 Security:
   DisableUnsafeFileWarning: apply
   DisableSmartAppControl: apply
 
-Context Menu:
+ContextMenu:
   EnableClassicContextMenu: apply
   DisableContextMenuLimit: apply
-  HideClipchampContextMenu: apply
+  HideClipchamp: apply
   HideEditWithPhotos: apply
   HideEditWithPaint: apply
   HideEditWithNotepad: apply
@@ -77,7 +78,6 @@ Sound:
 Background:
   DisableAutoDeleteTemp: apply
   DisableXboxGameBar: apply
-  EnableWindowsRestoreLastSession: skip
 
 PowerPlan:
   EnableHighPerformancePlan: apply
