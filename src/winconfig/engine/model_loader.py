@@ -29,7 +29,11 @@ class ModelLoader:
             for definition_path in definition_paths
         ]
         merged_definition = Definition.model_validate(
-            [td for d in definitions for td in d.root]
+            {
+                name: body
+                for definition in definitions
+                for name, body in definition.root.items()
+            }
         )
         return merged_definition
 
@@ -42,9 +46,8 @@ class ModelLoader:
         if available_definition is None:
             available_definition = cls.load_definitions([])
 
-        available_tasks = {d.name for d in available_definition.root}
         for task_name in task_plan.root:
-            if task_name not in available_tasks:
+            if task_name not in available_definition.root:
                 raise Exception(f"task {task_name} not found in definition")
 
         return task_plan

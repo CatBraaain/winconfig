@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=../src/winconfig/resources/builtin.definition.schema.json
 
-- name: OpenWithCode
+OpenWithCode:
   description: Add the "Open with Code" item to context menu
   registries:
     - path: HKCR\*\shell\VSCode
@@ -87,7 +87,7 @@
           new_value: "\"%LocalAppData%\\Programs\\Microsoft VS Code\\Code.exe\" \"%V\""
           old_value: <NotExist>
 
-- name: EditMouseSensitivity
+EditMouseSensitivity:
   description: Set mouse sensitivity
   registries:
     - path: HKCU\Control Panel\Mouse
@@ -97,7 +97,7 @@
           new_value: "12"
           old_value: "10"
 
-- name: EditWindowsPATH
+EditWindowsPATH:
   description: Edit windows path
   script:
     apply: |-

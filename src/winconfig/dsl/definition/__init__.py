@@ -24,10 +24,9 @@ from .script import ScriptDefinition
 from .service import ServiceDefinition, ServiceStartupType  # noqa: F401
 
 
-class TaskDefinition(BaseModel):
+class TaskDefinitionBody(BaseModel):
     """A single, self-contained configuration task."""
 
-    name: str = Field(description="The name of the task.")
     description: str = Field(description="A description of the task's purpose.")
     registries: list[RegistryPathDefinition] = Field(
         default=[],
@@ -59,6 +58,10 @@ class TaskDefinition(BaseModel):
         },
     )
 
+
+class TaskDefinition(TaskDefinitionBody):
+    name: str = Field(description="The name of the task.")
+
     def generate_script(self, mode: TaskMode) -> str:
         script = "\n".join(
             [
@@ -81,12 +84,14 @@ class TaskDefinition(BaseModel):
 class Definition(RootModel):
     """The root model for a winconfig definition file."""
 
-    root: list[TaskDefinition] = Field(
-        default=[], description="The list of configuration tasks to be applied."
+    root: dict[str, TaskDefinitionBody] = Field(
+        default={}, description="The list of configuration tasks to be applied."
     )
 
     def get_task_definition(self, task_name: str) -> TaskDefinition:
-        task = next((x for x in reversed(self.root) if x.name == task_name), None)
-        if task is None:
+        td_body = self.root.get(task_name)
+        if td_body is None:
             raise ValueError(f"Task definition {task_name} not found")
-        return task
+        return TaskDefinition.model_validate(
+            {"name": task_name, **td_body.model_dump()}
+        )

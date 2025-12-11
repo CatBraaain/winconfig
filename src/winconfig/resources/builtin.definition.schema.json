@@ -182,7 +182,7 @@
       ],
       "type": "string"
     },
-    "TaskDefinition": {
+    "TaskDefinitionBody": {
       "additionalProperties": false,
       "anyOf": [
         {
@@ -200,10 +200,6 @@
       ],
       "description": "A single, self-contained configuration task.",
       "properties": {
-        "name": {
-          "description": "The name of the task.",
-          "type": "string"
-        },
         "description": {
           "description": "A description of the task's purpose.",
           "type": "string"
@@ -241,14 +237,14 @@
           "description": "Custom PowerShell scripts for actions not covered by registry, services, or scheduled tasks."
         }
       },
-      "required": ["name", "description"],
+      "required": ["description"],
       "type": "object"
     }
   },
-  "default": [],
-  "description": "The root model for a winconfig definition file.",
-  "items": {
-    "$ref": "#/$defs/TaskDefinition"
+  "additionalProperties": {
+    "$ref": "#/$defs/TaskDefinitionBody"
   },
-  "type": "array"
+  "default": {},
+  "description": "The root model for a winconfig definition file.",
+  "type": "object"
 }

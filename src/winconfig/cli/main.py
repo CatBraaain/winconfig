@@ -68,7 +68,7 @@ def generate_task_plan_schema(
         if strict_names:
             definition = ModelLoader.load_definitions(extra_definition_paths)
             schema_dict["propertyNames"] = {
-                "enum": [td.name for td in definition.root],
+                "enum": list(definition.root.keys()),
                 "type": "string",
             }
         schema = json.dumps(schema_dict, ensure_ascii=False, indent=2)
