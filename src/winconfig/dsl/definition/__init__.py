@@ -1,8 +1,3 @@
-import subprocess
-from pathlib import Path
-from typing import Any
-
-import yaml
 from pydantic import (
     BaseModel,
     ConfigDict,
@@ -95,29 +90,3 @@ class Definition(RootModel):
         if task is None:
             raise ValueError(f"Task definition {task_name} not found")
         return task
-
-    def output_yaml(self, dist_path: str) -> None:
-        def str_presenter(dumper: Any, data: Any) -> Any:  # noqa: ANN401
-            if len(data.splitlines()) > 1:
-                return dumper.represent_scalar(
-                    "tag:yaml.org,2002:str",
-                    data.removeprefix("\ufeff").replace("\t", "    "),
-                    style="|",
-                )
-            return dumper.represent_scalar("tag:yaml.org,2002:str", data)
-
-        yaml.add_representer(str, str_presenter)
-
-        schema_ref_str = "# yaml-language-server: $schema=./schema.json"
-        yaml_str = (
-            schema_ref_str
-            + "\n\n"
-            + yaml.dump(
-                self.model_dump(exclude_defaults=True),
-                allow_unicode=True,
-                sort_keys=False,
-            )
-        )
-
-        Path(dist_path).write_text(yaml_str, encoding="utf-8")
-        subprocess.run(["bunx", "prettier", "--write", f'"{dist_path}"'], check=True)
