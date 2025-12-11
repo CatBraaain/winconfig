@@ -61,6 +61,11 @@ class TaskDefinitionBody(BaseModel):
 
 class TaskDefinition(TaskDefinitionBody):
     name: str = Field(description="The name of the task.")
+    group: str = Field(description="The group of the task.")
+
+    @property
+    def full_name(self) -> str:
+        return f"{self.group} - {self.name}"
 
     def generate_script(self, mode: TaskMode) -> str:
         script = "\n".join(
@@ -88,13 +93,15 @@ class Definition(RootModel):
         default={}, description="The list of configuration tasks to be applied."
     )
 
-    def get_task_definition(self, task_group: str, task_name: str) -> TaskDefinition:
-        td_group = self.root.get(task_group)
+    def get_task_definition(
+        self, task_group_name: str, task_name: str
+    ) -> TaskDefinition:
+        td_group = self.root.get(task_group_name)
         if td_group is None:
-            raise ValueError(f"Task group {task_group} not found")
+            raise ValueError(f"Task group {task_group_name} not found")
         td_body = td_group.get(task_name)
         if td_body is None:
             raise ValueError(f"Task definition {task_name} not found")
         return TaskDefinition.model_validate(
-            {"name": task_name, **td_body.model_dump()}
+            {"name": task_name, "group": task_group_name, **td_body.model_dump()}
         )
