@@ -14,12 +14,14 @@ apply:
 test:
   powershell.exe -ExecutionPolicy Bypass -File tests/run_test_in_wsb.ps1 -Headless false
 
-build:
+pyinstaller:
   uv run pyinstaller \
     --onefile src/winconfig/cli/main.py \
     --add-data "src/winconfig/resources:winconfig/resources" \
     -n winconfig --workpath dist --uac-admin --noconfirm
-  # uv run nuitka --mode=onefile src/winconfig/cli/main.py --output-filename=winconfig --mingw64 --output-dir=dist --windows-uac-admin --assume-yes-for-downloads
+
+nuitka:
+  uv run nuitka --mode=onefile src/winconfig/cli/main.py --output-filename=winconfig --mingw64 --output-dir=dist --windows-uac-admin --assume-yes-for-downloads
 
 schema:
   uv run src/winconfig/cli/main.py schema taskplan --output {{winconfig_schema}} -e {{additional_definition}}
