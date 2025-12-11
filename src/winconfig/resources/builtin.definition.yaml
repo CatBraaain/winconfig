@@ -19,6 +19,7 @@
           type: DWord
           new_value: "0"
           old_value: "1"
+
 ### Suggestions ###
 - name: DisableWindowsSuggestions
   description: Disables the Windows welcome experience, tips, scoobe experience
