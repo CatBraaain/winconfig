@@ -68,8 +68,8 @@ def generate_task_plan_schema(
         schema_dict = generate_schema(TaskPlan)
         if strict_names:
             definition = ModelLoader.load_definitions(extra_definition_paths)
-            schema_dict["additionalProperties"] = False
-            schema_dict["properties"] = {
+            schema_dict["properties"]["Plan"]["additionalProperties"] = False
+            schema_dict["properties"]["Plan"]["properties"] = {
                 task_group_name: {
                     "type": "object",
                     "properties": {

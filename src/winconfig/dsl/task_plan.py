@@ -3,7 +3,7 @@ from __future__ import annotations
 from enum import Enum
 from typing import Literal
 
-from pydantic import RootModel
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class TaskMode(Enum):
@@ -23,5 +23,12 @@ class TaskMode(Enum):
 type ApplyMode = Literal[TaskMode.APPLY, TaskMode.REVERT]
 
 
-class TaskPlan(RootModel):
-    root: dict[str, dict[str, TaskMode]] = {}
+class TaskPlan(BaseModel):
+    plan: dict[str, dict[str, TaskMode]] = Field(
+        default={},
+        alias="Plan",
+    )
+
+    model_config = ConfigDict(
+        extra="forbid",
+    )

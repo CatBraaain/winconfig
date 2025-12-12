@@ -46,7 +46,7 @@ class ModelLoader:
         if available_definition is None:
             available_definition = cls.load_definitions([])
 
-        for task_name in task_plan.root:
+        for task_name in task_plan.plan:
             if task_name not in available_definition.root:
                 raise Exception(f"task {task_name} not found in definition")
 

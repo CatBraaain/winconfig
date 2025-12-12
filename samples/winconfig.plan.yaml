@@ -1,89 +1,90 @@
 # yaml-language-server: $schema=./winconfig.plan.schema.json
 
-Appearance:
-  SystemDarkMode: apply
-  AppDarkMode: apply
+Plan:
+  Appearance:
+    SystemDarkMode: apply
+    AppDarkMode: apply
 
-Windows:
-  DisableWindowsSuggestions: apply
-  EnableWindowsRestoreLastSession: skip
+  Windows:
+    DisableWindowsSuggestions: apply
+    EnableWindowsRestoreLastSession: skip
 
-DesktopTaskbar:
-  TaskbarAlignmentLeft: apply
-  EnableTaskbarEndTask: apply
-  HideSearch: apply
-  HideTaskView: apply
-  HideWidgets: apply
-  RemoveCopilot: apply
-  ShowClockSeconds: apply
-  ShowMultiMonitorTaskbar: apply
-  HideDesktopRecycleBin: apply
-  ShowSidePanelClock: apply
+  DesktopTaskbar:
+    TaskbarAlignmentLeft: apply
+    EnableTaskbarEndTask: apply
+    HideSearch: apply
+    HideTaskView: apply
+    HideWidgets: apply
+    RemoveCopilot: apply
+    ShowClockSeconds: apply
+    ShowMultiMonitorTaskbar: apply
+    HideDesktopRecycleBin: apply
+    ShowSidePanelClock: apply
 
-SettingsApp:
-  HideSettingsSuggestions: apply
+  SettingsApp:
+    HideSettingsSuggestions: apply
 
-StartMenu:
-  DisableStartMenuBingSearch: apply
-  HideStartMenuRecommendations: apply
-  HideStartMenuAccountNotifications: apply
-  EnableGodMode: apply
+  StartMenu:
+    DisableStartMenuBingSearch: apply
+    HideStartMenuRecommendations: apply
+    HideStartMenuAccountNotifications: apply
+    EnableGodMode: apply
 
-Explorer:
-  ShowHiddenFiles: apply
-  ShowFileExtensions: apply
-  HideHome: apply
-  HideGallery: apply
-  DisableOneDrive: apply
-  DisableGroupView: apply
-  EnableRestoreLastSession: revert
-  DisableCheckBoxes: apply
-  HideRecentFiles: apply
-  HideFrequentFolders: apply
-  DisableAutoShortcutsSuffix: apply
+  Explorer:
+    ShowHiddenFiles: apply
+    ShowFileExtensions: apply
+    HideHome: apply
+    HideGallery: apply
+    DisableOneDrive: apply
+    DisableGroupView: apply
+    EnableRestoreLastSession: revert
+    DisableCheckBoxes: apply
+    HideRecentFiles: apply
+    HideFrequentFolders: apply
+    DisableAutoShortcutsSuffix: apply
 
-Security:
-  DisableUnsafeFileWarning: apply
-  DisableSmartAppControl: apply
+  Security:
+    DisableUnsafeFileWarning: apply
+    DisableSmartAppControl: apply
 
-ContextMenu:
-  EnableClassicContextMenu: apply
-  DisableContextMenuLimit: apply
-  HideClipchamp: apply
-  HideEditWithPhotos: apply
-  HideEditWithPaint: apply
-  HideEditWithNotepad: apply
-  HideExtractAll: apply
-  HideOpenInWindowsTerminal: apply
-  HidePrint: apply
-  HideCompressedFolder: apply
-  HideSearchMsStore: apply
-  HideShare: apply
-  HideAddToFavorite: apply
-  HidePreviousVersions: apply
-  HideSendTo: apply
-  HideAddToLibrary: apply
-  HideGiveAccessTo: apply
+  ContextMenu:
+    EnableClassicContextMenu: apply
+    DisableContextMenuLimit: apply
+    HideClipchamp: apply
+    HideEditWithPhotos: apply
+    HideEditWithPaint: apply
+    HideEditWithNotepad: apply
+    HideExtractAll: apply
+    HideOpenInWindowsTerminal: apply
+    HidePrint: apply
+    HideCompressedFolder: apply
+    HideSearchMsStore: apply
+    HideShare: apply
+    HideAddToFavorite: apply
+    HidePreviousVersions: apply
+    HideSendTo: apply
+    HideAddToLibrary: apply
+    HideGiveAccessTo: apply
 
-MouseKeyboard:
-  DisableMouseAcceleration: apply
-  DisableF1HelpPage: apply
-  DisableStickyShift: apply
-  FastKeyRepeat: apply
-  DisableTouchPad: apply
+  MouseKeyboard:
+    DisableMouseAcceleration: apply
+    DisableF1HelpPage: apply
+    DisableStickyShift: apply
+    FastKeyRepeat: apply
+    DisableTouchPad: apply
 
-Sound:
-  DisableSystemSound: apply
+  Sound:
+    DisableSystemSound: apply
 
-Background:
-  DisableAutoDeleteTemp: apply
-  DisableXboxGameBar: apply
+  Background:
+    DisableAutoDeleteTemp: apply
+    DisableXboxGameBar: apply
 
-PowerPlan:
-  EnableHighPerformancePlan: apply
-  DisableAutoSleep: apply
+  PowerPlan:
+    EnableHighPerformancePlan: apply
+    DisableAutoSleep: apply
 
-Personalization:
-  OpenWithCode: apply
-  EditMouseSensitivity: apply
-  EditWindowsPATH: apply
+  Personalization:
+    OpenWithCode: apply
+    EditMouseSensitivity: apply
+    EditWindowsPATH: apply

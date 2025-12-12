@@ -28,7 +28,7 @@ class TaskBuilder:
         powershell = PowershellRunspace()
         logger.debug(f"Setup PowerShell: version {powershell.runspace.Version}")
 
-        for task_group_name, task_group in self.plan.root.items():
+        for task_group_name, task_group in self.plan.plan.items():
             for task_name, planed_mode in task_group.items():
                 td = self.definition.get_task_definition(task_group_name, task_name)
                 mode = planed_mode.resolve(reverse)
