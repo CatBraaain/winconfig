@@ -1,7 +1,6 @@
 import json
 
 import typer
-from pydantic import BaseModel
 
 from winconfig.cli.cli_utils import (
     DryRunParam,
