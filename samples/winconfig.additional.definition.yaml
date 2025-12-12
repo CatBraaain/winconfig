@@ -87,7 +87,6 @@ Personalization:
             type: ExpandString
             new_value: "\"%LocalAppData%\\Programs\\Microsoft VS Code\\Code.exe\" \"%V\""
             old_value: <NotExist>
-
   EditMouseSensitivity:
     description: Set mouse sensitivity
     registries:
@@ -97,7 +96,6 @@ Personalization:
             type: String
             new_value: "12"
             old_value: "10"
-
   EditWindowsPATH:
     description: Edit windows path
     script:
