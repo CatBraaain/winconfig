@@ -578,15 +578,15 @@ MouseKeyboard:
       - path: HKCU\Control Panel\Mouse
         entries:
           - name: MouseSpeed
-            type: DWord
+            type: String
             new_value: "0"
             old_value: "1"
           - name: MouseThreshold1
-            type: DWord
+            type: String
             new_value: "0"
             old_value: "6"
           - name: MouseThreshold2
-            type: DWord
+            type: String
             new_value: "0"
             old_value: "10"
   DisableF1HelpPage:

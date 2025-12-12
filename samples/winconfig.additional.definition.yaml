@@ -94,7 +94,7 @@ Personalization:
       - path: HKCU\Control Panel\Mouse
         entries:
           - name: MouseSensitivity
-            type: DWord
+            type: String
             new_value: "12"
             old_value: "10"
 
