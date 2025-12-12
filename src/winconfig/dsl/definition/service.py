@@ -7,7 +7,7 @@ from pydantic import (
     Field,
 )
 
-from winconfig.dsl.task_plan import ApplyMode, TaskMode
+from winconfig.dsl.action import ActionMode, ApplyMode
 
 from .const_types import NOT_EXIST
 
@@ -35,9 +35,9 @@ class ServiceDefinition(BaseModel):
 
     def resolve_value(self, mode: ApplyMode) -> str:
         match mode:
-            case TaskMode.APPLY:
+            case ActionMode.APPLY:
                 return self.new_startup
-            case TaskMode.REVERT:
+            case ActionMode.REVERT:
                 return self.old_startup
             case _:
                 raise ValueError(f"Invalid mode: {mode}")
@@ -58,8 +58,8 @@ class ServiceDefinition(BaseModel):
             }}
         """
 
-    def generate_set_script(self, mode: TaskMode) -> str:
-        if mode == TaskMode.SKIP:
+    def generate_set_script(self, mode: ActionMode) -> str:
+        if mode == ActionMode.SKIP:
             return ""
         startup_type = self.resolve_value(mode)
 

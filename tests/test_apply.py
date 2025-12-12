@@ -3,17 +3,17 @@ import pytest
 from winconfig.dsl.definition import (
     ACCESS_DENIED,
     NOT_EXIST,
-    TaskDefinition,
-    TaskMode,
+    ActionMode,
+    Definition,
 )
 from winconfig.engine.powershell import PowershellRunspace
 
 
 def test_apply_resitory(
-    runtime_set: tuple[PowershellRunspace, TaskDefinition], mode: TaskMode
+    runtime_set: tuple[PowershellRunspace, Definition], mode: ActionMode
 ):
-    powershell, task_definition = runtime_set
-    for registry_path in task_definition.registries:
+    powershell, definition = runtime_set
+    for registry_path in definition.registries:
         for registry_item in registry_path.items:
             res = powershell.run(registry_item.generate_set_script(mode))
             if res == ACCESS_DENIED:
@@ -21,7 +21,7 @@ def test_apply_resitory(
                 continue
 
             current_value = powershell.run(registry_item.generate_get_script())
-            if mode == TaskMode.SKIP:
+            if mode == ActionMode.SKIP:
                 continue
             expected_value = registry_item.resolve_value(mode)
             assert current_value == expected_value, (
@@ -30,13 +30,13 @@ def test_apply_resitory(
 
 
 def test_apply_scheduled_task(
-    runtime_set: tuple[PowershellRunspace, TaskDefinition], mode: TaskMode
+    runtime_set: tuple[PowershellRunspace, Definition], mode: ActionMode
 ):
-    powershell, task_definition = runtime_set
-    for schtask in task_definition.scheduled_tasks:
+    powershell, definition = runtime_set
+    for schtask in definition.scheduled_tasks:
         powershell.run(schtask.generate_set_script(mode))
         current_state = powershell.run(schtask.generate_get_script())
-        if mode == TaskMode.SKIP:
+        if mode == ActionMode.SKIP:
             continue
         expected_value = schtask.resolve_value(mode)
         assert current_state in (NOT_EXIST, expected_value), (
@@ -45,16 +45,16 @@ def test_apply_scheduled_task(
 
 
 def test_apply_service(
-    runtime_set: tuple[PowershellRunspace, TaskDefinition], mode: TaskMode
+    runtime_set: tuple[PowershellRunspace, Definition], mode: ActionMode
 ):
-    powershell, task_definition = runtime_set
-    for service in task_definition.services:
+    powershell, definition = runtime_set
+    for service in definition.services:
         res = powershell.run(service.generate_set_script(mode))
         if res == ACCESS_DENIED:
             # pytest.skip("Access denied: need workaround")
             continue
         current_type = powershell.run(service.generate_get_script())
-        if mode == TaskMode.SKIP:
+        if mode == ActionMode.SKIP:
             continue
         expected_type = service.resolve_value(mode)
         if powershell.version == 5 and (
@@ -70,13 +70,13 @@ def test_apply_service(
 
 
 def test_apply_script(
-    runtime_set: tuple[PowershellRunspace, TaskDefinition], mode: TaskMode
+    runtime_set: tuple[PowershellRunspace, Definition], mode: ActionMode
 ):
-    powershell, task_definition = runtime_set
-    if task_definition.name in [
+    powershell, definition = runtime_set
+    if definition.name in [
         "RemoveCopilot",
     ]:
         pytest.xfail("Not Supporting in Windows Sandbox")
 
-    script = task_definition.script.generate_set_script(mode)
+    script = definition.script.generate_set_script(mode)
     powershell.run(script)

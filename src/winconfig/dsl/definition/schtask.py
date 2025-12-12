@@ -8,7 +8,7 @@ from pydantic import (
     Field,
 )
 
-from winconfig.dsl.task_plan import ApplyMode, TaskMode
+from winconfig.dsl.action import ActionMode, ApplyMode
 
 from .const_types import NOT_EXIST
 
@@ -42,9 +42,9 @@ class SchtaskDefinition(BaseModel):
 
     def resolve_value(self, mode: ApplyMode) -> str:
         match mode:
-            case TaskMode.APPLY:
+            case ActionMode.APPLY:
                 return self.new_state
-            case TaskMode.REVERT:
+            case ActionMode.REVERT:
                 return self.old_state
             case _:
                 raise ValueError(f"Invalid mode: {mode}")
@@ -59,8 +59,8 @@ class SchtaskDefinition(BaseModel):
             }}
         """
 
-    def generate_set_script(self, mode: TaskMode) -> str:
-        if mode == TaskMode.SKIP:
+    def generate_set_script(self, mode: ActionMode) -> str:
+        if mode == ActionMode.SKIP:
             return ""
         state = self.resolve_value(mode)
         enabled = "$true" if state == "Enabled" else "$false"

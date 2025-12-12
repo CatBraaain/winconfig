@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=./builtin.definition.schema.json
 
-Definition:
+Definitions:
   Appearance:
     SystemDarkMode:
       description: Enables dark mode for system

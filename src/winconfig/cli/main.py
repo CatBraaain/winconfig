@@ -24,7 +24,7 @@ app = typer.Typer(
 
 @app.command(
     no_args_is_help=True,
-    help="Apply the specified task plan. You can also load additional definition files.",
+    help="Apply the configured actions.",
 )
 def apply(
     config_path: ConfigPathParam,
@@ -47,18 +47,19 @@ def schema(
 ) -> None:
     with handle_cli_error():
         schema_dict = generate_schema(Config)
-        builtin_definition = ModelLoader.load_configs([]).definition
-        schema_dict["properties"]["Plan"]["properties"] = {
+        builtin_definition = ModelLoader.load_configs([]).definition_collection
+        schema_dict["properties"]["Actions"]["properties"] = {
             task_group_name: {
                 "type": "object",
                 "properties": {
-                    task_name: {"$ref": "#/$defs/TaskMode"} for task_name in task_group
+                    task_name: {"$ref": "#/$defs/ActionMode"}
+                    for task_name in task_group
                 },
                 "additionalProperties": True,
             }
             for task_group_name, task_group in builtin_definition.root.items()
         }
-        schema_dict["properties"]["Plan"]["additionalProperties"] = True
+        schema_dict["properties"]["Actions"]["additionalProperties"] = True
         schema = json.dumps(schema_dict, ensure_ascii=False, indent=2)
         handle_output(content=schema, output_path=output)
 

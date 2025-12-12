@@ -1,17 +1,17 @@
 from pydantic import BaseModel, ConfigDict, Field
 
-from .definition import Definition
-from .task_plan import TaskPlan
+from .action import ActionCollection
+from .definition import DefinitionCollection
 
 
 class Config(BaseModel):
-    definition: Definition = Field(
-        default=Definition(),
-        alias="Definition",
+    definition_collection: DefinitionCollection = Field(
+        default=DefinitionCollection(),
+        alias="Definitions",
     )
-    plan: TaskPlan = Field(
-        default=TaskPlan(),
-        alias="Plan",
+    action_collection: ActionCollection = Field(
+        default=ActionCollection(),
+        alias="Actions",
     )
 
     model_config = ConfigDict(

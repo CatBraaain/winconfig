@@ -18,7 +18,7 @@ OutputParam = Annotated[
 ConfigPathParam = Annotated[
     Path,
     typer.Argument(
-        help="Path to the task plan.",
+        help="Path to the config file.",
         exists=True,
         file_okay=True,
         dir_okay=False,
@@ -31,7 +31,7 @@ DryRunParam = Annotated[
     bool,
     typer.Option(
         "--dry-run",
-        help="Do not apply any changes. Useful for validating the task plan and definitions without executing them.",
+        help="Do not apply any changes. Useful for validating the config file without executing them.",
     ),
 ]
 

@@ -6,7 +6,7 @@ from typing import Any, Literal, Self
 
 from pydantic import BaseModel, ConfigDict, Field, PrivateAttr, field_validator
 
-from winconfig.dsl.task_plan import ApplyMode, TaskMode
+from winconfig.dsl.action import ActionMode, ApplyMode
 
 from .const_types import (
     ACCESS_DENIED,
@@ -88,15 +88,15 @@ class RegistryPathDefinition(BaseModel):
         self, mode: ApplyMode
     ) -> NotChangeType | ExistType | NotExistType:
         match mode:
-            case TaskMode.APPLY:
+            case ActionMode.APPLY:
                 return self.new_existance
-            case TaskMode.REVERT:
+            case ActionMode.REVERT:
                 return self.old_existance
             case _:
                 raise ValueError(f"Invalid mode: {mode}")
 
-    def generate_set_script(self, mode: TaskMode) -> str:
-        if mode == TaskMode.SKIP:
+    def generate_set_script(self, mode: ActionMode) -> str:
+        if mode == ActionMode.SKIP:
             return ""
         value = self.resolve_value(mode)
 
@@ -158,9 +158,9 @@ class RegistryEntryDefinition(BaseModel):
 
     def resolve_value(self, mode: ApplyMode) -> str:
         match mode:
-            case TaskMode.APPLY:
+            case ActionMode.APPLY:
                 return self.new_value
-            case TaskMode.REVERT:
+            case ActionMode.REVERT:
                 return self.old_value
             case _:
                 raise ValueError(f"Invalid mode: {mode}")
@@ -184,8 +184,8 @@ class RegistryEntryDefinition(BaseModel):
             }}
         """
 
-    def generate_set_script(self, mode: TaskMode) -> str:
-        if mode == TaskMode.SKIP:
+    def generate_set_script(self, mode: ActionMode) -> str:
+        if mode == ActionMode.SKIP:
             return ""
         value = self.resolve_value(mode)
         if self.type == "Binary":

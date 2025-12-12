@@ -1,15 +1,124 @@
 {
   "$defs": {
-    "Definition": {
+    "ActionCollection": {
+      "$ref": "#/$defs/ActionCollectionRoot",
+      "default": {}
+    },
+    "ActionCollectionRoot": {
       "additionalProperties": {
-        "additionalProperties": {
-          "$ref": "#/$defs/TaskDefinitionBody"
-        },
-        "type": "object"
+        "$ref": "#/$defs/ActionGroup"
       },
-      "default": {},
-      "description": "The root model for a winconfig definition file.",
+      "propertyNames": {
+        "$ref": "#/$defs/ActionGroupName"
+      },
       "type": "object"
+    },
+    "ActionGroup": {
+      "additionalProperties": {
+        "$ref": "#/$defs/ActionMode"
+      },
+      "propertyNames": {
+        "$ref": "#/$defs/ActionName"
+      },
+      "type": "object"
+    },
+    "ActionGroupName": {
+      "type": "string"
+    },
+    "ActionMode": {
+      "enum": ["apply", "revert", "skip"],
+      "title": "ActionMode",
+      "type": "string"
+    },
+    "ActionName": {
+      "type": "string"
+    },
+    "DefinitionBody": {
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": ["registries"]
+        },
+        {
+          "required": ["scheduled_tasks"]
+        },
+        {
+          "required": ["services"]
+        },
+        {
+          "required": ["script"]
+        }
+      ],
+      "description": "A single, self-contained configuration task.",
+      "properties": {
+        "description": {
+          "description": "A description of the task's purpose.",
+          "type": "string"
+        },
+        "registries": {
+          "default": [],
+          "description": "The registry values to be modified.",
+          "items": {
+            "$ref": "#/$defs/RegistryPathDefinition"
+          },
+          "type": "array"
+        },
+        "scheduled_tasks": {
+          "default": [],
+          "description": "The scheduled tasks to be modified.",
+          "items": {
+            "$ref": "#/$defs/SchtaskDefinition"
+          },
+          "type": "array"
+        },
+        "services": {
+          "default": [],
+          "description": "The Windows services to be modified.",
+          "items": {
+            "$ref": "#/$defs/ServiceDefinition"
+          },
+          "type": "array"
+        },
+        "script": {
+          "$ref": "#/$defs/ScriptDefinition",
+          "default": {
+            "apply": "",
+            "revert": ""
+          },
+          "description": "Custom PowerShell scripts for actions not covered by registry, services, or scheduled tasks."
+        }
+      },
+      "required": ["description"],
+      "type": "object"
+    },
+    "DefinitionCollection": {
+      "$ref": "#/$defs/DefinitionCollectionRoot",
+      "default": {},
+      "description": "The root model for a winconfig definition file."
+    },
+    "DefinitionCollectionRoot": {
+      "additionalProperties": {
+        "$ref": "#/$defs/DefinitionGroup"
+      },
+      "propertyNames": {
+        "$ref": "#/$defs/DefinitionGroupName"
+      },
+      "type": "object"
+    },
+    "DefinitionGroup": {
+      "additionalProperties": {
+        "$ref": "#/$defs/DefinitionBody"
+      },
+      "propertyNames": {
+        "$ref": "#/$defs/DefinitionName"
+      },
+      "type": "object"
+    },
+    "DefinitionGroupName": {
+      "type": "string"
+    },
+    "DefinitionName": {
+      "type": "string"
     },
     "ExistType": {
       "const": "<Exist>",
@@ -192,97 +301,24 @@
         "Manual"
       ],
       "type": "string"
-    },
-    "TaskDefinitionBody": {
-      "additionalProperties": false,
-      "anyOf": [
-        {
-          "required": ["registries"]
-        },
-        {
-          "required": ["scheduled_tasks"]
-        },
-        {
-          "required": ["services"]
-        },
-        {
-          "required": ["script"]
-        }
-      ],
-      "description": "A single, self-contained configuration task.",
-      "properties": {
-        "description": {
-          "description": "A description of the task's purpose.",
-          "type": "string"
-        },
-        "registries": {
-          "default": [],
-          "description": "The registry values to be modified.",
-          "items": {
-            "$ref": "#/$defs/RegistryPathDefinition"
-          },
-          "type": "array"
-        },
-        "scheduled_tasks": {
-          "default": [],
-          "description": "The scheduled tasks to be modified.",
-          "items": {
-            "$ref": "#/$defs/SchtaskDefinition"
-          },
-          "type": "array"
-        },
-        "services": {
-          "default": [],
-          "description": "The Windows services to be modified.",
-          "items": {
-            "$ref": "#/$defs/ServiceDefinition"
-          },
-          "type": "array"
-        },
-        "script": {
-          "$ref": "#/$defs/ScriptDefinition",
-          "default": {
-            "apply": "",
-            "revert": ""
-          },
-          "description": "Custom PowerShell scripts for actions not covered by registry, services, or scheduled tasks."
-        }
-      },
-      "required": ["description"],
-      "type": "object"
-    },
-    "TaskMode": {
-      "enum": ["apply", "revert", "skip"],
-      "title": "TaskMode",
-      "type": "string"
-    },
-    "TaskPlan": {
-      "additionalProperties": {
-        "additionalProperties": {
-          "$ref": "#/$defs/TaskMode"
-        },
-        "type": "object"
-      },
-      "default": {},
-      "type": "object"
     }
   },
   "additionalProperties": false,
   "properties": {
-    "Definition": {
-      "$ref": "#/$defs/Definition"
+    "Definitions": {
+      "$ref": "#/$defs/DefinitionCollection"
     },
-    "Plan": {
-      "$ref": "#/$defs/TaskPlan",
+    "Actions": {
+      "$ref": "#/$defs/ActionCollection",
       "properties": {
         "Appearance": {
           "type": "object",
           "properties": {
             "SystemDarkMode": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             },
             "AppDarkMode": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             }
           },
           "additionalProperties": true
@@ -291,10 +327,10 @@
           "type": "object",
           "properties": {
             "DisableWindowsSuggestions": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             },
             "EnableWindowsRestoreLastSession": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             }
           },
           "additionalProperties": true
@@ -303,34 +339,34 @@
           "type": "object",
           "properties": {
             "TaskbarAlignmentLeft": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             },
             "EnableTaskbarEndTask": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             },
             "HideSearch": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             },
             "HideTaskView": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             },
             "HideWidgets": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             },
             "RemoveCopilot": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             },
             "ShowClockSeconds": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             },
             "ShowMultiMonitorTaskbar": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             },
             "HideDesktopRecycleBin": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             },
             "ShowSidePanelClock": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             }
           },
           "additionalProperties": true
@@ -339,7 +375,7 @@
           "type": "object",
           "properties": {
             "HideSettingsSuggestions": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             }
           },
           "additionalProperties": true
@@ -348,16 +384,16 @@
           "type": "object",
           "properties": {
             "DisableStartMenuBingSearch": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             },
             "HideStartMenuRecommendations": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             },
             "HideStartMenuAccountNotifications": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             },
             "EnableGodMode": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             }
           },
           "additionalProperties": true
@@ -366,37 +402,37 @@
           "type": "object",
           "properties": {
             "ShowHiddenFiles": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             },
             "ShowFileExtensions": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             },
             "HideHome": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             },
             "HideGallery": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             },
             "DisableOneDrive": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             },
             "DisableGroupView": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             },
             "EnableRestoreLastSession": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             },
             "DisableCheckBoxes": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             },
             "HideRecentFiles": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             },
             "HideFrequentFolders": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             },
             "DisableAutoShortcutsSuffix": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             }
           },
           "additionalProperties": true
@@ -405,10 +441,10 @@
           "type": "object",
           "properties": {
             "DisableUnsafeFileWarning": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             },
             "DisableSmartAppControl": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             }
           },
           "additionalProperties": true
@@ -417,55 +453,55 @@
           "type": "object",
           "properties": {
             "EnableClassicContextMenu": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             },
             "DisableContextMenuLimit": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             },
             "HideClipchamp": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             },
             "HideEditWithPhotos": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             },
             "HideEditWithPaint": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             },
             "HideEditWithNotepad": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             },
             "HideExtractAll": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             },
             "HideOpenInWindowsTerminal": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             },
             "HidePrint": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             },
             "HideCompressedFolder": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             },
             "HideSearchMsStore": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             },
             "HideShare": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             },
             "HideAddToFavorite": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             },
             "HidePreviousVersions": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             },
             "HideSendTo": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             },
             "HideAddToLibrary": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             },
             "HideGiveAccessTo": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             }
           },
           "additionalProperties": true
@@ -474,19 +510,19 @@
           "type": "object",
           "properties": {
             "DisableMouseAcceleration": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             },
             "DisableF1HelpPage": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             },
             "DisableStickyShift": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             },
             "FastKeyRepeat": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             },
             "DisableTouchPad": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             }
           },
           "additionalProperties": true
@@ -495,7 +531,7 @@
           "type": "object",
           "properties": {
             "DisableSystemSound": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             }
           },
           "additionalProperties": true
@@ -504,10 +540,10 @@
           "type": "object",
           "properties": {
             "DisableAutoDeleteTemp": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             },
             "DisableXboxGameBar": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             }
           },
           "additionalProperties": true
@@ -516,10 +552,10 @@
           "type": "object",
           "properties": {
             "EnableHighPerformancePlan": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             },
             "DisableAutoSleep": {
-              "$ref": "#/$defs/TaskMode"
+              "$ref": "#/$defs/ActionMode"
             }
           },
           "additionalProperties": true

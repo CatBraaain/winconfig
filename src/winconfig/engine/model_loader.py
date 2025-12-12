@@ -4,9 +4,15 @@ import yaml
 from pydantic import BaseModel, ValidationError
 from yaml import YAMLError
 
+from winconfig.dsl.action import (
+    ActionCollection,
+    ActionCollectionRoot,
+)
 from winconfig.dsl.config import Config
-from winconfig.dsl.definition import Definition, TaskDefinitionBody
-from winconfig.dsl.task_plan import TaskMode, TaskPlan
+from winconfig.dsl.definition import (
+    DefinitionCollection,
+    DefinitionCollectionRoot,
+)
 from winconfig.resources import BUILTIN_DEFINITION_PATH
 
 
@@ -27,30 +33,41 @@ class ModelLoader:
         config_paths = [BUILTIN_DEFINITION_PATH, *config_paths]
         configs = [cls.load_yaml(config_path, Config) for config_path in config_paths]
 
-        merged_definition: dict[str, dict[str, TaskDefinitionBody]] = {}
+        merged_definition_collection: DefinitionCollectionRoot = {}
         for config in configs:
-            for group_name, td_group in config.definition.root.items():
-                if group_name not in merged_definition:
-                    merged_definition[group_name] = {}
-                merged_definition[group_name] |= td_group
+            for (
+                definition_group_name,
+                definition_group,
+            ) in config.definition_collection.root.items():
+                if definition_group_name not in merged_definition_collection:
+                    merged_definition_collection[definition_group_name] = {}
+                merged_definition_collection[definition_group_name] |= definition_group
 
-        merged_plan: dict[str, dict[str, TaskMode]] = {}
+        merged_action_collection: ActionCollectionRoot = {}
         for config in configs:
-            for group_name, task_group in config.plan.root.items():
-                if group_name not in merged_plan:
-                    merged_plan[group_name] = {}
-                merged_plan[group_name] |= task_group
+            for (
+                definition_group_name,
+                action_group,
+            ) in config.action_collection.root.items():
+                if definition_group_name not in merged_action_collection:
+                    merged_action_collection[definition_group_name] = {}
+                merged_action_collection[definition_group_name] |= action_group
 
         merged_config = Config.model_validate(
             {
-                "definition": Definition.model_validate(merged_definition),
-                "plan": TaskPlan.model_validate(merged_plan),
+                "Definitions": DefinitionCollection.model_validate(
+                    merged_definition_collection
+                ),
+                "Actions": ActionCollection.model_validate(merged_action_collection),
             }
         )
 
-        for task_group_name, task_group in merged_config.plan.root.items():
-            for task_name in task_group:
-                _ = merged_config.definition.get_task_definition(
+        for (
+            task_group_name,
+            action_group,
+        ) in merged_config.action_collection.root.items():
+            for task_name in action_group:
+                _ = merged_config.definition_collection.get_definition(
                     task_group_name, task_name
                 )
 

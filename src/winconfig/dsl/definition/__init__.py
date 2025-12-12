@@ -5,7 +5,7 @@ from pydantic import (
     RootModel,
 )
 
-from winconfig.dsl.task_plan import TaskMode
+from winconfig.dsl.action import ActionMode
 
 from .const_types import (  # noqa: F401
     ACCESS_DENIED,
@@ -24,7 +24,7 @@ from .script import ScriptDefinition
 from .service import ServiceDefinition, ServiceStartupType  # noqa: F401
 
 
-class TaskDefinitionBody(BaseModel):
+class DefinitionBody(BaseModel):
     """A single, self-contained configuration task."""
 
     description: str = Field(description="A description of the task's purpose.")
@@ -59,15 +59,15 @@ class TaskDefinitionBody(BaseModel):
     )
 
 
-class TaskDefinition(TaskDefinitionBody):
-    name: str = Field(description="The name of the task.")
-    group: str = Field(description="The group of the task.")
+class Definition(DefinitionBody):
+    group: str
+    name: str
 
     @property
     def full_name(self) -> str:
         return f"{self.group} - {self.name}"
 
-    def generate_script(self, mode: TaskMode) -> str:
+    def generate_script(self, mode: ActionMode) -> str:
         script = "\n".join(
             [
                 e.generate_set_script(mode)
@@ -86,22 +86,34 @@ class TaskDefinition(TaskDefinitionBody):
         return script
 
 
-class Definition(RootModel):
+type DefinitionGroupName = str
+type DefinitionGroup = dict[DefinitionName, DefinitionBody]
+type DefinitionName = str
+type DefinitionCollectionRoot = dict[DefinitionGroupName, DefinitionGroup]
+
+
+class DefinitionCollection(RootModel):
     """The root model for a winconfig definition file."""
 
-    root: dict[str, dict[str, TaskDefinitionBody]] = Field(
+    root: DefinitionCollectionRoot = Field(
         default={}, description="The list of configuration tasks to be applied."
     )
 
-    def get_task_definition(
-        self, task_group_name: str, task_name: str
-    ) -> TaskDefinition:
-        td_group = self.root.get(task_group_name)
-        if td_group is None:
-            raise ValueError(f"Task group {task_group_name} not found")
-        td_body = td_group.get(task_name)
-        if td_body is None:
-            raise ValueError(f"Task {task_group_name} - {task_name} not found")
-        return TaskDefinition.model_validate(
-            {"name": task_name, "group": task_group_name, **td_body.model_dump()}
+    def get_definition(
+        self, definition_group_name: str, definition_name: str
+    ) -> Definition:
+        definition_group = self.root.get(definition_group_name)
+        if definition_group is None:
+            raise ValueError(f"Definition group {definition_group_name} not found")
+        definition_body = definition_group.get(definition_name)
+        if definition_body is None:
+            raise ValueError(
+                f"Definition {definition_group_name} - {definition_name} not found"
+            )
+        return Definition.model_validate(
+            {
+                "name": definition_name,
+                "group": definition_group_name,
+                **definition_body.model_dump(),
+            }
         )

@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=./winconfig.config.schema.json
 
-Plan:
+Actions:
   Appearance:
     SystemDarkMode: apply
     AppDarkMode: apply
@@ -89,7 +89,7 @@ Plan:
     EditMouseSensitivity: apply
     EditWindowsPATH: apply
 
-Definition:
+Definitions:
   Personalization:
     OpenWithCode:
       description: Add the "Open with Code" item to context menu

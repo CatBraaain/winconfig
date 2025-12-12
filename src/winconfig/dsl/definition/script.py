@@ -6,7 +6,7 @@ from pydantic import (
     Field,
 )
 
-from winconfig.dsl.task_plan import ApplyMode, TaskMode
+from winconfig.dsl.action import ActionMode, ApplyMode
 
 
 class ScriptDefinition(BaseModel):
@@ -25,14 +25,14 @@ class ScriptDefinition(BaseModel):
 
     def resolve_value(self, mode: ApplyMode) -> str:
         match mode:
-            case TaskMode.APPLY:
+            case ActionMode.APPLY:
                 return self.apply
-            case TaskMode.REVERT:
+            case ActionMode.REVERT:
                 return self.revert
             case _:
                 raise ValueError(f"Invalid mode: {mode}")
 
-    def generate_set_script(self, mode: TaskMode) -> str:
-        if mode == TaskMode.SKIP:
+    def generate_set_script(self, mode: ActionMode) -> str:
+        if mode == ActionMode.SKIP:
             return ""
         return dedent(self.resolve_value(mode))

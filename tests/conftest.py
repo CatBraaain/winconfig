@@ -3,7 +3,7 @@ from pathlib import Path
 import pytest
 import yaml
 
-from winconfig.dsl.definition import Definition, TaskDefinition, TaskMode
+from winconfig.dsl.definition import ActionMode, Definition, DefinitionCollection
 from winconfig.engine.powershell import PowershellRunspace
 
 
@@ -19,10 +19,10 @@ def ensure_sandbox():
         pytest.fail("This test must be run inside a Windows Sandbox")
 
 
-def generate_runtime_sets() -> list[tuple[PowershellRunspace, TaskDefinition]]:
+def generate_runtime_sets() -> list[tuple[PowershellRunspace, Definition]]:
     definition_files = list(Path().glob("src/winconfig/resources/*.definition.yaml"))
     definitions = [
-        Definition.model_validate(
+        DefinitionCollection.model_validate(
             yaml.safe_load(definition_file.read_text(encoding="utf-8"))
         )
         for definition_file in definition_files
@@ -33,7 +33,7 @@ def generate_runtime_sets() -> list[tuple[PowershellRunspace, TaskDefinition]]:
     runtime_sets = [
         (
             runspace,
-            definition.get_task_definition(task_group_name, task_name),
+            definition.get_definition(task_group_name, task_name),
         )
         for (runspace, definition) in runspace_with_definition
         for task_group_name, task_group in definition.root.items()
@@ -49,13 +49,13 @@ def generate_runtime_sets() -> list[tuple[PowershellRunspace, TaskDefinition]]:
 )
 def runtime_set(
     request: pytest.FixtureRequest,
-) -> tuple[PowershellRunspace, TaskDefinition]:
+) -> tuple[PowershellRunspace, Definition]:
     return request.param
 
 
 @pytest.fixture(
-    params=[TaskMode.APPLY, TaskMode.REVERT, TaskMode.SKIP],
+    params=[ActionMode.APPLY, ActionMode.REVERT, ActionMode.SKIP],
     ids=lambda e: e.value,
 )
-def mode(request: pytest.FixtureRequest) -> TaskMode:
+def mode(request: pytest.FixtureRequest) -> ActionMode:
     return request.param
