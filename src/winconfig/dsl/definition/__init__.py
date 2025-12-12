@@ -101,7 +101,7 @@ class Definition(RootModel):
             raise ValueError(f"Task group {task_group_name} not found")
         td_body = td_group.get(task_name)
         if td_body is None:
-            raise ValueError(f"Task definition {task_name} not found")
+            raise ValueError(f"Task {task_group_name} - {task_name} not found")
         return TaskDefinition.model_validate(
             {"name": task_name, "group": task_group_name, **td_body.model_dump()}
         )
