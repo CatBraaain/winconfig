@@ -1,0 +1,205 @@
+# yaml-language-server: $schema=./winconfig.config.schema.json
+
+Plan:
+  Appearance:
+    SystemDarkMode: apply
+    AppDarkMode: apply
+
+  Windows:
+    DisableWindowsSuggestions: apply
+    EnableWindowsRestoreLastSession: skip
+
+  DesktopTaskbar:
+    TaskbarAlignmentLeft: apply
+    EnableTaskbarEndTask: apply
+    HideSearch: apply
+    HideTaskView: apply
+    HideWidgets: apply
+    RemoveCopilot: apply
+    ShowClockSeconds: apply
+    ShowMultiMonitorTaskbar: apply
+    HideDesktopRecycleBin: apply
+    ShowSidePanelClock: apply
+
+  SettingsApp:
+    HideSettingsSuggestions: apply
+
+  StartMenu:
+    DisableStartMenuBingSearch: apply
+    HideStartMenuRecommendations: apply
+    HideStartMenuAccountNotifications: apply
+    EnableGodMode: apply
+
+  Explorer:
+    ShowHiddenFiles: apply
+    ShowFileExtensions: apply
+    HideHome: apply
+    HideGallery: apply
+    DisableOneDrive: apply
+    DisableGroupView: apply
+    EnableRestoreLastSession: revert
+    DisableCheckBoxes: apply
+    HideRecentFiles: apply
+    HideFrequentFolders: apply
+    DisableAutoShortcutsSuffix: apply
+
+  Security:
+    DisableUnsafeFileWarning: apply
+    DisableSmartAppControl: apply
+
+  ContextMenu:
+    EnableClassicContextMenu: apply
+    DisableContextMenuLimit: apply
+    HideClipchamp: apply
+    HideEditWithPhotos: apply
+    HideEditWithPaint: apply
+    HideEditWithNotepad: apply
+    HideExtractAll: apply
+    HideOpenInWindowsTerminal: apply
+    HidePrint: apply
+    HideCompressedFolder: apply
+    HideSearchMsStore: apply
+    HideShare: apply
+    HideAddToFavorite: apply
+    HidePreviousVersions: apply
+    HideSendTo: apply
+    HideAddToLibrary: apply
+    HideGiveAccessTo: apply
+
+  MouseKeyboard:
+    DisableMouseAcceleration: apply
+    DisableF1HelpPage: apply
+    DisableStickyShift: apply
+    FastKeyRepeat: apply
+    DisableTouchPad: apply
+
+  Sound:
+    DisableSystemSound: apply
+
+  Background:
+    DisableAutoDeleteTemp: apply
+    DisableXboxGameBar: apply
+
+  PowerPlan:
+    EnableHighPerformancePlan: apply
+    DisableAutoSleep: apply
+
+  Personalization:
+    OpenWithCode: apply
+    EditMouseSensitivity: apply
+    EditWindowsPATH: apply
+
+Definition:
+  Personalization:
+    OpenWithCode:
+      description: Add the "Open with Code" item to context menu
+      registries:
+        - path: HKCR\*\shell\VSCode
+          new_existance: <Exist>
+          old_existance: <NotExist>
+          entries:
+            - name: (default)
+              type: String
+              new_value: "Open with Code (&Q)"
+              old_value: <NotExist>
+            - name: Icon
+              type: ExpandString
+              new_value: "%LocalAppData%\\Programs\\Microsoft VS Code\\Code.exe"
+              old_value: <NotExist>
+        - path: HKCR\*\shell\VSCode\command
+          new_existance: <Exist>
+          old_existance: <NotExist>
+          entries:
+            - name: (default)
+              type: ExpandString
+              new_value: "\"%LocalAppData%\\Programs\\Microsoft VS Code\\Code.exe\" \"%V\""
+              old_value: <NotExist>
+
+        - path: HKCR\directory\shell\VSCode
+          new_existance: <Exist>
+          old_existance: <NotExist>
+          entries:
+            - name: (default)
+              type: String
+              new_value: "Open with Code (&Q)"
+              old_value: <NotExist>
+            - name: Icon
+              type: ExpandString
+              new_value: "%LocalAppData%\\Programs\\Microsoft VS Code\\Code.exe"
+              old_value: <NotExist>
+        - path: HKCR\directory\shell\VSCode\command
+          new_existance: <Exist>
+          old_existance: <NotExist>
+          entries:
+            - name: (default)
+              type: ExpandString
+              new_value: "\"%LocalAppData%\\Programs\\Microsoft VS Code\\Code.exe\" \"%V\""
+              old_value: <NotExist>
+
+        - path: HKCR\directory\background\shell\VSCode
+          new_existance: <Exist>
+          old_existance: <NotExist>
+          entries:
+            - name: (default)
+              type: String
+              new_value: "Open with Code (&Q)"
+              old_value: <NotExist>
+            - name: Icon
+              type: ExpandString
+              new_value: "%LocalAppData%\\Programs\\Microsoft VS Code\\Code.exe"
+              old_value: <NotExist>
+        - path: HKCR\directory\background\shell\VSCode\command
+          new_existance: <Exist>
+          old_existance: <NotExist>
+          entries:
+            - name: (default)
+              type: ExpandString
+              new_value: "\"%LocalAppData%\\Programs\\Microsoft VS Code\\Code.exe\" \"%V\""
+              old_value: <NotExist>
+
+        - path: HKCR\drive\shell\VSCode
+          new_existance: <Exist>
+          old_existance: <NotExist>
+          entries:
+            - name: (default)
+              type: String
+              new_value: "Open with Code (&Q)"
+              old_value: <NotExist>
+            - name: Icon
+              type: ExpandString
+              new_value: "%LocalAppData%\\Programs\\Microsoft VS Code\\Code.exe"
+              old_value: <NotExist>
+        - path: HKCR\drive\shell\VSCode\command
+          new_existance: <Exist>
+          old_existance: <NotExist>
+          entries:
+            - name: (default)
+              type: ExpandString
+              new_value: "\"%LocalAppData%\\Programs\\Microsoft VS Code\\Code.exe\" \"%V\""
+              old_value: <NotExist>
+    EditMouseSensitivity:
+      description: Set mouse sensitivity
+      registries:
+        - path: HKCU\Control Panel\Mouse
+          entries:
+            - name: MouseSensitivity
+              type: String
+              new_value: "12"
+              old_value: "10"
+    EditWindowsPATH:
+      description: Edit windows path
+      script:
+        apply: |-
+          $gitPath = "C:\Program Files\Git\bin"
+          $oldPath = [Environment]::GetEnvironmentVariable("Path", "User").Split(';')
+          if (-not ($oldPath -contains $gitPath)) {
+            $newPath = ($oldPath + $gitPath) -join ';'
+            [Environment]::SetEnvironmentVariable("Path", $newPath, "User")
+          }
+        revert: |-
+          $gitPath = "C:\Program Files\Git\bin"
+          $oldPath = [Environment]::GetEnvironmentVariable("Path", "User").Split(';')
+          if ($oldPath -contains $gitPath) {
+            $newPath = ($oldPath | ? { $_ -ne $gitPath }) -join ';'
+            [Environment]::SetEnvironmentVariable("Path", $newPath, "User")
+          }

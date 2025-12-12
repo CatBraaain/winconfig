@@ -3,13 +3,12 @@ set unstable
 _:
   @just --list --unsorted
 
-additional_definition := "samples/winconfig.additional.definition.yaml"
-taskplan := "samples/winconfig.plan.yaml"
-winconfig_schema := "samples/winconfig.plan.schema.json"
+config := "samples/winconfig.config.yaml"
+config_schema := "samples/winconfig.config.schema.json"
 builtin_definition_schema := "src/winconfig/resources/builtin.definition.schema.json"
 
 apply:
-  uv run src/winconfig/cli/main.py apply {{taskplan}} -e {{additional_definition}}
+  uv run src/winconfig/cli/main.py apply {{config}}
 
 test:
   powershell.exe -ExecutionPolicy Bypass -File tests/run_test_in_wsb.ps1 -Headless false
@@ -24,9 +23,9 @@ nuitka:
   uv run nuitka --mode=onefile src/winconfig/cli/main.py --output-filename=winconfig --mingw64 --output-dir=dist --windows-uac-admin --assume-yes-for-downloads
 
 schema:
-  uv run src/winconfig/cli/main.py schema taskplan --output {{winconfig_schema}} -e {{additional_definition}}
-  bunx prettier --write {{winconfig_schema}}
-  uv run src/winconfig/cli/main.py schema definition --output {{builtin_definition_schema}}
+  uv run src/winconfig/cli/main.py schema --output {{config_schema}}
+  bunx prettier --write {{config_schema}}
+  uv run src/winconfig/cli/main.py schema --output {{builtin_definition_schema}}
   bunx prettier --write {{builtin_definition_schema}}
 
 memo:

@@ -2,35 +2,31 @@ from pathlib import Path
 
 from loguru import logger
 
-from winconfig.dsl.definition import PERMISSION_DENIED, Definition
-from winconfig.dsl.task_plan import TaskPlan
+from winconfig.dsl.config import Config
+from winconfig.dsl.definition import PERMISSION_DENIED
 
 from .model_loader import ModelLoader
 from .powershell import PowershellRunspace
 
 
 class TaskBuilder:
-    definition: Definition
-    plan: TaskPlan
+    config: Config
 
     def __init__(
         self,
-        task_plan_path: Path,
-        extra_definition_paths: list[Path],
+        config_path: Path,
     ) -> None:
-        self.definition = ModelLoader.load_definitions(extra_definition_paths)
-        self.plan = ModelLoader.load_task_plan(
-            task_plan_path=task_plan_path,
-            available_definition=self.definition,
-        )
+        self.config = ModelLoader.load_configs([config_path])
 
     def apply(self, reverse: bool) -> None:
         powershell = PowershellRunspace()
         logger.debug(f"Setup PowerShell: version {powershell.runspace.Version}")
 
-        for task_group_name, task_group in self.plan.plan.items():
+        for task_group_name, task_group in self.config.plan.root.items():
             for task_name, planed_mode in task_group.items():
-                td = self.definition.get_task_definition(task_group_name, task_name)
+                td = self.config.definition.get_task_definition(
+                    task_group_name, task_name
+                )
                 mode = planed_mode.resolve(reverse)
                 script = td.generate_script(mode).strip()
                 try:

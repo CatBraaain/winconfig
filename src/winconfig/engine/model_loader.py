@@ -4,8 +4,9 @@ import yaml
 from pydantic import BaseModel, ValidationError
 from yaml import YAMLError
 
-from winconfig.dsl.definition import Definition
-from winconfig.dsl.task_plan import TaskPlan
+from winconfig.dsl.config import Config
+from winconfig.dsl.definition import Definition, TaskDefinitionBody
+from winconfig.dsl.task_plan import TaskMode, TaskPlan
 from winconfig.resources import BUILTIN_DEFINITION_PATH
 
 
@@ -22,32 +23,35 @@ class ModelLoader:
             ) from None
 
     @classmethod
-    def load_definitions(cls, extra_definition_paths: list[Path]) -> Definition:
-        definition_paths = [BUILTIN_DEFINITION_PATH, *extra_definition_paths]
-        definitions = [
-            cls.load_yaml(definition_path, Definition)
-            for definition_path in definition_paths
-        ]
-        merged_definition = Definition.model_validate(
+    def load_configs(cls, config_paths: list[Path]) -> Config:
+        config_paths = [BUILTIN_DEFINITION_PATH, *config_paths]
+        configs = [cls.load_yaml(config_path, Config) for config_path in config_paths]
+
+        merged_definition: dict[str, dict[str, TaskDefinitionBody]] = {}
+        for config in configs:
+            for group_name, td_group in config.definition.root.items():
+                if group_name not in merged_definition:
+                    merged_definition[group_name] = {}
+                merged_definition[group_name] |= td_group
+
+        merged_plan: dict[str, dict[str, TaskMode]] = {}
+        for config in configs:
+            for group_name, task_group in config.plan.root.items():
+                if group_name not in merged_plan:
+                    merged_plan[group_name] = {}
+                merged_plan[group_name] |= task_group
+
+        merged_config = Config.model_validate(
             {
-                name: body
-                for definition in definitions
-                for name, body in definition.root.items()
+                "definition": Definition.model_validate(merged_definition),
+                "plan": TaskPlan.model_validate(merged_plan),
             }
         )
-        return merged_definition
 
-    @classmethod
-    def load_task_plan(
-        cls, task_plan_path: Path, available_definition: Definition | None = None
-    ) -> TaskPlan:
-        task_plan = cls.load_yaml(task_plan_path, TaskPlan)
-
-        if available_definition is None:
-            available_definition = cls.load_definitions([])
-
-        for task_group_name, task_group in task_plan.plan.items():
+        for task_group_name, task_group in merged_config.plan.root.items():
             for task_name in task_group:
-                _ = available_definition.get_task_definition(task_group_name, task_name)
+                _ = merged_config.definition.get_task_definition(
+                    task_group_name, task_name
+                )
 
-        return task_plan
+        return merged_config

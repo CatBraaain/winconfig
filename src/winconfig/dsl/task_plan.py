@@ -1,9 +1,7 @@
-from __future__ import annotations
-
 from enum import Enum
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import RootModel
 
 
 class TaskMode(Enum):
@@ -11,7 +9,7 @@ class TaskMode(Enum):
     REVERT = "revert"
     SKIP = "skip"
 
-    def resolve(self, reverse: bool) -> TaskMode:
+    def resolve(self, reverse: bool) -> "TaskMode":
         if reverse:
             if self == TaskMode.APPLY:
                 return TaskMode.REVERT
@@ -23,12 +21,5 @@ class TaskMode(Enum):
 type ApplyMode = Literal[TaskMode.APPLY, TaskMode.REVERT]
 
 
-class TaskPlan(BaseModel):
-    plan: dict[str, dict[str, TaskMode]] = Field(
-        default={},
-        alias="Plan",
-    )
-
-    model_config = ConfigDict(
-        extra="forbid",
-    )
+class TaskPlan(RootModel):
+    root: dict[str, dict[str, TaskMode]] = {}

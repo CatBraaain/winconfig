@@ -3,30 +3,22 @@ import json
 import typer
 
 from winconfig.cli.cli_utils import (
+    ConfigPathParam,
     DryRunParam,
-    ExtraDefinitionPathsParam,
     LogLevelParam,
     OutputParam,
-    TaskPlanPathParam,
     generate_schema,
     handle_cli_error,
     handle_output,
 )
-from winconfig.dsl.definition import Definition
+from winconfig.dsl.config import Config
 from winconfig.engine.model_loader import ModelLoader
-from winconfig.engine.task_builder import TaskBuilder, TaskPlan
+from winconfig.engine.task_builder import TaskBuilder
 
 app = typer.Typer(
     no_args_is_help=True,
     context_settings={"help_option_names": ["-h", "--help"]},
     pretty_exceptions_show_locals=False,
-)
-schema_command = typer.Typer()
-app.add_typer(
-    schema_command,
-    name="schema",
-    no_args_is_help=True,
-    help="Generate JSON schemas.",
 )
 
 
@@ -35,65 +27,38 @@ app.add_typer(
     help="Apply the specified task plan. You can also load additional definition files.",
 )
 def apply(
-    task_plan_path: TaskPlanPathParam,
-    extra_definition_paths: ExtraDefinitionPathsParam = None,
+    config_path: ConfigPathParam,
     reverse: bool = False,
     dry_run: DryRunParam = False,
     loglevel: LogLevelParam = "INFO",  # noqa: ARG001
 ) -> None:
-    if extra_definition_paths is None:
-        extra_definition_paths = []
     with handle_cli_error():
-        task_builder = TaskBuilder(
-            task_plan_path=task_plan_path,
-            extra_definition_paths=extra_definition_paths,
-        )
+        task_builder = TaskBuilder(config_path=config_path)
         if not dry_run:
             task_builder.apply(reverse=reverse)
 
 
-@schema_command.command(
-    "taskplan",
-    help="Output the JSON schema of TaskPlan.",
+@app.command(
+    help="Output the JSON schema of Config.",
 )
-def generate_task_plan_schema(
+def schema(
     output: OutputParam = None,
-    extra_definition_paths: ExtraDefinitionPathsParam = None,
-    strict_names: bool = True,
     loglevel: LogLevelParam = "INFO",  # noqa: ARG001
 ) -> None:
-    if extra_definition_paths is None:
-        extra_definition_paths = []
     with handle_cli_error():
-        schema_dict = generate_schema(TaskPlan)
-        if strict_names:
-            definition = ModelLoader.load_definitions(extra_definition_paths)
-            schema_dict["properties"]["Plan"]["additionalProperties"] = False
-            schema_dict["properties"]["Plan"]["properties"] = {
-                task_group_name: {
-                    "type": "object",
-                    "properties": {
-                        task_name: {"$ref": "#/$defs/TaskMode"}
-                        for task_name in task_group
-                    },
-                    "additionalProperties": False,
-                }
-                for task_group_name, task_group in definition.root.items()
+        schema_dict = generate_schema(Config)
+        builtin_definition = ModelLoader.load_configs([]).definition
+        schema_dict["properties"]["Plan"]["properties"] = {
+            task_group_name: {
+                "type": "object",
+                "properties": {
+                    task_name: {"$ref": "#/$defs/TaskMode"} for task_name in task_group
+                },
+                "additionalProperties": True,
             }
-        schema = json.dumps(schema_dict, ensure_ascii=False, indent=2)
-        handle_output(content=schema, output_path=output)
-
-
-@schema_command.command(
-    "definition",
-    help="Output the JSON schema of Definition.",
-)
-def generate_definition_schema(
-    output: OutputParam = None,
-    loglevel: LogLevelParam = "INFO",  # noqa: ARG001
-) -> None:
-    with handle_cli_error():
-        schema_dict = generate_schema(Definition)
+            for task_group_name, task_group in builtin_definition.root.items()
+        }
+        schema_dict["properties"]["Plan"]["additionalProperties"] = True
         schema = json.dumps(schema_dict, ensure_ascii=False, indent=2)
         handle_output(content=schema, output_path=output)
 

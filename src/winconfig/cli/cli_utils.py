@@ -15,7 +15,7 @@ OutputParam = Annotated[
         help="Path to the file where the schema will be saved.",
     ),
 ]
-TaskPlanPathParam = Annotated[
+ConfigPathParam = Annotated[
     Path,
     typer.Argument(
         help="Path to the task plan.",
@@ -25,17 +25,6 @@ TaskPlanPathParam = Annotated[
         writable=False,
         readable=True,
         resolve_path=True,
-    ),
-]
-ExtraDefinitionPathsParam = Annotated[
-    list[Path] | None,
-    typer.Option(
-        *["-e", "--extra-definition-path"],
-        help=(
-            "Path to an additional definition file. "
-            "Can be specified multiple times to include multiple files. "
-            "If the same definition exists, the last one specified overrides the previous ones."
-        ),
     ),
 ]
 DryRunParam = Annotated[
