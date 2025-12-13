@@ -2,8 +2,8 @@
 
 Actions:
   Appearance:
-    SystemDarkMode: apply
-    AppDarkMode: apply
+    EnableSystemDarkMode: apply
+    EnableAppDarkMode: apply
 
   Windows:
     DisableWindowsSuggestions: apply
@@ -70,7 +70,7 @@ Actions:
     DisableMouseAcceleration: apply
     DisableF1HelpPage: apply
     DisableStickyShift: apply
-    FastKeyRepeat: apply
+    EnableFastKeyRepeat: apply
     DisableTouchPad: apply
 
   Sound:

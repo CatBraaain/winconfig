@@ -1,24 +1,21 @@
 {
   "$defs": {
-    "ActionCollection": {
-      "$ref": "#/$defs/ActionCollectionRoot",
+    "ActionConfig": {
+      "$ref": "#/$defs/ActionConfigRoot",
       "default": {}
     },
-    "ActionCollectionRoot": {
+    "ActionConfigRoot": {
       "additionalProperties": {
-        "$ref": "#/$defs/ActionGroup"
+        "additionalProperties": {
+          "$ref": "#/$defs/ActionMode"
+        },
+        "propertyNames": {
+          "$ref": "#/$defs/ActionName"
+        },
+        "type": "object"
       },
       "propertyNames": {
         "$ref": "#/$defs/ActionGroupName"
-      },
-      "type": "object"
-    },
-    "ActionGroup": {
-      "additionalProperties": {
-        "$ref": "#/$defs/ActionMode"
-      },
-      "propertyNames": {
-        "$ref": "#/$defs/ActionName"
       },
       "type": "object"
     },
@@ -91,21 +88,21 @@
       "required": ["description"],
       "type": "object"
     },
-    "DefinitionCollection": {
-      "$ref": "#/$defs/DefinitionCollectionRoot",
-      "default": {},
-      "description": "The root model for a winconfig definition file."
-    },
     "DefinitionCollectionRoot": {
       "additionalProperties": {
-        "$ref": "#/$defs/DefinitionGroup"
+        "$ref": "#/$defs/DefinitionGroupDict"
       },
       "propertyNames": {
         "$ref": "#/$defs/DefinitionGroupName"
       },
       "type": "object"
     },
-    "DefinitionGroup": {
+    "DefinitionConfig": {
+      "$ref": "#/$defs/DefinitionCollectionRoot",
+      "default": {},
+      "description": "The root model for a winconfig definition file."
+    },
+    "DefinitionGroupDict": {
       "additionalProperties": {
         "$ref": "#/$defs/DefinitionBody"
       },
@@ -306,18 +303,18 @@
   "additionalProperties": false,
   "properties": {
     "Definitions": {
-      "$ref": "#/$defs/DefinitionCollection"
+      "$ref": "#/$defs/DefinitionConfig"
     },
     "Actions": {
-      "$ref": "#/$defs/ActionCollection",
+      "$ref": "#/$defs/ActionConfig",
       "properties": {
         "Appearance": {
           "type": "object",
           "properties": {
-            "SystemDarkMode": {
+            "EnableSystemDarkMode": {
               "$ref": "#/$defs/ActionMode"
             },
-            "AppDarkMode": {
+            "EnableAppDarkMode": {
               "$ref": "#/$defs/ActionMode"
             }
           },
@@ -518,7 +515,7 @@
             "DisableStickyShift": {
               "$ref": "#/$defs/ActionMode"
             },
-            "FastKeyRepeat": {
+            "EnableFastKeyRepeat": {
               "$ref": "#/$defs/ActionMode"
             },
             "DisableTouchPad": {

@@ -2,7 +2,7 @@
 
 Definitions:
   Appearance:
-    SystemDarkMode:
+    EnableSystemDarkMode:
       description: Enables dark mode for system
       registries:
         - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize
@@ -11,7 +11,7 @@ Definitions:
               type: DWord
               new_value: "0"
               old_value: "1"
-    AppDarkMode:
+    EnableAppDarkMode:
       description: Enables dark mode for apps
       registries:
         - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize
@@ -610,7 +610,7 @@ Definitions:
               type: String
               new_value: "506"
               old_value: "510"
-    FastKeyRepeat:
+    EnableFastKeyRepeat:
       description: Minimize key repeat delay and Maximize key repeat rate
       registries:
         - path: HKCU\Control Panel\Keyboard
