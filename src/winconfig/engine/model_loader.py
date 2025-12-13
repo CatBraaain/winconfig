@@ -33,11 +33,6 @@ class ModelLoader:
             ),
             Actions=ActionConfig.merge([config.action_config for config in configs]),
         )
-
-        for action_group in merged_config.action_config.groups:
-            for action in action_group.actions:
-                _ = merged_config.definition_config.get_definition(
-                    action.group_name, action.name
-                )
+        merged_config.validate_action_config()
 
         return merged_config

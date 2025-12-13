@@ -28,3 +28,10 @@ class Config(BaseModel):
             ),
             Actions=ActionConfig.merge([config.action_config for config in configs]),
         )
+
+    def validate_action_config(self) -> None:
+        for action_group in self.action_config.groups:
+            for action in action_group.actions:
+                _ = self.definition_config.get_definition(
+                    action.group_name, action.name
+                )
