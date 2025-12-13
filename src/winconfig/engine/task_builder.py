@@ -22,27 +22,26 @@ class TaskBuilder:
         powershell = PowershellRunspace()
         logger.debug(f"Setup PowerShell: version {powershell.runspace.Version}")
 
-        for (
-            action_group_name,
-            action_group,
-        ) in self.config.action_collection.root.items():
-            for action_name, configured_action_mode in action_group.items():
-                td = self.config.definition_collection.get_definition(
-                    action_group_name, action_name
+        for action_group in self.config.action_config.groups:
+            for action in action_group.actions:
+                definition = self.config.definition_config.get_definition(
+                    action.group_name, action.name
                 )
-                action_mode = configured_action_mode.resolve(reverse)
-                script = td.generate_script(action_mode).strip()
+                action_mode = action.mode.resolve(reverse)
+                script = definition.generate_script(action_mode).strip()
                 try:
                     stdout = powershell.run(script)
-                    logger.info(f"Success: {td.full_name}[{action_mode.value}]")
+                    logger.info(f"Success: {definition.full_name}[{action_mode.value}]")
                     if PERMISSION_DENIED in stdout:
                         raise Exception(
                             "Administrator privileges required for this operation"
                         )
                 except Exception as e:
-                    logger.error(f"Fail: {td.full_name}[{action_mode.value}]: {e}")
+                    logger.error(
+                        f"Fail: {definition.full_name}[{action_mode.value}]: {e}"
+                    )
                     raise
                 finally:
                     logger.debug(
-                        f"{td.full_name}[{action_mode.value}]:\n```powershell\n{script}\n```"
+                        f"{definition.full_name}[{action_mode.value}]:\n```powershell\n{script}\n```"
                     )

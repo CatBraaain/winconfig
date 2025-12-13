@@ -47,17 +47,17 @@ def schema(
 ) -> None:
     with handle_cli_error():
         schema_dict = generate_schema(Config)
-        builtin_definition = ModelLoader.load_configs([]).definition_collection
+        builtin_definition_config = ModelLoader.load_configs([]).definition_config
         schema_dict["properties"]["Actions"]["properties"] = {
-            task_group_name: {
+            definition_group.name: {
                 "type": "object",
                 "properties": {
-                    task_name: {"$ref": "#/$defs/ActionMode"}
-                    for task_name in task_group
+                    definition.name: {"$ref": "#/$defs/ActionMode"}
+                    for definition in definition_group.definitions
                 },
                 "additionalProperties": True,
             }
-            for task_group_name, task_group in builtin_definition.root.items()
+            for definition_group in builtin_definition_config.groups
         }
         schema_dict["properties"]["Actions"]["additionalProperties"] = True
         schema = json.dumps(schema_dict, ensure_ascii=False, indent=2)

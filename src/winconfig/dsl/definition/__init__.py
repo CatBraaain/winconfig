@@ -59,13 +59,19 @@ class DefinitionBody(BaseModel):
     )
 
 
+type DefinitionGroupName = str
+type DefinitionGroupDict = dict[DefinitionName, DefinitionBody]
+type DefinitionName = str
+type DefinitionCollectionRoot = dict[DefinitionGroupName, DefinitionGroupDict]
+
+
 class Definition(DefinitionBody):
-    group: str
-    name: str
+    group_name: DefinitionGroupName
+    name: DefinitionName
 
     @property
     def full_name(self) -> str:
-        return f"{self.group} - {self.name}"
+        return f"{self.group_name} - {self.name}"
 
     def generate_script(self, mode: ActionMode) -> str:
         script = "\n".join(
@@ -86,18 +92,45 @@ class Definition(DefinitionBody):
         return script
 
 
-type DefinitionGroupName = str
-type DefinitionGroup = dict[DefinitionName, DefinitionBody]
-type DefinitionName = str
-type DefinitionCollectionRoot = dict[DefinitionGroupName, DefinitionGroup]
+class DefinitionGroup(BaseModel):
+    name: DefinitionName
+    definitions: list[Definition]
 
 
-class DefinitionCollection(RootModel):
+class DefinitionConfig(RootModel):
     """The root model for a winconfig definition file."""
 
     root: DefinitionCollectionRoot = Field(
         default={}, description="The list of configuration tasks to be applied."
     )
+
+    @classmethod
+    def merge(cls, definition_configs: list["DefinitionConfig"]) -> "DefinitionConfig":
+        merged: DefinitionCollectionRoot = {}
+        for definition_config in definition_configs:
+            for group_name, group in definition_config.root.items():
+                if group_name not in merged:
+                    merged[group_name] = {}
+                merged[group_name] |= group
+
+        return DefinitionConfig.model_validate(merged)
+
+    @property
+    def groups(self) -> list[DefinitionGroup]:
+        return [
+            DefinitionGroup(
+                name=definition_group_name,
+                definitions=[
+                    Definition(
+                        group_name=definition_group_name,
+                        name=definition_name,
+                        **definition_body.model_dump(),
+                    )
+                    for definition_name, definition_body in definition_group.items()
+                ],
+            )
+            for definition_group_name, definition_group in self.root.items()
+        ]
 
     def get_definition(
         self, definition_group_name: str, definition_name: str
@@ -110,10 +143,8 @@ class DefinitionCollection(RootModel):
             raise ValueError(
                 f"Definition {definition_group_name} - {definition_name} not found"
             )
-        return Definition.model_validate(
-            {
-                "name": definition_name,
-                "group": definition_group_name,
-                **definition_body.model_dump(),
-            }
+        return Definition(
+            name=definition_name,
+            group_name=definition_group_name,
+            **definition_body.model_dump(),
         )

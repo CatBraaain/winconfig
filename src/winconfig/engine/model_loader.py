@@ -4,15 +4,9 @@ import yaml
 from pydantic import BaseModel, ValidationError
 from yaml import YAMLError
 
-from winconfig.dsl.action import (
-    ActionCollection,
-    ActionCollectionRoot,
-)
+from winconfig.dsl.action import ActionConfig
 from winconfig.dsl.config import Config
-from winconfig.dsl.definition import (
-    DefinitionCollection,
-    DefinitionCollectionRoot,
-)
+from winconfig.dsl.definition import DefinitionConfig
 from winconfig.resources import BUILTIN_DEFINITION_PATH
 
 
@@ -33,42 +27,17 @@ class ModelLoader:
         config_paths = [BUILTIN_DEFINITION_PATH, *config_paths]
         configs = [cls.load_yaml(config_path, Config) for config_path in config_paths]
 
-        merged_definition_collection: DefinitionCollectionRoot = {}
-        for config in configs:
-            for (
-                definition_group_name,
-                definition_group,
-            ) in config.definition_collection.root.items():
-                if definition_group_name not in merged_definition_collection:
-                    merged_definition_collection[definition_group_name] = {}
-                merged_definition_collection[definition_group_name] |= definition_group
-
-        merged_action_collection: ActionCollectionRoot = {}
-        for config in configs:
-            for (
-                definition_group_name,
-                action_group,
-            ) in config.action_collection.root.items():
-                if definition_group_name not in merged_action_collection:
-                    merged_action_collection[definition_group_name] = {}
-                merged_action_collection[definition_group_name] |= action_group
-
-        merged_config = Config.model_validate(
-            {
-                "Definitions": DefinitionCollection.model_validate(
-                    merged_definition_collection
-                ),
-                "Actions": ActionCollection.model_validate(merged_action_collection),
-            }
+        merged_config = Config(
+            Definitions=DefinitionConfig.merge(
+                [config.definition_config for config in configs]
+            ),
+            Actions=ActionConfig.merge([config.action_config for config in configs]),
         )
 
-        for (
-            task_group_name,
-            action_group,
-        ) in merged_config.action_collection.root.items():
-            for task_name in action_group:
-                _ = merged_config.definition_collection.get_definition(
-                    task_group_name, task_name
+        for action_group in merged_config.action_config.groups:
+            for action in action_group.actions:
+                _ = merged_config.definition_config.get_definition(
+                    action.group_name, action.name
                 )
 
         return merged_config

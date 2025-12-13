@@ -1,9 +1,7 @@
-from pathlib import Path
-
 import pytest
-import yaml
 
-from winconfig.dsl.definition import ActionMode, Definition, DefinitionCollection
+from winconfig.dsl.definition import ActionMode, Definition
+from winconfig.engine.model_loader import ModelLoader
 from winconfig.engine.powershell import PowershellRunspace
 
 
@@ -20,24 +18,12 @@ def ensure_sandbox():
 
 
 def generate_runtime_sets() -> list[tuple[PowershellRunspace, Definition]]:
-    definition_files = list(Path().glob("src/winconfig/resources/*.definition.yaml"))
-    definitions = [
-        DefinitionCollection.model_validate(
-            yaml.safe_load(definition_file.read_text(encoding="utf-8"))
-        )
-        for definition_file in definition_files
-    ]
-    runspace_with_definition = [
-        (PowershellRunspace(), definition) for definition in definitions
-    ]
+    config = ModelLoader.load_configs([])
+    runspace = PowershellRunspace()
     runtime_sets = [
-        (
-            runspace,
-            definition.get_definition(task_group_name, task_name),
-        )
-        for (runspace, definition) in runspace_with_definition
-        for task_group_name, task_group in definition.root.items()
-        for task_name in task_group
+        (runspace, definition)
+        for group in config.definition_config.groups
+        for definition in group.definitions
     ]
     return runtime_sets
 
