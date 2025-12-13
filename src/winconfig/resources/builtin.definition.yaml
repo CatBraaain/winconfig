@@ -123,7 +123,7 @@ Definitions:
         Note: Uninstalling is the only way to disable this after 23H2.
       script:
         apply: winget uninstall --name "Microsoft Copilot" --exact --source msstore
-        revert: winget install --name "Microsoft Copilot" --exact --source msstore --accept-package-agreements --accept-source-agreements --silent
+        revert: winget install --name "Microsoft Copilot" --exact --source msstore --no-upgrade --accept-package-agreements --accept-source-agreements --silent
     ShowClockSeconds:
       description: Show seconds on the taskbar clock
       registries:
