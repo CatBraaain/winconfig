@@ -16,7 +16,7 @@ class TaskBuilder:
         self,
         config_path: Path,
     ) -> None:
-        self.config = ModelLoader.load_configs([config_path])
+        self.config = ModelLoader.load_config([config_path])
 
     def apply(self, reverse: bool) -> None:
         powershell = PowershellRunspace()

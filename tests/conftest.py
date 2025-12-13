@@ -18,7 +18,7 @@ def ensure_sandbox():
 
 
 def generate_runtime_sets() -> list[tuple[PowershellRunspace, Definition]]:
-    config = ModelLoader.load_configs([])
+    config = ModelLoader.load_config([])
     runspace = PowershellRunspace()
     runtime_sets = [
         (runspace, definition)

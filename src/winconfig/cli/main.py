@@ -47,7 +47,7 @@ def schema(
 ) -> None:
     with handle_cli_error():
         schema_dict = generate_schema(Config)
-        builtin_definition_config = ModelLoader.load_configs([]).definition_config
+        builtin_definition_config = ModelLoader.load_config([]).definition_config
         schema_dict["properties"]["Actions"]["properties"] = {
             definition_group.name: {
                 "type": "object",

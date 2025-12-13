@@ -4,9 +4,7 @@ import yaml
 from pydantic import BaseModel, ValidationError
 from yaml import YAMLError
 
-from winconfig.dsl.action import ActionConfig
 from winconfig.dsl.config import Config
-from winconfig.dsl.definition import DefinitionConfig
 from winconfig.resources import BUILTIN_DEFINITION_PATH
 
 
@@ -23,16 +21,10 @@ class ModelLoader:
             ) from None
 
     @classmethod
-    def load_configs(cls, config_paths: list[Path]) -> Config:
+    def load_config(cls, config_paths: list[Path]) -> Config:
         config_paths = [BUILTIN_DEFINITION_PATH, *config_paths]
         configs = [cls.load_yaml(config_path, Config) for config_path in config_paths]
-
-        merged_config = Config(
-            Definitions=DefinitionConfig.merge(
-                [config.definition_config for config in configs]
-            ),
-            Actions=ActionConfig.merge([config.action_config for config in configs]),
-        )
+        merged_config = Config.merge(configs)
         merged_config.validate_action_config()
 
         return merged_config
