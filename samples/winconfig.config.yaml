@@ -88,6 +88,7 @@ Actions:
     OpenWithCode: apply
     EditMouseSensitivity: apply
     EditWindowsPATH: apply
+    SetAdvancedKeyRepeat: apply
 
 Definitions:
   Personalization:
@@ -203,3 +204,24 @@ Definitions:
             $newPath = ($oldPath | ? { $_ -ne $gitPath }) -join ';'
             [Environment]::SetEnvironmentVariable("Path", $newPath, "User")
           }
+    SetAdvancedKeyRepeat:
+      description: More Fast Key Repeat
+      registries:
+        - path: HKCU\Control Panel\Accessibility\Keyboard Response
+          entries:
+            - name: AutoRepeatDelay
+              type: String
+              new_value: "200"
+              old_value: "1000"
+            - name: AutoRepeatRate
+              type: String
+              new_value: "30"
+              old_value: "500"
+            - name: DelayBeforeAcceptance
+              type: String
+              new_value: "0"
+              old_value: "1000"
+            - name: Flags
+              type: String
+              new_value: "3"
+              old_value: "126"
