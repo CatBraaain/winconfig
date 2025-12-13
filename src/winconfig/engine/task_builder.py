@@ -30,9 +30,7 @@ class TaskBuilder:
                 )
                 action_mode = action.mode.resolve(reverse)
                 if action_mode == ActionMode.SKIP:
-                    logger.debug(
-                        f"{definition.full_name}[{action_mode.value}]: skipped"
-                    )
+                    logger.info(f"Skipped: {definition.full_name}[{action_mode.value}]")
                     continue
                 script = definition.generate_script(action_mode).strip()
                 try:
@@ -44,7 +42,7 @@ class TaskBuilder:
                         )
                 except Exception as e:
                     logger.error(
-                        f"Fail: {definition.full_name}[{action_mode.value}]: {e}"
+                        f"Failed: {definition.full_name}[{action_mode.value}]: {e}"
                     )
                     raise
                 finally:
