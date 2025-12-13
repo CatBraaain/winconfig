@@ -1,3 +1,5 @@
+from typing import Self
+
 from pydantic import BaseModel, ConfigDict, Field
 
 from .action import ActionConfig
@@ -21,8 +23,8 @@ class Config(BaseModel):
     )
 
     @classmethod
-    def merge(cls, configs: list["Config"]) -> "Config":
-        return Config(
+    def merge(cls, configs: list[Self]) -> Self:
+        return cls(
             Definitions=DefinitionConfig.merge(
                 [config.definition_config for config in configs]
             ),

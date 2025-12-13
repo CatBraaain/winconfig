@@ -1,3 +1,5 @@
+from typing import Self
+
 from pydantic import (
     BaseModel,
     ConfigDict,
@@ -105,7 +107,7 @@ class DefinitionConfig(RootModel):
     )
 
     @classmethod
-    def merge(cls, definition_configs: list["DefinitionConfig"]) -> "DefinitionConfig":
+    def merge(cls, definition_configs: list[Self]) -> Self:
         merged: DefinitionCollectionRoot = {}
         for definition_config in definition_configs:
             for group_name, group in definition_config.root.items():
@@ -113,7 +115,7 @@ class DefinitionConfig(RootModel):
                     merged[group_name] = {}
                 merged[group_name] |= group
 
-        return DefinitionConfig.model_validate(merged)
+        return cls.model_validate(merged)
 
     @property
     def groups(self) -> list[DefinitionGroup]:

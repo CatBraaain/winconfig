@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Literal
+from typing import Literal, Self
 
 from pydantic import BaseModel, RootModel
 
@@ -40,7 +40,7 @@ class ActionConfig(RootModel):
     root: ActionConfigRoot = {}
 
     @classmethod
-    def merge(cls, action_configs: list["ActionConfig"]) -> "ActionConfig":
+    def merge(cls, action_configs: list[Self]) -> Self:
         merged: ActionConfigRoot = {}
         for action_config in action_configs:
             for group_name, group in action_config.root.items():
