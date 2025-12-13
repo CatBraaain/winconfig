@@ -617,12 +617,12 @@ Definitions:
           entries:
             - name: KeyboardDelay
               type: String
-              new_value: "0"
-              old_value: "1"
+              new_value: "0" # 250ms
+              old_value: "1" # 500ms
             - name: KeyboardSpeed
               type: String
-              new_value: "31"
-              old_value: "31"
+              new_value: "31" # 33.3ms
+              old_value: "31" # 33.3ms
     DisableTouchPad:
       description: Disable touchpad for laptop
       registries:
