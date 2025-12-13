@@ -7,7 +7,7 @@ from pydantic import (
     Field,
 )
 
-from winconfig.dsl.action import ActionMode, ApplyMode
+from winconfig.dsl.action import ActionMode, ExecutableActionMode
 
 from .const_types import NOT_EXIST
 
@@ -33,7 +33,7 @@ class ServiceDefinition(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    def resolve_value(self, mode: ApplyMode) -> str:
+    def resolve_value(self, mode: ExecutableActionMode) -> str:
         match mode:
             case ActionMode.APPLY:
                 return self.new_startup

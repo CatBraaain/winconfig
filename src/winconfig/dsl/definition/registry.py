@@ -6,7 +6,7 @@ from typing import Any, Literal, Self
 
 from pydantic import BaseModel, ConfigDict, Field, PrivateAttr, field_validator
 
-from winconfig.dsl.action import ActionMode, ApplyMode
+from winconfig.dsl.action import ActionMode, ExecutableActionMode
 
 from .const_types import (
     ACCESS_DENIED,
@@ -85,7 +85,7 @@ class RegistryPathDefinition(BaseModel):
         return [self, *self.entries]
 
     def resolve_value(
-        self, mode: ApplyMode
+        self, mode: ExecutableActionMode
     ) -> NotChangeType | ExistType | NotExistType:
         match mode:
             case ActionMode.APPLY:
@@ -156,7 +156,7 @@ class RegistryEntryDefinition(BaseModel):
     def full_path(self) -> str:
         return f"{self._parent.path}\\{self.name}"
 
-    def resolve_value(self, mode: ApplyMode) -> str:
+    def resolve_value(self, mode: ExecutableActionMode) -> str:
         match mode:
             case ActionMode.APPLY:
                 return self.new_value

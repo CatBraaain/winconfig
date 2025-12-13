@@ -6,7 +6,7 @@ from pydantic import (
     Field,
 )
 
-from winconfig.dsl.action import ActionMode, ApplyMode
+from winconfig.dsl.action import ActionMode, ExecutableActionMode
 
 
 class ScriptDefinition(BaseModel):
@@ -23,7 +23,7 @@ class ScriptDefinition(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    def resolve_value(self, mode: ApplyMode) -> str:
+    def resolve_value(self, mode: ExecutableActionMode) -> str:
         match mode:
             case ActionMode.APPLY:
                 return self.apply

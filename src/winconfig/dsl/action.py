@@ -18,7 +18,7 @@ class ActionMode(Enum):
         return self
 
 
-type ApplyMode = Literal[ActionMode.APPLY, ActionMode.REVERT]
+type ExecutableActionMode = Literal[ActionMode.APPLY, ActionMode.REVERT]
 
 type ActionName = str
 type ActionGroupName = str
