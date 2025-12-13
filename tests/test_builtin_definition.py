@@ -9,7 +9,7 @@ from winconfig.dsl.definition import (
 from winconfig.engine.powershell import PowershellRunspace
 
 
-def test_apply_resitory(
+def test_resitory_definition(
     runtime_set: tuple[PowershellRunspace, Definition], mode: ExecutableActionMode
 ):
     powershell, definition = runtime_set
@@ -27,7 +27,7 @@ def test_apply_resitory(
             )
 
 
-def test_apply_scheduled_task(
+def test_schtask_definiton(
     runtime_set: tuple[PowershellRunspace, Definition], mode: ExecutableActionMode
 ):
     powershell, definition = runtime_set
@@ -40,7 +40,7 @@ def test_apply_scheduled_task(
         )
 
 
-def test_apply_service(
+def test_service_definition(
     runtime_set: tuple[PowershellRunspace, Definition], mode: ExecutableActionMode
 ):
     powershell, definition = runtime_set
@@ -63,7 +63,7 @@ def test_apply_service(
         )
 
 
-def test_apply_script(
+def test_script_definition(
     runtime_set: tuple[PowershellRunspace, Definition], mode: ExecutableActionMode
 ):
     powershell, definition = runtime_set
