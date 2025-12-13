@@ -184,9 +184,7 @@ class RegistryEntryDefinition(BaseModel):
             }}
         """
 
-    def generate_set_script(self, mode: ActionMode) -> str:
-        if mode == ActionMode.SKIP:
-            return ""
+    def generate_set_script(self, mode: ExecutableActionMode) -> str:
         value = self.resolve_value(mode)
         if self.type == "Binary":
             psvalue = f'("{value.replace('"', '`"')}".split(" ") | % {{ [byte]$_ }})'

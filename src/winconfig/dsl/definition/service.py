@@ -58,9 +58,7 @@ class ServiceDefinition(BaseModel):
             }}
         """
 
-    def generate_set_script(self, mode: ActionMode) -> str:
-        if mode == ActionMode.SKIP:
-            return ""
+    def generate_set_script(self, mode: ExecutableActionMode) -> str:
         startup_type = self.resolve_value(mode)
 
         service_name = f"""

@@ -1,6 +1,7 @@
 import pytest
 
-from winconfig.dsl.definition import ActionMode, Definition
+from winconfig.dsl.action import ActionMode, ExecutableActionMode
+from winconfig.dsl.definition import Definition
 from winconfig.engine.model_loader import ModelLoader
 from winconfig.engine.powershell import PowershellRunspace
 
@@ -40,8 +41,8 @@ def runtime_set(
 
 
 @pytest.fixture(
-    params=[ActionMode.APPLY, ActionMode.REVERT, ActionMode.SKIP],
+    params=[ActionMode.APPLY, ActionMode.REVERT],
     ids=lambda e: e.value,
 )
-def mode(request: pytest.FixtureRequest) -> ActionMode:
+def mode(request: pytest.FixtureRequest) -> ExecutableActionMode:
     return request.param

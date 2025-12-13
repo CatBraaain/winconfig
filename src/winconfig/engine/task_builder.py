@@ -2,6 +2,7 @@ from pathlib import Path
 
 from loguru import logger
 
+from winconfig.dsl.action import ActionMode
 from winconfig.dsl.config import Config
 from winconfig.dsl.definition import PERMISSION_DENIED
 
@@ -28,6 +29,11 @@ class TaskBuilder:
                     action.group_name, action.name
                 )
                 action_mode = action.mode.resolve(reverse)
+                if action_mode == ActionMode.SKIP:
+                    logger.debug(
+                        f"{definition.full_name}[{action_mode.value}]: skipped"
+                    )
+                    continue
                 script = definition.generate_script(action_mode).strip()
                 try:
                     stdout = powershell.run(script)

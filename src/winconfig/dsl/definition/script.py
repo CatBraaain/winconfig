@@ -32,7 +32,5 @@ class ScriptDefinition(BaseModel):
             case _:
                 raise ValueError(f"Invalid mode: {mode}")
 
-    def generate_set_script(self, mode: ActionMode) -> str:
-        if mode == ActionMode.SKIP:
-            return ""
+    def generate_set_script(self, mode: ExecutableActionMode) -> str:
         return dedent(self.resolve_value(mode))

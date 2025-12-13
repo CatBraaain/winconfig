@@ -59,9 +59,7 @@ class SchtaskDefinition(BaseModel):
             }}
         """
 
-    def generate_set_script(self, mode: ActionMode) -> str:
-        if mode == ActionMode.SKIP:
-            return ""
+    def generate_set_script(self, mode: ExecutableActionMode) -> str:
         state = self.resolve_value(mode)
         enabled = "$true" if state == "Enabled" else "$false"
         script = self.with_error_handler(f"""

@@ -7,7 +7,7 @@ from pydantic import (
     RootModel,
 )
 
-from winconfig.dsl.action import ActionMode
+from winconfig.dsl.action import ExecutableActionMode
 
 from .const_types import (  # noqa: F401
     ACCESS_DENIED,
@@ -75,7 +75,7 @@ class Definition(DefinitionBody):
     def full_name(self) -> str:
         return f"{self.group_name} - {self.name}"
 
-    def generate_script(self, mode: ActionMode) -> str:
+    def generate_script(self, mode: ExecutableActionMode) -> str:
         script = "\n".join(
             [
                 e.generate_set_script(mode)
