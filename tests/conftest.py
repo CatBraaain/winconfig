@@ -1,7 +1,7 @@
 import pytest
 
 from winconfig.dsl.action import ActionMode, ExecutableActionMode
-from winconfig.dsl.definition import Definition
+from winconfig.engine.config_context import ConfigContext, Task
 from winconfig.engine.model_loader import ModelLoader
 from winconfig.engine.powershell import PowershellRunspace
 
@@ -18,13 +18,12 @@ def ensure_sandbox():
         pytest.fail("This test must be run inside a Windows Sandbox")
 
 
-def generate_runtime_sets() -> list[tuple[PowershellRunspace, Definition]]:
+def generate_runtime_sets() -> list[tuple[PowershellRunspace, Task]]:
     config = ModelLoader.load_config([])
+    config_context = ConfigContext(config)
     runspace = PowershellRunspace()
     runtime_sets = [
-        (runspace, definition)
-        for group in config.definition_config.groups
-        for definition in group.definitions
+        (runspace, task) for group in config_context.groups for task in group.tasks
     ]
     return runtime_sets
 
@@ -36,7 +35,7 @@ def generate_runtime_sets() -> list[tuple[PowershellRunspace, Definition]]:
 )
 def runtime_set(
     request: pytest.FixtureRequest,
-) -> tuple[PowershellRunspace, Definition]:
+) -> tuple[PowershellRunspace, Task]:
     return request.param
 
 

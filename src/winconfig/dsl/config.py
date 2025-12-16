@@ -32,8 +32,13 @@ class Config(BaseModel):
         )
 
     def validate_action_config(self) -> None:
-        for action_group in self.action_config.groups:
-            for action in action_group.actions:
-                _ = self.definition_config.get_definition(
-                    action.group_name, action.name
-                )
+        for action_group_name, action_group in self.action_config.root.items():
+            for action_name in action_group:
+                definition_group = self.definition_config.root.get(action_group_name)
+                if definition_group is None:
+                    raise ValueError(f"Definition group {action_group_name} not found")
+                definition_body = definition_group.get(action_name)
+                if definition_body is None:
+                    raise ValueError(
+                        f"Definition {action_group_name} - {action_name} not found"
+                    )

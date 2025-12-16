@@ -12,8 +12,8 @@ from winconfig.cli.cli_utils import (
     handle_output,
 )
 from winconfig.dsl.config import Config
+from winconfig.engine.config_context import ConfigContext
 from winconfig.engine.model_loader import ModelLoader
-from winconfig.engine.task_builder import TaskBuilder
 
 app = typer.Typer(
     no_args_is_help=True,
@@ -33,9 +33,10 @@ def apply(
     loglevel: LogLevelParam = "INFO",  # noqa: ARG001
 ) -> None:
     with handle_cli_error():
-        task_builder = TaskBuilder(config_path=config_path)
+        config = ModelLoader.load_config([config_path])
+        config_context = ConfigContext(config)
         if not dry_run:
-            task_builder.apply(reverse=reverse)
+            config_context.apply(reverse=reverse)
 
 
 @app.command(
@@ -47,17 +48,18 @@ def schema(
 ) -> None:
     with handle_cli_error():
         schema_dict = generate_schema(Config)
-        builtin_definition_config = ModelLoader.load_config([]).definition_config
+        builtin_config = ModelLoader.load_config([])
+        builtin_config_context = ConfigContext(builtin_config)
         schema_dict["properties"]["Actions"]["properties"] = {
-            definition_group.name: {
+            task_group.name: {
                 "type": "object",
                 "properties": {
-                    definition.name: {"$ref": "#/$defs/ActionMode"}
-                    for definition in definition_group.definitions
+                    task.name: {"$ref": "#/$defs/ActionMode"}
+                    for task in task_group.tasks
                 },
                 "additionalProperties": True,
             }
-            for definition_group in builtin_definition_config.groups
+            for task_group in builtin_config_context.groups
         }
         schema_dict["properties"]["Actions"]["additionalProperties"] = True
         schema = json.dumps(schema_dict, ensure_ascii=False, indent=2)

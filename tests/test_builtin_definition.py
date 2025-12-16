@@ -4,16 +4,16 @@ from winconfig.dsl.action import ExecutableActionMode
 from winconfig.dsl.definition import (
     ACCESS_DENIED,
     NOT_EXIST,
-    Definition,
 )
+from winconfig.engine.config_context import Task
 from winconfig.engine.powershell import PowershellRunspace
 
 
 def test_resitory_definition(
-    runtime_set: tuple[PowershellRunspace, Definition], mode: ExecutableActionMode
+    runtime_set: tuple[PowershellRunspace, Task], mode: ExecutableActionMode
 ):
-    powershell, definition = runtime_set
-    for registry_path in definition.registries:
+    powershell, task = runtime_set
+    for registry_path in task.registries:
         for registry_item in registry_path.items:
             res = powershell.run(registry_item.generate_set_script(mode))
             if res == ACCESS_DENIED:
@@ -28,10 +28,10 @@ def test_resitory_definition(
 
 
 def test_schtask_definiton(
-    runtime_set: tuple[PowershellRunspace, Definition], mode: ExecutableActionMode
+    runtime_set: tuple[PowershellRunspace, Task], mode: ExecutableActionMode
 ):
-    powershell, definition = runtime_set
-    for schtask in definition.scheduled_tasks:
+    powershell, task = runtime_set
+    for schtask in task.scheduled_tasks:
         powershell.run(schtask.generate_set_script(mode))
         current_state = powershell.run(schtask.generate_get_script())
         expected_value = schtask.resolve_value(mode)
@@ -41,10 +41,10 @@ def test_schtask_definiton(
 
 
 def test_service_definition(
-    runtime_set: tuple[PowershellRunspace, Definition], mode: ExecutableActionMode
+    runtime_set: tuple[PowershellRunspace, Task], mode: ExecutableActionMode
 ):
-    powershell, definition = runtime_set
-    for service in definition.services:
+    powershell, task = runtime_set
+    for service in task.services:
         res = powershell.run(service.generate_set_script(mode))
         if res == ACCESS_DENIED:
             # pytest.skip("Access denied: need workaround")
@@ -64,13 +64,13 @@ def test_service_definition(
 
 
 def test_script_definition(
-    runtime_set: tuple[PowershellRunspace, Definition], mode: ExecutableActionMode
+    runtime_set: tuple[PowershellRunspace, Task], mode: ExecutableActionMode
 ):
-    powershell, definition = runtime_set
-    if definition.name in [
+    powershell, task = runtime_set
+    if task.name in [
         "RemoveCopilot",
     ]:
         pytest.xfail("Not Supporting in Windows Sandbox")
 
-    script = definition.script.generate_set_script(mode)
+    script = task.script.generate_set_script(mode)
     powershell.run(script)

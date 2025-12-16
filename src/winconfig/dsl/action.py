@@ -25,17 +25,6 @@ type ActionGroupName = str
 type ActionConfigRoot = dict[ActionGroupName, dict[ActionName, ActionMode]]
 
 
-class Action(BaseModel):
-    group_name: ActionGroupName
-    name: ActionName
-    mode: ActionMode
-
-
-class ActionGroup(BaseModel):
-    name: ActionGroupName
-    actions: list[Action]
-
-
 class ActionConfig(RootModel):
     root: ActionConfigRoot = {}
 
@@ -49,16 +38,3 @@ class ActionConfig(RootModel):
                 merged[group_name] |= group
 
         return cls.model_validate(merged)
-
-    @property
-    def groups(self) -> list[ActionGroup]:
-        return [
-            ActionGroup(
-                name=group_name,
-                actions=[
-                    Action(group_name=group_name, name=name, mode=mode)
-                    for name, mode in group.items()
-                ],
-            )
-            for group_name, group in self.root.items()
-        ]

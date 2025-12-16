@@ -67,38 +67,6 @@ type DefinitionName = str
 type DefinitionCollectionRoot = dict[DefinitionGroupName, DefinitionGroupDict]
 
 
-class Definition(DefinitionBody):
-    group_name: DefinitionGroupName
-    name: DefinitionName
-
-    @property
-    def full_name(self) -> str:
-        return f"{self.group_name} - {self.name}"
-
-    def generate_script(self, mode: ExecutableActionMode) -> str:
-        script = "\n".join(
-            [
-                e.generate_set_script(mode)
-                for e in (
-                    [
-                        registry_item
-                        for registry_path in self.registries
-                        for registry_item in registry_path.items
-                    ]
-                    + self.scheduled_tasks
-                    + self.services
-                    + [self.script]
-                )
-            ]
-        )
-        return script
-
-
-class DefinitionGroup(BaseModel):
-    name: DefinitionName
-    definitions: list[Definition]
-
-
 class DefinitionConfig(RootModel):
     """The root model for a winconfig definition file."""
 
@@ -116,37 +84,3 @@ class DefinitionConfig(RootModel):
                 merged[group_name] |= group
 
         return cls.model_validate(merged)
-
-    @property
-    def groups(self) -> list[DefinitionGroup]:
-        return [
-            DefinitionGroup(
-                name=definition_group_name,
-                definitions=[
-                    Definition(
-                        group_name=definition_group_name,
-                        name=definition_name,
-                        **definition_body.model_dump(),
-                    )
-                    for definition_name, definition_body in definition_group.items()
-                ],
-            )
-            for definition_group_name, definition_group in self.root.items()
-        ]
-
-    def get_definition(
-        self, definition_group_name: str, definition_name: str
-    ) -> Definition:
-        definition_group = self.root.get(definition_group_name)
-        if definition_group is None:
-            raise ValueError(f"Definition group {definition_group_name} not found")
-        definition_body = definition_group.get(definition_name)
-        if definition_body is None:
-            raise ValueError(
-                f"Definition {definition_group_name} - {definition_name} not found"
-            )
-        return Definition(
-            name=definition_name,
-            group_name=definition_group_name,
-            **definition_body.model_dump(),
-        )
