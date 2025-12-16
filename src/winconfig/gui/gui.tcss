@@ -20,6 +20,15 @@ TaskLabel {
     width: 1fr;
     padding: 0 1;
 }
+TaskListItem.apply Static#label {
+    color: $text-success;
+}
+TaskListItem.revert Static#label {
+    color: $text-warning;
+}
+TaskListItem.skip Static#label {
+    color: $foreground-darken-3;
+}
 
 # adjust defaults
 ListView {
