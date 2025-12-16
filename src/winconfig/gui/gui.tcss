@@ -1,8 +1,12 @@
 TaskList {
-    border-title-align: center;
     width: 100;
-    border-left: tall $surface-lighten-3;
-    border-right: tall $surface-lighten-3;
+    border: wide $surface-lighten-3;
+
+    margin: 2;
+    border-title-align: center;
+    border-title-style: bold;
+    border-title-color: $foreground;
+    border-title-background: $surface;
 }
 TaskListItem > Grid {
     height: 3;
@@ -12,11 +16,7 @@ TaskListItem > Grid {
     align: center middle;
 }
 TaskLabel {
-    # border: hkey $surface-lighten-3;
-    border-top: hkey $surface-lighten-3;
-    border-bottom: hkey $surface-lighten-3;
-    # border-top: blank;
-    # border-bottom: hkey $surface-lighten-3;
+    border: hkey $surface-lighten-3;
     width: 1fr;
     padding: 0 1;
 }

@@ -4,7 +4,14 @@ from typing import cast
 from textual.app import App, ComposeResult
 from textual.containers import Center, Grid, Middle
 from textual.events import Focus
-from textual.widgets import Footer, Header, Label, ListItem, ListView, Select
+from textual.widgets import (
+    Footer,
+    Header,
+    Label,
+    ListItem,
+    ListView,
+    Select,
+)
 
 from winconfig.config.action import ActionMode
 from winconfig.engine import Engine, Task
@@ -20,11 +27,10 @@ class WinconfigApp(App):
             yield TaskList()
         yield Footer()
 
-    def on_mount(self) -> None:
-        self.theme = "flexoki"
-
 
 class TaskList(ListView):
+    BORDER_TITLE = "TaskList"
+
     def __init__(self) -> None:
         engine = Engine(Path("samples/winconfig.config.yaml"))
         super().__init__(
