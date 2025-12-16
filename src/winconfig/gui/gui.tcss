@@ -34,6 +34,7 @@ ListView {
 }
 SelectCurrent {
     padding: 0 1;
+    border: tall $surface-darken-2;
 }
 Tooltip {
     offset-x: 0%;
