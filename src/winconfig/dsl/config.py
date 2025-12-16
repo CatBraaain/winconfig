@@ -36,9 +36,11 @@ class Config(BaseModel):
             for action_name in action_group:
                 definition_group = self.definition_config.root.get(action_group_name)
                 if definition_group is None:
-                    raise ValueError(f"Definition group {action_group_name} not found")
+                    raise ValueError(
+                        f'Definition Group "{action_group_name}" not found'
+                    )
                 definition_body = definition_group.get(action_name)
                 if definition_body is None:
                     raise ValueError(
-                        f"Definition {action_group_name} - {action_name} not found"
+                        f'Definition "{action_name}" not found in Definition Group "{action_group_name}"'
                     )

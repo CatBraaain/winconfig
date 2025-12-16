@@ -80,7 +80,7 @@ class Task(DefinitionBody):
 
     @property
     def full_name(self) -> str:
-        return f"{self.group_name} - {self.name}"
+        return f"{self.group_name} > {self.name}"
 
     def generate_script(self, mode: ExecutableActionMode) -> str:
         script = "\n".join(
