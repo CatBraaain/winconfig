@@ -13,7 +13,6 @@ from winconfig.cli.cli_utils import (
 )
 from winconfig.dsl.config import Config
 from winconfig.engine.config_context import ConfigContext
-from winconfig.engine.model_loader import ModelLoader
 
 app = typer.Typer(
     no_args_is_help=True,
@@ -33,8 +32,7 @@ def apply(
     loglevel: LogLevelParam = "INFO",  # noqa: ARG001
 ) -> None:
     with handle_cli_error():
-        config = ModelLoader.load_config([config_path])
-        config_context = ConfigContext(config)
+        config_context = ConfigContext.init(config_path)
         if not dry_run:
             config_context.apply(reverse=reverse)
 
@@ -48,8 +46,7 @@ def schema(
 ) -> None:
     with handle_cli_error():
         schema_dict = generate_schema(Config)
-        builtin_config = ModelLoader.load_config([])
-        builtin_config_context = ConfigContext(builtin_config)
+        builtin_config_context = ConfigContext.init()
         schema_dict["properties"]["Actions"]["properties"] = {
             task_group.name: {
                 "type": "object",

@@ -2,7 +2,6 @@ import pytest
 
 from winconfig.dsl.action import ActionMode, ExecutableActionMode
 from winconfig.engine.config_context import ConfigContext, Task
-from winconfig.engine.model_loader import ModelLoader
 from winconfig.engine.powershell import PowershellRunspace
 
 
@@ -19,8 +18,7 @@ def ensure_sandbox():
 
 
 def generate_runtime_sets() -> list[tuple[PowershellRunspace, Task]]:
-    config = ModelLoader.load_config([])
-    config_context = ConfigContext(config)
+    config_context = ConfigContext.init()
     runspace = PowershellRunspace()
     runtime_sets = [
         (runspace, task) for group in config_context.groups for task in group.tasks

@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from loguru import logger
 from pydantic import BaseModel
 
@@ -10,33 +12,42 @@ from winconfig.dsl.definition import (
     DefinitionName,
 )
 
+from .model_loader import ModelLoader
 from .powershell import PowershellRunspace
 
 
 class ConfigContext(BaseModel):
     groups: list["TaskGroup"]
 
-    def __init__(self, config: Config) -> None:
+    @classmethod
+    def init(cls, *config_paths: Path) -> "ConfigContext":
+        config = ModelLoader.load_config(*config_paths)
+        return cls.from_config(config)
+
+    @classmethod
+    def from_config(cls, config: Config) -> "ConfigContext":
         config.validate_action_config()
-        self.groups = [
-            TaskGroup(
-                name=definition_group_name,
-                tasks=[
-                    Task(
-                        group_name=definition_group_name,
-                        name=definition_name,
-                        mode=(
-                            config.action_config.root.get(
-                                definition_group_name, {}
-                            ).get(definition_name, None)
-                        ),
-                        **definition_body.model_dump(),
-                    )
-                    for definition_name, definition_body in definition_group.items()
-                ],
-            )
-            for definition_group_name, definition_group in config.definition_config.root.items()
-        ]
+        return cls(
+            groups=[
+                TaskGroup(
+                    name=definition_group_name,
+                    tasks=[
+                        Task(
+                            group_name=definition_group_name,
+                            name=definition_name,
+                            mode=(
+                                config.action_config.root.get(
+                                    definition_group_name, {}
+                                ).get(definition_name, None)
+                            ),
+                            **definition_body.model_dump(),
+                        )
+                        for definition_name, definition_body in definition_group.items()
+                    ],
+                )
+                for definition_group_name, definition_group in config.definition_config.root.items()
+            ]
+        )
 
     def apply(self, reverse: bool) -> None:
         powershell = PowershellRunspace()

@@ -21,9 +21,11 @@ class ModelLoader:
             ) from None
 
     @classmethod
-    def load_config(cls, config_paths: list[Path]) -> Config:
-        config_paths = [BUILTIN_DEFINITION_PATH, *config_paths]
-        configs = [cls.load_yaml(config_path, Config) for config_path in config_paths]
+    def load_config(cls, *config_paths: Path) -> Config:
+        configs = [
+            cls.load_yaml(config_path, Config)
+            for config_path in [BUILTIN_DEFINITION_PATH, *config_paths]
+        ]
         merged_config = Config.merge(configs)
         merged_config.validate_action_config()
 
