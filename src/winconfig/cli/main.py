@@ -13,12 +13,26 @@ from winconfig.cli.cli_utils import (
 )
 from winconfig.config.config import Config
 from winconfig.engine import Engine
+from winconfig.gui.gui import WinconfigApp
 
 app = typer.Typer(
-    no_args_is_help=True,
     context_settings={"help_option_names": ["-h", "--help"]},
     pretty_exceptions_show_locals=False,
 )
+
+
+@app.callback(invoke_without_command=True)
+def callback(ctx: typer.Context) -> None:
+    if ctx.invoked_subcommand is None:
+        gui()
+
+
+@app.command(
+    no_args_is_help=True,
+    help="Open the GUI.",
+)
+def gui() -> None:
+    WinconfigApp().run()
 
 
 @app.command(

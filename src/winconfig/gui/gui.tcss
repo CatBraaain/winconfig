@@ -1,0 +1,37 @@
+TaskList {
+    border-title-align: center;
+    width: 100;
+    border-left: tall $surface-lighten-3;
+    border-right: tall $surface-lighten-3;
+}
+TaskListItem > Grid {
+    height: 3;
+    grid-size: 2 1;
+    grid-columns: 81 15;
+    grid-gutter: 0 0;
+    align: center middle;
+}
+TaskLabel {
+    # border: hkey $surface-lighten-3;
+    border-top: hkey $surface-lighten-3;
+    border-bottom: hkey $surface-lighten-3;
+    # border-top: blank;
+    # border-bottom: hkey $surface-lighten-3;
+    width: 1fr;
+    padding: 0 1;
+}
+
+# adjust defaults
+ListView {
+    &:focus {
+        background-tint: $surface;
+        & > ListItem.-highlight {
+            color: $block-cursor-blurred-foreground;
+            background: $block-cursor-blurred-background;
+            text-style: $block-cursor-blurred-text-style;
+        }
+    }
+}
+Tooltip {
+    offset-x: 0%;
+}
