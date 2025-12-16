@@ -1,5 +1,5 @@
 TaskList {
-    width: 100;
+    max-width: 100;
     border: wide $surface-lighten-3;
 
     margin: 2;
@@ -11,7 +11,7 @@ TaskList {
 TaskListItem > Grid {
     height: 3;
     grid-size: 2 1;
-    grid-columns: 81 15;
+    grid-columns: 1fr 15;
     grid-gutter: 0 0;
     align: center middle;
 }
