@@ -11,7 +11,7 @@ TaskList {
 TaskListItem > Grid {
     height: 3;
     grid-size: 2 1;
-    grid-columns: 1fr 15;
+    grid-columns: 1fr 12;
     grid-gutter: 0 0;
     align: center middle;
 }
@@ -31,6 +31,9 @@ ListView {
             text-style: $block-cursor-blurred-text-style;
         }
     }
+}
+SelectCurrent {
+    padding: 0 1;
 }
 Tooltip {
     offset-x: 0%;
