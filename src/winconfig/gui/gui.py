@@ -1,8 +1,7 @@
 from pathlib import Path
-from typing import cast
 
 from textual.app import App, ComposeResult
-from textual.containers import Center, Grid, Middle
+from textual.containers import Center, Container, Grid, Middle
 from textual.events import Focus
 from textual.widgets import (
     Footer,
@@ -45,21 +44,9 @@ class TaskList(ListView):
 class TaskListItem(ListItem):
     task_: Task
 
-    def __init__(
-        self,
-        task: Task,
-    ) -> None:
+    def __init__(self, task: Task) -> None:
         super().__init__(classes=f"{task.group_name} {task.name}")
         self.task_ = task
-
-    def on_mount(self) -> None:
-        action_label_box = cast(
-            Middle,
-            self.query_one(
-                f".{self.task_.group_name} .{self.task_.name}", Label
-            ).parent,
-        )
-        action_label_box.tooltip = self.task_.description
 
     def compose(self) -> ComposeResult:
         with Grid():
@@ -69,15 +56,20 @@ class TaskListItem(ListItem):
                 yield TaskSelect(task=self.task_)
 
 
-class TaskLabel(Label):
-    def __init__(
-        self,
-        task: Task,
-    ) -> None:
-        super().__init__(
-            task.full_name,
-            classes=f"{task.group_name} {task.name}",
+class TaskLabel(Container):
+    task_: Task
+
+    def __init__(self, task: Task) -> None:
+        super().__init__()
+        self.task_ = task
+
+    def compose(self) -> ComposeResult:
+        yield Label(
+            self.task_.full_name, classes=f"{self.task_.group_name} {self.task_.name}"
         )
+
+    def on_mount(self) -> None:
+        self.query_one(Label).tooltip = self.task_.description
 
 
 class TaskSelect(Select):
