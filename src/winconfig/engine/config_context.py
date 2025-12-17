@@ -71,8 +71,9 @@ class ConfigContext(BaseModel):
                             "Administrator privileges required for this operation"
                         )
                 except Exception as e:
-                    logger.error(f"Failed: {task.full_name}[{action_mode}]: {e}")
-                    raise
+                    raise Exception(
+                        f"Failed: {task.full_name}[{action_mode}]: {e}"
+                    ) from e
                 finally:
                     logger.debug(
                         f"{task.full_name}[{action_mode}]:\n```powershell\n{script}\n```"
