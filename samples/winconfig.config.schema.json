@@ -304,10 +304,10 @@
         "Appearance": {
           "type": "object",
           "properties": {
-            "EnableSystemDarkMode": {
+            "SystemDarkMode": {
               "$ref": "#/$defs/ActionMode"
             },
-            "EnableAppDarkMode": {
+            "AppDarkMode": {
               "$ref": "#/$defs/ActionMode"
             }
           },
@@ -325,13 +325,13 @@
           },
           "additionalProperties": true
         },
-        "DesktopTaskbar": {
+        "Taskbar": {
           "type": "object",
           "properties": {
-            "TaskbarAlignmentLeft": {
+            "AlignTaskbarLeft": {
               "$ref": "#/$defs/ActionMode"
             },
-            "EnableTaskbarEndTask": {
+            "EnableEndTaskMenu": {
               "$ref": "#/$defs/ActionMode"
             },
             "HideSearch": {
@@ -349,22 +349,34 @@
             "ShowClockSeconds": {
               "$ref": "#/$defs/ActionMode"
             },
-            "ShowMultiMonitorTaskbar": {
-              "$ref": "#/$defs/ActionMode"
-            },
-            "HideDesktopRecycleBin": {
-              "$ref": "#/$defs/ActionMode"
-            },
-            "ShowSidePanelClock": {
+            "MultiMonitorTaskbar": {
               "$ref": "#/$defs/ActionMode"
             }
           },
           "additionalProperties": true
         },
-        "SettingsApp": {
+        "Desktop": {
           "type": "object",
           "properties": {
-            "HideSettingsSuggestions": {
+            "HideRecycleBin": {
+              "$ref": "#/$defs/ActionMode"
+            }
+          },
+          "additionalProperties": true
+        },
+        "NotificationCenter": {
+          "type": "object",
+          "properties": {
+            "ShowClock": {
+              "$ref": "#/$defs/ActionMode"
+            }
+          },
+          "additionalProperties": true
+        },
+        "Settings": {
+          "type": "object",
+          "properties": {
+            "HideSuggestions": {
               "$ref": "#/$defs/ActionMode"
             }
           },
@@ -373,22 +385,22 @@
         "StartMenu": {
           "type": "object",
           "properties": {
-            "DisableStartMenuBingSearch": {
+            "DisableBingSearch": {
               "$ref": "#/$defs/ActionMode"
             },
-            "HideStartMenuRecommendations": {
+            "HideRecommendations": {
               "$ref": "#/$defs/ActionMode"
             },
-            "HideStartMenuAccountNotifications": {
+            "HideAccountNotifications": {
               "$ref": "#/$defs/ActionMode"
             },
-            "EnableGodMode": {
+            "CreateGodModeFolder": {
               "$ref": "#/$defs/ActionMode"
             }
           },
           "additionalProperties": true
         },
-        "Explorer": {
+        "FileExplorer": {
           "type": "object",
           "properties": {
             "ShowHiddenFiles": {
@@ -421,7 +433,7 @@
             "HideFrequentFolders": {
               "$ref": "#/$defs/ActionMode"
             },
-            "DisableAutoShortcutsSuffix": {
+            "DisableShortcutSuffix": {
               "$ref": "#/$defs/ActionMode"
             }
           },
@@ -430,7 +442,7 @@
         "Security": {
           "type": "object",
           "properties": {
-            "DisableUnsafeFileWarning": {
+            "DisableUnsafeFileMarking": {
               "$ref": "#/$defs/ActionMode"
             },
             "DisableSmartAppControl": {
@@ -442,10 +454,10 @@
         "ContextMenu": {
           "type": "object",
           "properties": {
-            "EnableClassicContextMenu": {
+            "ClassicContextMenu": {
               "$ref": "#/$defs/ActionMode"
             },
-            "DisableContextMenuLimit": {
+            "ExpandSelectionLimit": {
               "$ref": "#/$defs/ActionMode"
             },
             "HideClipchamp": {
@@ -478,7 +490,7 @@
             "HideShare": {
               "$ref": "#/$defs/ActionMode"
             },
-            "HideAddToFavorite": {
+            "HideAddToFavorites": {
               "$ref": "#/$defs/ActionMode"
             },
             "HidePreviousVersions": {
@@ -502,13 +514,13 @@
             "DisableMouseAcceleration": {
               "$ref": "#/$defs/ActionMode"
             },
-            "DisableF1HelpPage": {
+            "DisableF1HelpShortcut": {
               "$ref": "#/$defs/ActionMode"
             },
             "DisableStickyShift": {
               "$ref": "#/$defs/ActionMode"
             },
-            "EnableFastKeyRepeat": {
+            "FastKeyRepeat": {
               "$ref": "#/$defs/ActionMode"
             },
             "DisableTouchPad": {
@@ -541,7 +553,7 @@
         "PowerPlan": {
           "type": "object",
           "properties": {
-            "EnableHighPerformancePlan": {
+            "HighPerformancePlan": {
               "$ref": "#/$defs/ActionMode"
             },
             "DisableAutoSleep": {

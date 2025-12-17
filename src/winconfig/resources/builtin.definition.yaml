@@ -2,8 +2,8 @@
 
 Definitions:
   Appearance:
-    EnableSystemDarkMode:
-      description: Enables dark mode for system
+    SystemDarkMode:
+      description: Enable dark mode for system, including the taskbar and title bar.
       registries:
         - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize
           entries:
@@ -11,8 +11,8 @@ Definitions:
               type: DWord
               new_value: "0"
               old_value: "1"
-    EnableAppDarkMode:
-      description: Enables dark mode for apps
+    AppDarkMode:
+      description: Enable dark mode for apps.
       registries:
         - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize
           entries:
@@ -23,7 +23,7 @@ Definitions:
 
   Windows:
     DisableWindowsSuggestions:
-      description: Disables the Windows welcome experience, tips, scoobe experience
+      description: Disable Windows welcome experience, tips, and SCOOBE.
       registries:
         - path: HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager
           entries:
@@ -62,7 +62,7 @@ Definitions:
               new_value: "0"
               old_value: "1"
     EnableWindowsRestoreLastSession:
-      description: Automatically reopen some apps that were opened last time when start OS
+      description: Automatically reopens some apps that were opened last time when starting the OS.
       registries:
         - path: HKCU:\Software\Microsoft\Windows NT\CurrentVersion\Winlogon
           entries:
@@ -71,9 +71,9 @@ Definitions:
               new_value: "1"
               old_value: "0"
 
-  DesktopTaskbar:
-    TaskbarAlignmentLeft:
-      description: Show Taskbar Items on the Left
+  Taskbar:
+    AlignTaskbarLeft:
+      description: Show Taskbar items on the left, like it was in Windows 10.
       registries:
         - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
           entries:
@@ -81,8 +81,10 @@ Definitions:
               type: DWord
               new_value: "0"
               old_value: "1"
-    EnableTaskbarEndTask:
-      description: Enables option to end task when right clicking a program in the taskbar
+    EnableEndTaskMenu:
+      description: >-
+        Adds an "End task" option to the taskbar right-click menu,
+        allowing you to terminate unresponsive apps without opening Task Manager.
       registries:
         - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings
           entries:
@@ -91,7 +93,7 @@ Definitions:
               new_value: "1"
               old_value: <NotExist>
     HideSearch:
-      description: Hide Search Button on the taskbar.
+      description: Hide Search button on the Taskbar. You can use Start menu search instead.
       registries:
         - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Search
           entries:
@@ -100,7 +102,7 @@ Definitions:
               new_value: "0"
               old_value: "1"
     HideTaskView:
-      description: Hide Task View Button in Taskbar.
+      description: Hide Task View button on the Taskbar. You can use Alt+Tab or Win+Tab instead.
       registries:
         - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
           entries:
@@ -109,7 +111,7 @@ Definitions:
               new_value: "0"
               old_value: "1"
     HideWidgets:
-      description: Hide Widgets Button from Taskbar.
+      description: Hide Widgets button on the Taskbar, which provides Weather and News information.
       registries:
         - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
           entries:
@@ -125,7 +127,7 @@ Definitions:
         apply: winget uninstall --name "Microsoft Copilot" --exact --source msstore
         revert: winget install --name "Microsoft Copilot" --exact --source msstore --no-upgrade --accept-package-agreements --accept-source-agreements --silent
     ShowClockSeconds:
-      description: Show seconds on the taskbar clock
+      description: Show seconds in the Taskbar clock.
       registries:
         - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
           entries:
@@ -133,8 +135,8 @@ Definitions:
               type: DWord
               new_value: "1"
               old_value: "0"
-    ShowMultiMonitorTaskbar:
-      description: Show taskbar on multiple monitors
+    MultiMonitorTaskbar:
+      description: Show Taskbar on all monitors.
       registries:
         - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
           entries:
@@ -146,8 +148,10 @@ Definitions:
               type: DWord
               new_value: "1"
               old_value: "0"
-    HideDesktopRecycleBin:
-      description: Hide the "Recycle Bin" icon from Desktop
+
+  Desktop:
+    HideRecycleBin:
+      description: Hide "Recycle Bin" icon on the Desktop.
       registries:
         - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel
           entries:
@@ -155,8 +159,10 @@ Definitions:
               type: DWord
               new_value: "1"
               old_value: "0"
-    ShowSidePanelClock:
-      description: Show time in Notification Center like as it in Windows 10
+
+  NotificationCenter:
+    ShowClock:
+      description: Show time in Notification Center like it was in Windows 10.
       registries:
         - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
           entries:
@@ -165,9 +171,9 @@ Definitions:
               new_value: "1"
               old_value: "0"
 
-  SettingsApp:
-    HideSettingsSuggestions:
-      description: Hide suggested content in the Settings
+  Settings:
+    HideSuggestions:
+      description: Hide suggestions in Settings.
       registries:
         - path: HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager
           entries:
@@ -185,8 +191,8 @@ Definitions:
               old_value: "1"
 
   StartMenu:
-    DisableStartMenuBingSearch:
-      description: Disables bing web search in Start Menu search.
+    DisableBingSearch:
+      description: Disable Bing web search in Start menu search.
       registries:
         - path: HKCU\Software\Policies\Microsoft\Windows\Explorer
           entries:
@@ -200,8 +206,8 @@ Definitions:
               type: DWord
               new_value: "0"
               old_value: "1"
-    HideStartMenuRecommendations:
-      description: Hide recommendations in Start Menu
+    HideRecommendations:
+      description: Hide recommendations in Start menu.
       registries:
         - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
           entries:
@@ -215,8 +221,8 @@ Definitions:
               type: DWord
               new_value: "1"
               old_value: <NotExist>
-    HideStartMenuAccountNotifications:
-      description: Hide Microsoft account-related notifications in Start Menu
+    HideAccountNotifications:
+      description: Hide Microsoft account-related notifications in Start menu.
       registries:
         - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
           entries:
@@ -224,10 +230,8 @@ Definitions:
               type: DWord
               new_value: "0"
               old_value: <NotExist>
-    EnableGodMode:
-      description: |-
-        Create GodeMode Folder and make it searchable in Start Menu.
-        Optionally you can pin it to Start Menu by manually.
+    CreateGodModeFolder:
+      description: Create a God Mode folder in Start menu, which you can find in Start menu search.
       script:
         apply: |-
           $startMenuPath = "$env:AppData\Microsoft\Windows\Start Menu\Programs"
@@ -242,9 +246,9 @@ Definitions:
           $shortcutPath = "$startMenuPath\GodMode.lnk"
           Remove-Item -Path $shortcutPath
 
-  Explorer:
+  FileExplorer:
     ShowHiddenFiles:
-      description: Show hidden files in explorer
+      description: Show hidden files on File Explorer, such as dotfiles or system files.
       registries:
         - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
           entries:
@@ -253,7 +257,7 @@ Definitions:
               new_value: "1"
               old_value: "0"
     ShowFileExtensions:
-      description: Show file extensions in explorer
+      description: Show file extensions on File Explorer.
       registries:
         - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
           entries:
@@ -262,7 +266,7 @@ Definitions:
               new_value: "0"
               old_value: "1"
     HideHome:
-      description: Hide the Home from Explorer and sets This PC as default
+      description: Hide Home on File Explorer and set This PC as default.
       registries:
         - path: HKLM\Software\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}
           new_existance: <NotExist>
@@ -279,7 +283,7 @@ Definitions:
               new_value: "1"
               old_value: <NotExist>
     HideGallery:
-      description: Hide the Gallery from Explorer and sets This PC as default
+      description: Hide Gallery on File Explorer and set This PC as default.
       registries:
         - path: HKLM\Software\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}
           new_existance: <NotExist>
@@ -296,7 +300,7 @@ Definitions:
               new_value: "1"
               old_value: <NotExist>
     DisableOneDrive:
-      description: Disables OneDrive and hide it from Explorer
+      description: Disable OneDrive and hide it on File Explorer.
       registries:
         - path: HKLM\Software\Policies\Microsoft\Windows\OneDrive
           entries:
@@ -305,7 +309,7 @@ Definitions:
               new_value: "1"
               old_value: <NotExist>
     DisableGroupView:
-      description: Do not group files and folder in the Downloads folder
+      description: Disable group view for files and folders in Downloads folder.
       registries:
         - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\FolderTypes\{885a186e-a440-4ada-812b-db871b942259}\TopViews\{00000000-0000-0000-0000-000000000000}
           entries:
@@ -314,7 +318,7 @@ Definitions:
               new_value: System.Null
               old_value: <NotExist>
     EnableRestoreLastSession:
-      description: Restore the last session when open explroer
+      description: Automatically restore previously opened tabs when File Explorer is opened.
       registries:
         - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
           entries:
@@ -332,7 +336,7 @@ Definitions:
               new_value: "0"
               old_value: "1"
     HideRecentFiles:
-      description: Hide recently used files in Explorer Quick Access, Start Menu recommendations, and Taskbar jump lists.
+      description: Hide recently used files on File Explorer, Start Menu, and Taskbar jump lists.
       registries:
         - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer
           entries:
@@ -347,7 +351,7 @@ Definitions:
               new_value: "0"
               old_value: "1"
     HideFrequentFolders:
-      description: Hide frequently used folders in Explorer Quick Access
+      description: Hide frequently used folders on File Explorer's Quick Access.
       registries:
         - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer
           entries:
@@ -355,8 +359,8 @@ Definitions:
               type: DWord
               new_value: "0"
               old_value: "1"
-    DisableAutoShortcutsSuffix:
-      description: Do not add the "- Shortcut" suffix to the file name of created shortcuts
+    DisableShortcutSuffix:
+      description: Disable automatically adding the "- Shortcut" suffix to the file name of newly created shortcuts.
       registries:
         - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\NamingTemplates
           entries:
@@ -366,10 +370,8 @@ Definitions:
               old_value: <NotExist>
 
   Security:
-    DisableUnsafeFileWarning:
-      description:
-        Disables the Attachment Manager marking files that have been downloaded
-        from the Internet as unsafe
+    DisableUnsafeFileMarking:
+      description: Disable marking downloaded files as unsafe, which triggers a warning when opening them.
       registries:
         - path: HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Attachments
           entries:
@@ -378,7 +380,7 @@ Definitions:
               new_value: "1"
               old_value: <NotExist>
     DisableSmartAppControl:
-      description: ""
+      description: Disable Smart App Control, which blocks all unsafe applications without any whitelist exceptions.
       registries:
         - path: HKLM\System\CurrentControlSet\Control\CI\Policy
           entries:
@@ -391,8 +393,8 @@ Definitions:
         revert: "CiTool --refresh --json"
 
   ContextMenu:
-    EnableClassicContextMenu:
-      description: Enables good old context menus as it was like in win10
+    ClassicContextMenu:
+      description: Enable good old Context menus like it was in Windows 10.
       registries:
         - path: HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32
           new_existance: <Exist>
@@ -402,10 +404,8 @@ Definitions:
               type: String
               new_value: ""
               old_value: <NotExist>
-    DisableContextMenuLimit:
-      description:
-        Enable the "Open", "Print", and "Edit" context menu items for more
-        than 15 items selected
+    ExpandSelectionLimit:
+      description: Enable "Open", "Print", and "Edit" Context menu items even when more than 15 items are selected.
       registries:
         - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer
           entries:
@@ -414,7 +414,7 @@ Definitions:
               new_value: "300"
               old_value: <NotExist>
     HideClipchamp:
-      description: Hide the "Edit with Clipchamp" item from context menu
+      description: Hide "Edit with Clipchamp" item in Context menu.
       registries:
         - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked
           entries:
@@ -423,7 +423,7 @@ Definitions:
               new_value: ""
               old_value: <NotExist>
     HideEditWithPhotos:
-      description: Hide the "Edit with Photos" item from context menu
+      description: Hide "Edit with Photos" item in Context menu.
       registries:
         - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked
           entries:
@@ -432,7 +432,7 @@ Definitions:
               new_value: ""
               old_value: <NotExist>
     HideEditWithPaint:
-      description: Hide the "Edit with Paint" item from context menu
+      description: Hide "Edit with Paint" item in Context menu.
       registries:
         - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked
           entries:
@@ -441,7 +441,7 @@ Definitions:
               new_value: ""
               old_value: <NotExist>
     HideEditWithNotepad:
-      description: Hide the "Edit with Notepad" item from context menu
+      description: Hide "Edit with Notepad" item in Context menu.
       registries:
         - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked
           entries:
@@ -450,7 +450,7 @@ Definitions:
               new_value: ""
               old_value: <NotExist>
     HideExtractAll:
-      description: Hide the "Extract all" item from the zipped files context menu
+      description: Hide "Extract all" item in zip file Context menu.
       registries:
         - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked
           entries:
@@ -463,7 +463,7 @@ Definitions:
               new_value: ""
               old_value: <NotExist>
     HideOpenInWindowsTerminal:
-      description: Hide the "Open in Windows Terminal" item from context menu
+      description: Hide "Open in Windows Terminal" item in Context menu.
       registries:
         - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked
           entries:
@@ -472,7 +472,7 @@ Definitions:
               new_value: ""
               old_value: <NotExist>
     HidePrint:
-      description: Hide the "Print" item from context menu for .bat and .cmd files
+      description: Hide "Print" item in Context menu for script files.
       registries:
         - path: HKCR\batfile\shell\print
           entries:
@@ -487,7 +487,7 @@ Definitions:
               new_value: ""
               old_value: <NotExist>
     HideCompressedFolder:
-      description: Hide the "Compressed (zipped) Folder" item from the "New" context menu
+      description: Hide "Compressed (zipped) Folder" item in the "New" Context menu.
       registries:
         - path: HKCR\.zip\CompressedFolder\ShellNew
           entries:
@@ -500,7 +500,7 @@ Definitions:
               new_value: <NotExist>
               old_value: "@C:\\Windows\\System32\\zipfldr.dll,-10194"
     HideSearchMsStore:
-      description: Hide the "Look for an app in the Microsoft Store" item in the "Open with" dialog
+      description: Hide "Look for an app in the Microsoft Store" item in the "Open with" dialog.
       registries:
         - path: HKLM\Software\Policies\Microsoft\Windows\Explorer
           entries:
@@ -509,7 +509,7 @@ Definitions:
               new_value: "1"
               old_value: <NotExist>
     HideShare:
-      description: Hide the "Share" item from context menu
+      description: Hide "Share" item in Context menu.
       registries:
         - path: HKCR\AllFilesystemObjects\ShellEx\ContextMenuHandlers\ModernSharing
           entries:
@@ -523,8 +523,8 @@ Definitions:
               type: String
               new_value: Share
               old_value: <NotExist>
-    HideAddToFavorite:
-      description: Hide the "Add to Favorites" item from context menu
+    HideAddToFavorites:
+      description: Hide "Add to Favorites" item in Context menu.
       registries:
         - path: HKCR\*\shell\pintohomefile
           entries:
@@ -533,7 +533,7 @@ Definitions:
               new_value: ""
               old_value: <NotExist>
     HidePreviousVersions:
-      description: Hide the "Previous Versions" item from context menu
+      description: Hide "Previous Versions" item in Context menu.
       registries:
         - path: HKCU\Software\Classes\AllFilesystemObjects
           entries:
@@ -548,13 +548,13 @@ Definitions:
               new_value: ""
               old_value: <NotExist>
     HideSendTo:
-      description: Hide the "Send To" item from context menu
+      description: Hide "Send To" item in Context menu.
       registries:
         - path: HKCR\AllFilesystemObjects\ShellEx\ContextMenuHandlers\SendTo
           new_existance: <NotExist>
           old_existance: <Exist>
     HideAddToLibrary:
-      description: Hide the "Add to Library" item from context menu
+      description: Hide "Add to Library" item in Context menu.
       registries:
         - path: HKCR\Folder\ShellEx\ContextMenuHandlers\Library Location
           entries:
@@ -563,7 +563,7 @@ Definitions:
               new_value: ""
               old_value: "{3dad6c5d-2167-4cae-9914-f99e41c12cfa}"
     HideGiveAccessTo:
-      description: Hide the "Give access to" item from context menu
+      description: Hide "Give access to" item in Context menu.
       registries:
         - path: HKCR\Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked
           entries:
@@ -574,7 +574,7 @@ Definitions:
 
   MouseKeyboard:
     DisableMouseAcceleration:
-      description: Disables mouse acceleration
+      description: Disable mouse acceleration.
       registries:
         - path: HKCU\Control Panel\Mouse
           entries:
@@ -590,8 +590,8 @@ Definitions:
               type: String
               new_value: "0"
               old_value: "10"
-    DisableF1HelpPage:
-      description: Disable help lookup via F1
+    DisableF1HelpShortcut:
+      description: Disable F1 shortcut for opening help.
       registries:
         - path: HKCU\Software\Classes\Typelib\{8cec5860-07a1-11d9-b15e-000d56bfe6ee}\1.0\0\win64
           new_existance: <Exist>
@@ -602,7 +602,7 @@ Definitions:
               new_value: ""
               old_value: <NotExist>
     DisableStickyShift:
-      description: Turn off pressing the Shift key 5 times to turn Sticky keys
+      description: Disable Sticky Keys triggered by pressing Shift five times.
       registries:
         - path: HKCU\Control Panel\Accessibility\StickyKeys
           entries:
@@ -610,8 +610,8 @@ Definitions:
               type: String
               new_value: "506"
               old_value: "510"
-    EnableFastKeyRepeat:
-      description: Minimize key repeat delay and Maximize key repeat rate
+    FastKeyRepeat:
+      description: Minimize key repeat delay and maximize key repeat rate.
       registries:
         - path: HKCU\Control Panel\Keyboard
           entries:
@@ -624,7 +624,7 @@ Definitions:
               new_value: "31" # 33.3ms
               old_value: "31" # 33.3ms
     DisableTouchPad:
-      description: Disable touchpad for laptop
+      description: Disable touchpad for laptop.
       registries:
         - path: HKCU\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad\Status
           entries:
@@ -635,7 +635,7 @@ Definitions:
 
   Sound:
     DisableSystemSound:
-      description: Disable all system sounds
+      description: Disable all system sounds.
       registries:
         - path: HKCU\AppEvents\Schemes
           entries:
@@ -670,7 +670,7 @@ Definitions:
 
   Background:
     DisableAutoDeleteTemp:
-      description: Disables Storage Sense deleting temp files automatically
+      description: Prevent Storage Sense deleting temporary files automatically.
       registries:
         - path: HKCU\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy
           entries:
@@ -679,7 +679,7 @@ Definitions:
               new_value: "0"
               old_value: "1"
     DisableXboxGameBar:
-      description: Disable Xbox Game Bar
+      description: Disable Xbox Game Bar.
       registries:
         - path: HKCU:\Software\Microsoft\Windows\CurrentVersion\GameDVR
           entries:
@@ -701,13 +701,13 @@ Definitions:
               old_value: "1"
 
   PowerPlan:
-    EnableHighPerformancePlan:
-      description: Set power plan on "High performance".
+    HighPerformancePlan:
+      description: Set power plan to "High performance".
       script:
         apply: powercfg /setactive SCHEME_MIN
         revert: powercfg /setactive SCHEME_BALANCED
     DisableAutoSleep:
-      description: Prevent system and monitor from going to sleep automatically
+      description: Prevent system and monitor from going to sleep automatically.
       script:
         apply: |-
           powercfg /change monitor-timeout-ac 0

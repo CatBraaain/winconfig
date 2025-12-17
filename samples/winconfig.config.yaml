@@ -2,35 +2,39 @@
 
 Actions:
   Appearance:
-    EnableSystemDarkMode: apply
-    EnableAppDarkMode: apply
+    SystemDarkMode: apply
+    AppDarkMode: apply
 
   Windows:
     DisableWindowsSuggestions: apply
     EnableWindowsRestoreLastSession: skip
 
-  DesktopTaskbar:
-    TaskbarAlignmentLeft: apply
-    EnableTaskbarEndTask: apply
+  Taskbar:
+    AlignTaskbarLeft: apply
+    EnableEndTaskMenu: apply
     HideSearch: apply
     HideTaskView: apply
     HideWidgets: apply
     RemoveCopilot: apply
     ShowClockSeconds: apply
-    ShowMultiMonitorTaskbar: apply
-    HideDesktopRecycleBin: apply
-    ShowSidePanelClock: apply
+    MultiMonitorTaskbar: apply
 
-  SettingsApp:
-    HideSettingsSuggestions: apply
+  Desktop:
+    HideRecycleBin: apply
+
+  NotificationCenter:
+    ShowClock: apply
+
+  Settings:
+    HideSuggestions: apply
 
   StartMenu:
-    DisableStartMenuBingSearch: apply
-    HideStartMenuRecommendations: apply
-    HideStartMenuAccountNotifications: apply
-    EnableGodMode: apply
+    DisableBingSearch: apply
+    HideRecommendations: apply
+    HideAccountNotifications: apply
+    CreateGodModeFolder: apply
 
-  Explorer:
+  FileExplorer:
     ShowHiddenFiles: apply
     ShowFileExtensions: apply
     HideHome: apply
@@ -41,15 +45,15 @@ Actions:
     DisableCheckBoxes: apply
     HideRecentFiles: apply
     HideFrequentFolders: apply
-    DisableAutoShortcutsSuffix: apply
+    DisableShortcutSuffix: apply
 
   Security:
-    DisableUnsafeFileWarning: apply
+    DisableUnsafeFileMarking: apply
     DisableSmartAppControl: apply
 
   ContextMenu:
-    EnableClassicContextMenu: apply
-    DisableContextMenuLimit: apply
+    ClassicContextMenu: apply
+    ExpandSelectionLimit: apply
     HideClipchamp: apply
     HideEditWithPhotos: apply
     HideEditWithPaint: apply
@@ -60,7 +64,7 @@ Actions:
     HideCompressedFolder: apply
     HideSearchMsStore: apply
     HideShare: apply
-    HideAddToFavorite: apply
+    HideAddToFavorites: apply
     HidePreviousVersions: apply
     HideSendTo: apply
     HideAddToLibrary: apply
@@ -68,9 +72,9 @@ Actions:
 
   MouseKeyboard:
     DisableMouseAcceleration: apply
-    DisableF1HelpPage: apply
+    DisableF1HelpShortcut: apply
     DisableStickyShift: apply
-    EnableFastKeyRepeat: apply
+    FastKeyRepeat: apply
     DisableTouchPad: apply
 
   Sound:
@@ -81,7 +85,7 @@ Actions:
     DisableXboxGameBar: apply
 
   PowerPlan:
-    EnableHighPerformancePlan: apply
+    HighPerformancePlan: apply
     DisableAutoSleep: apply
 
   Personalization:
@@ -93,7 +97,7 @@ Actions:
 Definitions:
   Personalization:
     OpenWithCode:
-      description: Add the "Open with Code" item to context menu
+      description: Add the "Open with Code" item to context menu.
       registries:
         - path: HKCR\*\shell\VSCode
           new_existance: <Exist>
@@ -179,7 +183,7 @@ Definitions:
               new_value: "\"%LocalAppData%\\Programs\\Microsoft VS Code\\Code.exe\" \"%V\""
               old_value: <NotExist>
     EditMouseSensitivity:
-      description: Set mouse sensitivity
+      description: Set mouse sensitivity.
       registries:
         - path: HKCU\Control Panel\Mouse
           entries:
@@ -188,7 +192,7 @@ Definitions:
               new_value: "12"
               old_value: "10"
     EditWindowsPATH:
-      description: Edit windows path
+      description: Edit windows path.
       script:
         apply: |-
           $gitPath = "C:\Program Files\Git\bin"
