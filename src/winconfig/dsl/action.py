@@ -22,15 +22,14 @@ type ExecutableActionMode = Literal[ActionMode.APPLY, ActionMode.REVERT]
 
 type ActionName = str
 type ActionGroupName = str
-type ActionConfigRoot = dict[ActionGroupName, dict[ActionName, ActionMode]]
 
 
 class ActionConfig(RootModel):
-    root: ActionConfigRoot = {}
+    root: dict[ActionGroupName, dict[ActionName, ActionMode]] = {}
 
     @classmethod
     def merge(cls, action_configs: list[Self]) -> Self:
-        merged: ActionConfigRoot = {}
+        merged: dict[ActionGroupName, dict[ActionName, ActionMode]] = {}
         for action_config in action_configs:
             for group_name, group in action_config.root.items():
                 if group_name not in merged:

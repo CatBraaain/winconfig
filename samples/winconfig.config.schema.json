@@ -1,10 +1,6 @@
 {
   "$defs": {
     "ActionConfig": {
-      "$ref": "#/$defs/ActionConfigRoot",
-      "default": {}
-    },
-    "ActionConfigRoot": {
       "additionalProperties": {
         "additionalProperties": {
           "$ref": "#/$defs/ActionMode"
@@ -14,6 +10,7 @@
         },
         "type": "object"
       },
+      "default": {},
       "propertyNames": {
         "$ref": "#/$defs/ActionGroupName"
       },
@@ -88,26 +85,19 @@
       "required": ["description"],
       "type": "object"
     },
-    "DefinitionCollectionRoot": {
+    "DefinitionConfig": {
       "additionalProperties": {
-        "$ref": "#/$defs/DefinitionGroupDict"
+        "additionalProperties": {
+          "$ref": "#/$defs/DefinitionBody"
+        },
+        "propertyNames": {
+          "$ref": "#/$defs/DefinitionName"
+        },
+        "type": "object"
       },
+      "default": {},
       "propertyNames": {
         "$ref": "#/$defs/DefinitionGroupName"
-      },
-      "type": "object"
-    },
-    "DefinitionConfig": {
-      "$ref": "#/$defs/DefinitionCollectionRoot",
-      "default": {},
-      "description": "The root model for a winconfig definition file."
-    },
-    "DefinitionGroupDict": {
-      "additionalProperties": {
-        "$ref": "#/$defs/DefinitionBody"
-      },
-      "propertyNames": {
-        "$ref": "#/$defs/DefinitionName"
       },
       "type": "object"
     },
@@ -301,12 +291,15 @@
     }
   },
   "additionalProperties": false,
+  "description": "The root model for a winconfig definition file.",
   "properties": {
     "Definitions": {
-      "$ref": "#/$defs/DefinitionConfig"
+      "$ref": "#/$defs/DefinitionConfig",
+      "description": "Task definition entries."
     },
     "Actions": {
       "$ref": "#/$defs/ActionConfig",
+      "description": "Task action entries to be executed.",
       "properties": {
         "Appearance": {
           "type": "object",

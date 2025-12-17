@@ -60,17 +60,15 @@ class DefinitionBody(BaseModel):
 
 
 type DefinitionGroupName = str
-type DefinitionGroupDict = dict[DefinitionName, DefinitionBody]
 type DefinitionName = str
-type DefinitionCollectionRoot = dict[DefinitionGroupName, DefinitionGroupDict]
 
 
 class DefinitionConfig(RootModel):
-    root: DefinitionCollectionRoot = {}
+    root: dict[DefinitionGroupName, dict[DefinitionName, DefinitionBody]] = {}
 
     @classmethod
     def merge(cls, definition_configs: list[Self]) -> Self:
-        merged: DefinitionCollectionRoot = {}
+        merged: dict[DefinitionGroupName, dict[DefinitionName, DefinitionBody]] = {}
         for definition_config in definition_configs:
             for group_name, group in definition_config.root.items():
                 if group_name not in merged:
