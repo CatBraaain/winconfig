@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Literal, Self
 
-from pydantic import BaseModel, RootModel
+from pydantic import RootModel
 
 
 class ActionMode(Enum):
