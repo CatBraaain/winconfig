@@ -301,12 +301,15 @@
     }
   },
   "additionalProperties": false,
+  "description": "The root model for a winconfig definition file.",
   "properties": {
     "Definitions": {
-      "$ref": "#/$defs/DefinitionConfig"
+      "$ref": "#/$defs/DefinitionConfig",
+      "description": "Task definition entries."
     },
     "Actions": {
       "$ref": "#/$defs/ActionConfig",
+      "description": "Task action entries to be executed.",
       "properties": {
         "Appearance": {
           "type": "object",

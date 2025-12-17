@@ -66,11 +66,7 @@ type DefinitionCollectionRoot = dict[DefinitionGroupName, DefinitionGroupDict]
 
 
 class DefinitionConfig(RootModel):
-    """The root model for a winconfig definition file."""
-
-    root: DefinitionCollectionRoot = Field(
-        default={}, description="The list of configuration tasks to be applied."
-    )
+    root: DefinitionCollectionRoot = {}
 
     @classmethod
     def merge(cls, definition_configs: list[Self]) -> Self:

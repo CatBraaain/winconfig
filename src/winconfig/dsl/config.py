@@ -7,13 +7,17 @@ from .definition import DefinitionConfig
 
 
 class Config(BaseModel):
+    """The root model for a winconfig definition file."""
+
     definition_config: DefinitionConfig = Field(
         default=DefinitionConfig(),
         alias="Definitions",
+        description="Task definition entries.",
     )
     action_config: ActionConfig = Field(
         default=ActionConfig(),
         alias="Actions",
+        description="Task action entries to be executed.",
     )
 
     model_config = ConfigDict(
