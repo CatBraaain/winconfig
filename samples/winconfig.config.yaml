@@ -88,7 +88,7 @@ Actions:
     OpenWithCode: apply
     EditMouseSensitivity: apply
     EditWindowsPATH: apply
-    SetAdvancedKeyRepeat: apply
+    SetAdvancedKeyRepeat: revert
 
 Definitions:
   Personalization:
