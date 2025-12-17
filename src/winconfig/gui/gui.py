@@ -83,18 +83,18 @@ class TaskSelect(Select):
             value=(task.mode or ActionMode.SKIP),
             allow_blank=False,
         )
-        self.action = task
+        self.task_ = task
 
     def on_focus(self, _: Focus) -> None:
         list_item = self.screen.query_one(
-            f".{self.action.group_name}.{self.action.name}", ListItem
+            f".{self.task_.group_name}.{self.task_.name}", ListItem
         )
         list_view = self.screen.query_one(ListView)
         list_view.index = list_view._nodes.index(list_item)  # noqa: SLF001
 
     def watch_value(self, old_value: str, new_value: str) -> None:
         list_item = self.screen.query_one(
-            f".{self.action.group_name}.{self.action.name}", ListItem
+            f".{self.task_.group_name}.{self.task_.name}", ListItem
         )
         if old_value != Select.BLANK:
             list_item.remove_class(old_value)
