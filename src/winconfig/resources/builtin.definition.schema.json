@@ -343,9 +343,6 @@
             "HideWidgets": {
               "$ref": "#/$defs/ActionMode"
             },
-            "RemoveCopilot": {
-              "$ref": "#/$defs/ActionMode"
-            },
             "ShowClockSeconds": {
               "$ref": "#/$defs/ActionMode"
             },
@@ -422,9 +419,6 @@
               "$ref": "#/$defs/ActionMode"
             },
             "EnableRestoreLastSession": {
-              "$ref": "#/$defs/ActionMode"
-            },
-            "DisableCheckBoxes": {
               "$ref": "#/$defs/ActionMode"
             },
             "HideRecentFiles": {

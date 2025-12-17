@@ -119,13 +119,6 @@ Definitions:
               type: DWord
               new_value: "0"
               old_value: "1"
-    RemoveCopilot:
-      description: |-
-        Remove Microsoft Copilot and hide it from taskbar.
-        Note: Uninstalling is the only way to disable this after 23H2.
-      script:
-        apply: winget uninstall --name "Microsoft Copilot" --exact --source msstore
-        revert: winget install --name "Microsoft Copilot" --exact --source msstore --no-upgrade --accept-package-agreements --accept-source-agreements --silent
     ShowClockSeconds:
       description: Show seconds in the Taskbar clock.
       registries:
@@ -326,15 +319,6 @@ Definitions:
               type: DWord
               new_value: "1"
               old_value: "0"
-    DisableCheckBoxes:
-      description: Do not use item check boxes
-      registries:
-        - path: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
-          entries:
-            - name: AutoCheckSelect
-              type: DWord
-              new_value: "0"
-              old_value: "1"
     HideRecentFiles:
       description: Hide recently used files on File Explorer, Start Menu, and Taskbar jump lists.
       registries:
@@ -481,6 +465,60 @@ Definitions:
               new_value: ""
               old_value: <NotExist>
         - path: HKCR\cmdfile\shell\print
+          entries:
+            - name: ProgrammaticAccessOnly
+              type: String
+              new_value: ""
+              old_value: <NotExist>
+        - path: HKCR\fonfile\shell\print
+          entries:
+            - name: ProgrammaticAccessOnly
+              type: String
+              new_value: ""
+              old_value: <NotExist>
+        - path: HKCR\htmlfile\shell\print
+          entries:
+            - name: ProgrammaticAccessOnly
+              type: String
+              new_value: ""
+              old_value: <NotExist>
+        - path: HKCR\JSEFile\shell\print
+          entries:
+            - name: ProgrammaticAccessOnly
+              type: String
+              new_value: ""
+              old_value: <NotExist>
+        - path: HKCR\JSFile\shell\print
+          entries:
+            - name: ProgrammaticAccessOnly
+              type: String
+              new_value: ""
+              old_value: <NotExist>
+        - path: HKCR\regfile\shell\print
+          entries:
+            - name: ProgrammaticAccessOnly
+              type: String
+              new_value: ""
+              old_value: <NotExist>
+        - path: HKCR\VBEFile\shell\print
+          entries:
+            - name: ProgrammaticAccessOnly
+              type: String
+              new_value: ""
+              old_value: <NotExist>
+        - path: HKCR\VBSFile\shell\print
+          entries:
+            - name: ProgrammaticAccessOnly
+              type: String
+              new_value: ""
+              old_value: <NotExist>
+        - path: HKCR\xhtmlfile\shell\print
+          entries:
+            - name: ProgrammaticAccessOnly
+              type: String
+              new_value: ""
+              old_value: <NotExist>
+        - path: HKCR\zapfile\shell\print
           entries:
             - name: ProgrammaticAccessOnly
               type: String

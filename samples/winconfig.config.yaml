@@ -15,7 +15,6 @@ Actions:
     HideSearch: apply
     HideTaskView: apply
     HideWidgets: apply
-    RemoveCopilot: apply
     ShowClockSeconds: apply
     MultiMonitorTaskbar: apply
 
@@ -42,7 +41,6 @@ Actions:
     DisableOneDrive: apply
     DisableGroupView: apply
     EnableRestoreLastSession: revert
-    DisableCheckBoxes: apply
     HideRecentFiles: apply
     HideFrequentFolders: apply
     DisableShortcutSuffix: apply
