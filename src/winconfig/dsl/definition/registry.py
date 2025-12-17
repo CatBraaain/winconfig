@@ -144,7 +144,7 @@ class RegistryEntryDefinition(BaseModel):
         description="The desired value of the registry entry."
     )
 
-    _parent: RegistryPathDefinition = PrivateAttr(default=None)  # pyright: ignore[reportAssignmentType]
+    _parent: RegistryPathDefinition = PrivateAttr(default=None)  # ty:ignore[invalid-assignment]
 
     model_config = ConfigDict(extra="forbid")
 

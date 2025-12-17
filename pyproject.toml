@@ -16,20 +16,11 @@ dev = [
     "pyinstaller>=6.17.0",
     "pytest>=8.4.2",
     "ruff>=0.14.7",
+    "ty>=0.0.2",
 ]
 
 [tool.uv]
 package = true
-
-[tool.pyright]
-include = [
-    "src",
-    "tests",
-    "build",
-]
-venvPath = "."
-venv = ".venv"
-reportPrivateImportUsage = false
 
 [tool.ruff]
 include = [ "pyproject.toml", "src/**/*.py", "tests/**/*.py" ]

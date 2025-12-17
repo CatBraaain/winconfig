@@ -52,7 +52,7 @@ def loglevel_callback(
                     "format": "<green>{time:HH:mm:ss.SSS}</green> | <level>{message}</level>",
                     "level": loglevel,
                 }
-            ]
+            ]  # ty:ignore[invalid-argument-type]  # loguru not having runtime type
         )
     logger.debug(f"Log level: {loglevel}")
 

@@ -25,10 +25,12 @@ class Config(BaseModel):
     @classmethod
     def merge(cls, configs: list[Self]) -> Self:
         return cls(
-            Definitions=DefinitionConfig.merge(
+            definition_config=DefinitionConfig.merge(
                 [config.definition_config for config in configs]
             ),
-            Actions=ActionConfig.merge([config.action_config for config in configs]),
+            action_config=ActionConfig.merge(
+                [config.action_config for config in configs]
+            ),
         )
 
     def validate_action_config(self) -> None:

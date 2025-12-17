@@ -1,11 +1,11 @@
 import clr
 
 dll_path = r"C:\Windows\Microsoft.NET\assembly\GAC_MSIL\System.Management.Automation\v4.0_3.0.0.0__31bf3856ad364e35\System.Management.Automation.dll"
-clr.AddReference(dll_path)  # pyright: ignore[reportAttributeAccessIssue]
-from Microsoft.PowerShell import (  # pyright: ignore[reportMissingImports]  # noqa: E402
+clr.AddReference(dll_path)  # ty:ignore[unresolved-attribute]
+from Microsoft.PowerShell import (  # ty:ignore[unresolved-import]  # noqa: E402
     ExecutionPolicy,
 )
-from System.Management.Automation import (  # pyright: ignore[reportMissingImports]  # noqa: E402
+from System.Management.Automation import (  # ty:ignore[unresolved-import] # noqa: E402
     PowerShell,
     Runspaces,
 )
