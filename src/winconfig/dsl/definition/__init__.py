@@ -7,8 +7,6 @@ from pydantic import (
     RootModel,
 )
 
-from winconfig.dsl.action import ExecutableActionMode
-
 from .const_types import (  # noqa: F401
     ACCESS_DENIED,
     EXIST,
