@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import ClassVar
 
 from textual.app import App, ComposeResult
 from textual.containers import Center, Container, Grid, Middle
@@ -30,6 +31,12 @@ class WinconfigApp(App):
 class TaskList(ListView):
     BORDER_TITLE = "TaskList"
 
+    BINDINGS: ClassVar = [
+        ("a", f"set_action_mode('{ActionMode.APPLY}')", "Set apply mode"),
+        ("r", f"set_action_mode('{ActionMode.REVERT}')", "Set revert mode"),
+        ("s", f"set_action_mode('{ActionMode.SKIP}')", "Set skip mode"),
+    ]
+
     def __init__(self) -> None:
         engine = Engine(Path("samples/winconfig.config.yaml"))
         super().__init__(
@@ -39,6 +46,10 @@ class TaskList(ListView):
                 for task in group.tasks
             ],
         )
+
+    def action_set_action_mode(self, mode: ActionMode) -> None:
+        selected_line = self.screen.query_one(".-highlight", ListItem)
+        selected_line.query_one(TaskSelect).value = mode
 
 
 class TaskListItem(ListItem):
