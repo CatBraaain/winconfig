@@ -1,10 +1,10 @@
-from enum import Enum
+from enum import StrEnum
 from typing import Literal, Self
 
 from pydantic import RootModel
 
 
-class ActionMode(Enum):
+class ActionMode(StrEnum):
     APPLY = "apply"
     REVERT = "revert"
     SKIP = "skip"

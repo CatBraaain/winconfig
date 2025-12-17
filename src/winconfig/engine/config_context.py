@@ -60,22 +60,22 @@ class ConfigContext(BaseModel):
                     continue
                 action_mode = task.mode.resolve(reverse)
                 if action_mode == ActionMode.SKIP:
-                    logger.info(f"Skipped: {task.full_name}[{action_mode.value}]")
+                    logger.info(f"Skipped: {task.full_name}[{action_mode}]")
                     continue
                 script = task.generate_script(action_mode).strip()
                 try:
                     stdout = powershell.run(script)
-                    logger.info(f"Success: {task.full_name}[{action_mode.value}]")
+                    logger.info(f"Success: {task.full_name}[{action_mode}]")
                     if PERMISSION_DENIED in stdout:
                         raise Exception(
                             "Administrator privileges required for this operation"
                         )
                 except Exception as e:
-                    logger.error(f"Failed: {task.full_name}[{action_mode.value}]: {e}")
+                    logger.error(f"Failed: {task.full_name}[{action_mode}]: {e}")
                     raise
                 finally:
                     logger.debug(
-                        f"{task.full_name}[{action_mode.value}]:\n```powershell\n{script}\n```"
+                        f"{task.full_name}[{action_mode}]:\n```powershell\n{script}\n```"
                     )
 
 

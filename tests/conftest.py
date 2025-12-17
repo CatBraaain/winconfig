@@ -39,7 +39,7 @@ def runtime_set(
 
 @pytest.fixture(
     params=[ActionMode.APPLY, ActionMode.REVERT],
-    ids=lambda e: e.value,
+    ids=lambda e: e,
 )
 def mode(request: pytest.FixtureRequest) -> ExecutableActionMode:
     return request.param
