@@ -38,27 +38,32 @@ def run(
 
 
 @app.command(
-    help="Output the JSON schema of Config.",
+    help="Output the JSON schema of Config. Use --strict to enforce strict action names."
 )
 def schema(
+    config_paths: ConfigPathParams,
     output: OutputParam = None,
+    strict: bool = False,
     loglevel: LogLevelParam = "INFO",  # noqa: ARG001
 ) -> None:
     with handle_cli_error():
         schema_dict = generate_schema(Config)
-        builtin_config_context = ConfigContext.init()
-        schema_dict["properties"]["Actions"]["properties"] = {
-            task_group.name: {
-                "type": "object",
-                "properties": {
-                    task.name: {"$ref": "#/$defs/ActionMode"}
-                    for task in task_group.tasks
-                },
-                "additionalProperties": True,
-            }
-            for task_group in builtin_config_context.groups
+        config_context = ConfigContext.init(*config_paths, validate=False)
+        additional_props = not strict
+        schema_dict["properties"]["Actions"] = {
+            "properties": {
+                task_group.name: {
+                    "type": "object",
+                    "properties": {
+                        task.name: {"$ref": "#/$defs/ActionMode"}
+                        for task in task_group.tasks
+                    },
+                    "additionalProperties": additional_props,
+                }
+                for task_group in config_context.groups
+            },
+            "additionalProperties": additional_props,
         }
-        schema_dict["properties"]["Actions"]["additionalProperties"] = True
         schema = json.dumps(schema_dict, ensure_ascii=False, indent=2)
         handle_output(content=schema, output_path=output)
 

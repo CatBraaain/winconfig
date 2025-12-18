@@ -298,8 +298,6 @@
       "description": "Task definition entries."
     },
     "Actions": {
-      "$ref": "#/$defs/ActionConfig",
-      "description": "Task action entries to be executed.",
       "properties": {
         "Appearance": {
           "type": "object",
@@ -311,7 +309,7 @@
               "$ref": "#/$defs/ActionMode"
             }
           },
-          "additionalProperties": true
+          "additionalProperties": false
         },
         "Windows": {
           "type": "object",
@@ -323,7 +321,7 @@
               "$ref": "#/$defs/ActionMode"
             }
           },
-          "additionalProperties": true
+          "additionalProperties": false
         },
         "Taskbar": {
           "type": "object",
@@ -350,7 +348,7 @@
               "$ref": "#/$defs/ActionMode"
             }
           },
-          "additionalProperties": true
+          "additionalProperties": false
         },
         "Desktop": {
           "type": "object",
@@ -359,7 +357,7 @@
               "$ref": "#/$defs/ActionMode"
             }
           },
-          "additionalProperties": true
+          "additionalProperties": false
         },
         "NotificationCenter": {
           "type": "object",
@@ -368,7 +366,7 @@
               "$ref": "#/$defs/ActionMode"
             }
           },
-          "additionalProperties": true
+          "additionalProperties": false
         },
         "Settings": {
           "type": "object",
@@ -377,7 +375,7 @@
               "$ref": "#/$defs/ActionMode"
             }
           },
-          "additionalProperties": true
+          "additionalProperties": false
         },
         "StartMenu": {
           "type": "object",
@@ -395,7 +393,7 @@
               "$ref": "#/$defs/ActionMode"
             }
           },
-          "additionalProperties": true
+          "additionalProperties": false
         },
         "FileExplorer": {
           "type": "object",
@@ -431,7 +429,7 @@
               "$ref": "#/$defs/ActionMode"
             }
           },
-          "additionalProperties": true
+          "additionalProperties": false
         },
         "Security": {
           "type": "object",
@@ -443,7 +441,7 @@
               "$ref": "#/$defs/ActionMode"
             }
           },
-          "additionalProperties": true
+          "additionalProperties": false
         },
         "ContextMenu": {
           "type": "object",
@@ -500,7 +498,7 @@
               "$ref": "#/$defs/ActionMode"
             }
           },
-          "additionalProperties": true
+          "additionalProperties": false
         },
         "MouseKeyboard": {
           "type": "object",
@@ -521,7 +519,7 @@
               "$ref": "#/$defs/ActionMode"
             }
           },
-          "additionalProperties": true
+          "additionalProperties": false
         },
         "Sound": {
           "type": "object",
@@ -530,7 +528,7 @@
               "$ref": "#/$defs/ActionMode"
             }
           },
-          "additionalProperties": true
+          "additionalProperties": false
         },
         "Background": {
           "type": "object",
@@ -542,7 +540,7 @@
               "$ref": "#/$defs/ActionMode"
             }
           },
-          "additionalProperties": true
+          "additionalProperties": false
         },
         "PowerPlan": {
           "type": "object",
@@ -554,10 +552,28 @@
               "$ref": "#/$defs/ActionMode"
             }
           },
-          "additionalProperties": true
+          "additionalProperties": false
+        },
+        "Personalization": {
+          "type": "object",
+          "properties": {
+            "OpenWithCode": {
+              "$ref": "#/$defs/ActionMode"
+            },
+            "EditMouseSensitivity": {
+              "$ref": "#/$defs/ActionMode"
+            },
+            "EditWindowsPATH": {
+              "$ref": "#/$defs/ActionMode"
+            },
+            "SetAdvancedKeyRepeat": {
+              "$ref": "#/$defs/ActionMode"
+            }
+          },
+          "additionalProperties": false
         }
       },
-      "additionalProperties": true
+      "additionalProperties": false
     }
   },
   "type": "object"

@@ -23,7 +23,7 @@ nuitka:
   uv run nuitka --mode=onefile src/winconfig/cli/main.py --output-filename=winconfig --mingw64 --output-dir=dist --windows-uac-admin --assume-yes-for-downloads
 
 schema:
-  uv run src/winconfig/cli/main.py schema --output {{config_schema}}
+  uv run src/winconfig/cli/main.py schema {{config}} --output {{config_schema}} --strict
   bunx prettier --write {{config_schema}}
   uv run src/winconfig/cli/main.py schema --output {{builtin_definition_schema}}
   bunx prettier --write {{builtin_definition_schema}}

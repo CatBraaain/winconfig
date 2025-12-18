@@ -20,13 +20,14 @@ class ConfigContext(BaseModel):
     groups: list["TaskGroup"]
 
     @classmethod
-    def init(cls, *config_paths: Path) -> "ConfigContext":
+    def init(cls, *config_paths: Path, validate: bool = True) -> "ConfigContext":
         config = ModelLoader.load_config(*config_paths)
-        return cls.from_config(config)
+        return cls.from_config(config, validate)
 
     @classmethod
-    def from_config(cls, config: Config) -> "ConfigContext":
-        config.validate_action_config()
+    def from_config(cls, config: Config, validate: bool = True) -> "ConfigContext":
+        if validate:
+            config.validate_action_config()
         return cls(
             groups=[
                 TaskGroup(
