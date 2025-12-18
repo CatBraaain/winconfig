@@ -10,6 +10,9 @@ builtin_definition_schema := "src/winconfig/resources/builtin.definition.schema.
 run:
   uv run src/winconfig/cli/main.py run {{config}}
 
+gui:
+  uv run textual run src/winconfig/gui/gui.py --dev
+
 test:
   powershell.exe -ExecutionPolicy Bypass -File tests/run_test_in_wsb.ps1 -Headless false
 
