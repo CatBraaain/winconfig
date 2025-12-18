@@ -28,7 +28,7 @@ schema:
   uv run src/winconfig/cli/main.py schema --output {{builtin_definition_schema}}
   bunx prettier --write {{builtin_definition_schema}}
 
-memo:
+refresh-wsb:
   robocopy C:\winconfig-readonly C:\winconfig /s /xf .* /xd .*
   cd C:\winconfig
-  uv run pytest --durations 0 tests/test_apply.py -v
+  uv run pytest --durations 0 tests/test_builtin_definition.py -v
