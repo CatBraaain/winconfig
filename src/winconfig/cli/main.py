@@ -3,7 +3,7 @@ import json
 import typer
 
 from winconfig.cli.cli_utils import (
-    ConfigPathParams,
+    ConfigPathsParam,
     DryRunParam,
     LogLevelParam,
     OutputParam,
@@ -26,7 +26,7 @@ app = typer.Typer(
     help="Run the configured actions.",
 )
 def run(
-    config_paths: ConfigPathParams,
+    config_paths: ConfigPathsParam,
     reverse: bool = False,
     dry_run: DryRunParam = False,
     loglevel: LogLevelParam = "INFO",  # noqa: ARG001
@@ -41,7 +41,7 @@ def run(
     help="Output the JSON schema of Config. Use --strict to enforce strict action names."
 )
 def schema(
-    config_paths: ConfigPathParams,
+    config_paths: ConfigPathsParam,
     output: OutputParam = None,
     strict: bool = False,
     loglevel: LogLevelParam = "INFO",  # noqa: ARG001

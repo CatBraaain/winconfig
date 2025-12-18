@@ -15,7 +15,7 @@ OutputParam = Annotated[
         help="Path to the file where the schema will be saved.",
     ),
 ]
-ConfigPathParams = Annotated[
+ConfigPathsParam = Annotated[
     list[Path],
     typer.Argument(
         default_factory=list,
