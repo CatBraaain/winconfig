@@ -98,8 +98,8 @@ Definitions:
       description: Add the "Open with Code" item to context menu.
       registries:
         - path: HKCR\*\shell\VSCode
-          new_existance: <Exist>
-          old_existance: <NotExist>
+          new_existence: <Exist>
+          old_existence: <NotExist>
           entries:
             - name: (default)
               type: String
@@ -110,8 +110,8 @@ Definitions:
               new_value: "%LocalAppData%\\Programs\\Microsoft VS Code\\Code.exe"
               old_value: <NotExist>
         - path: HKCR\*\shell\VSCode\command
-          new_existance: <Exist>
-          old_existance: <NotExist>
+          new_existence: <Exist>
+          old_existence: <NotExist>
           entries:
             - name: (default)
               type: ExpandString
@@ -119,8 +119,8 @@ Definitions:
               old_value: <NotExist>
 
         - path: HKCR\directory\shell\VSCode
-          new_existance: <Exist>
-          old_existance: <NotExist>
+          new_existence: <Exist>
+          old_existence: <NotExist>
           entries:
             - name: (default)
               type: String
@@ -131,8 +131,8 @@ Definitions:
               new_value: "%LocalAppData%\\Programs\\Microsoft VS Code\\Code.exe"
               old_value: <NotExist>
         - path: HKCR\directory\shell\VSCode\command
-          new_existance: <Exist>
-          old_existance: <NotExist>
+          new_existence: <Exist>
+          old_existence: <NotExist>
           entries:
             - name: (default)
               type: ExpandString
@@ -140,8 +140,8 @@ Definitions:
               old_value: <NotExist>
 
         - path: HKCR\directory\background\shell\VSCode
-          new_existance: <Exist>
-          old_existance: <NotExist>
+          new_existence: <Exist>
+          old_existence: <NotExist>
           entries:
             - name: (default)
               type: String
@@ -152,8 +152,8 @@ Definitions:
               new_value: "%LocalAppData%\\Programs\\Microsoft VS Code\\Code.exe"
               old_value: <NotExist>
         - path: HKCR\directory\background\shell\VSCode\command
-          new_existance: <Exist>
-          old_existance: <NotExist>
+          new_existence: <Exist>
+          old_existence: <NotExist>
           entries:
             - name: (default)
               type: ExpandString
@@ -161,8 +161,8 @@ Definitions:
               old_value: <NotExist>
 
         - path: HKCR\drive\shell\VSCode
-          new_existance: <Exist>
-          old_existance: <NotExist>
+          new_existence: <Exist>
+          old_existence: <NotExist>
           entries:
             - name: (default)
               type: String
@@ -173,8 +173,8 @@ Definitions:
               new_value: "%LocalAppData%\\Programs\\Microsoft VS Code\\Code.exe"
               old_value: <NotExist>
         - path: HKCR\drive\shell\VSCode\command
-          new_existance: <Exist>
-          old_existance: <NotExist>
+          new_existence: <Exist>
+          old_existence: <NotExist>
           entries:
             - name: (default)
               type: ExpandString

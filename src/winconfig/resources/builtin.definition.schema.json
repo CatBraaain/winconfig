@@ -165,7 +165,7 @@
           "description": "The path to the registry key.",
           "type": "string"
         },
-        "old_existance": {
+        "old_existence": {
           "anyOf": [
             {
               "$ref": "#/$defs/NotChangeType"
@@ -180,7 +180,7 @@
           "default": "<Exist>",
           "description": "The default existance of the registry key."
         },
-        "new_existance": {
+        "new_existence": {
           "anyOf": [
             {
               "$ref": "#/$defs/NotChangeType"

@@ -33,11 +33,11 @@ class RegistryPathDefinition(BaseModel):
     """Represents a single registry key and entry(s) to be modified."""
 
     path: str = Field(description="The path to the registry key.")
-    old_existance: NotChangeType | ExistType | NotExistType = Field(
+    old_existence: NotChangeType | ExistType | NotExistType = Field(
         default=EXIST,
         description="The default existance of the registry key.",
     )
-    new_existance: NotChangeType | ExistType | NotExistType = Field(
+    new_existence: NotChangeType | ExistType | NotExistType = Field(
         default=EXIST,
         description="The desired existance of the registry key.",
     )
@@ -89,9 +89,9 @@ class RegistryPathDefinition(BaseModel):
     ) -> NotChangeType | ExistType | NotExistType:
         match mode:
             case ActionMode.APPLY:
-                return self.new_existance
+                return self.new_existence
             case ActionMode.REVERT:
-                return self.old_existance
+                return self.old_existence
             case _:
                 raise ValueError(f"Invalid mode: {mode}")
 

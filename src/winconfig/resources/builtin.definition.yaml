@@ -262,8 +262,8 @@ Definitions:
       description: Hide Home on File Explorer and set This PC as default.
       registries:
         - path: HKLM\Software\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}
-          new_existance: <NotExist>
-          old_existance: <Exist>
+          new_existence: <NotExist>
+          old_existence: <Exist>
           entries:
             - name: (default)
               type: String
@@ -279,8 +279,8 @@ Definitions:
       description: Hide Gallery on File Explorer and set This PC as default.
       registries:
         - path: HKLM\Software\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}
-          new_existance: <NotExist>
-          old_existance: <Exist>
+          new_existence: <NotExist>
+          old_existence: <Exist>
           entries:
             - name: (default)
               type: String
@@ -381,8 +381,8 @@ Definitions:
       description: Enable good old Context menus like it was in Windows 10.
       registries:
         - path: HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32
-          new_existance: <Exist>
-          old_existance: <NotExist>
+          new_existence: <Exist>
+          old_existence: <NotExist>
           entries:
             - name: (default)
               type: String
@@ -589,8 +589,8 @@ Definitions:
       description: Hide "Send To" item in Context menu.
       registries:
         - path: HKCR\AllFilesystemObjects\ShellEx\ContextMenuHandlers\SendTo
-          new_existance: <NotExist>
-          old_existance: <Exist>
+          new_existence: <NotExist>
+          old_existence: <Exist>
     HideAddToLibrary:
       description: Hide "Add to Library" item in Context menu.
       registries:
@@ -632,8 +632,8 @@ Definitions:
       description: Disable F1 shortcut for opening help.
       registries:
         - path: HKCU\Software\Classes\Typelib\{8cec5860-07a1-11d9-b15e-000d56bfe6ee}\1.0\0\win64
-          new_existance: <Exist>
-          old_existance: <NotExist>
+          new_existence: <Exist>
+          old_existence: <NotExist>
           entries:
             - name: (default)
               type: String
