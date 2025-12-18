@@ -15,10 +15,11 @@ OutputParam = Annotated[
         help="Path to the file where the schema will be saved.",
     ),
 ]
-ConfigPathParam = Annotated[
-    Path,
+ConfigPathParams = Annotated[
+    list[Path],
     typer.Argument(
-        help="Path to the config file.",
+        default_factory=list,
+        help="Path(s) to the config file(s). Later files override earlier ones.",
         exists=True,
         file_okay=True,
         dir_okay=False,

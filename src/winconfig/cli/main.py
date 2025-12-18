@@ -3,7 +3,7 @@ import json
 import typer
 
 from winconfig.cli.cli_utils import (
-    ConfigPathParam,
+    ConfigPathParams,
     DryRunParam,
     LogLevelParam,
     OutputParam,
@@ -26,13 +26,13 @@ app = typer.Typer(
     help="Run the configured actions.",
 )
 def run(
-    config_path: ConfigPathParam,
+    config_paths: ConfigPathParams,
     reverse: bool = False,
     dry_run: DryRunParam = False,
     loglevel: LogLevelParam = "INFO",  # noqa: ARG001
 ) -> None:
     with handle_cli_error():
-        config_context = ConfigContext.init(config_path)
+        config_context = ConfigContext.init(*config_paths)
         if not dry_run:
             config_context.run(reverse=reverse)
 
