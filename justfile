@@ -7,8 +7,8 @@ config := "samples/winconfig.config.yaml"
 config_schema := "samples/winconfig.config.schema.json"
 builtin_definition_schema := "src/winconfig/resources/builtin.definition.schema.json"
 
-apply:
-  uv run src/winconfig/cli/main.py apply {{config}}
+run:
+  uv run src/winconfig/cli/main.py run {{config}}
 
 test:
   powershell.exe -ExecutionPolicy Bypass -File tests/run_test_in_wsb.ps1 -Headless false

@@ -23,9 +23,9 @@ app = typer.Typer(
 
 @app.command(
     no_args_is_help=True,
-    help="Apply the configured actions.",
+    help="Run the configured actions.",
 )
-def apply(
+def run(
     config_path: ConfigPathParam,
     reverse: bool = False,
     dry_run: DryRunParam = False,
@@ -34,7 +34,7 @@ def apply(
     with handle_cli_error():
         config_context = ConfigContext.init(config_path)
         if not dry_run:
-            config_context.apply(reverse=reverse)
+            config_context.run(reverse=reverse)
 
 
 @app.command(

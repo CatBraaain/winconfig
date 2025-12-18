@@ -49,7 +49,7 @@ class ConfigContext(BaseModel):
             ]
         )
 
-    def apply(self, reverse: bool) -> None:
+    def run(self, reverse: bool) -> None:
         powershell = PowershellRunspace()
         logger.debug(f"Setup PowerShell: version {powershell.runspace.Version}")
 
