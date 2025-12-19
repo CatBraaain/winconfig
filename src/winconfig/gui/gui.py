@@ -1,15 +1,20 @@
 from pathlib import Path
 from typing import Any, ClassVar, cast
 
+from loguru import logger
 from textual.app import App, ComposeResult
 from textual.containers import Center, Container, Grid, Middle
 from textual.events import Focus
+from textual.screen import Screen
+from textual.widget import Widget
 from textual.widgets import (
+    Button,
     Footer,
     Header,
     Label,
     ListItem,
     ListView,
+    Log,
     Select,
 )
 
@@ -31,8 +36,48 @@ class WinconfigApp(App):
     def compose(self) -> ComposeResult:
         yield Header()
         with Center():
+            yield RunButton()
             yield TaskList()
         yield Footer()
+
+
+class LogScreen(Screen):
+    def compose(self) -> ComposeResult:
+        yield Log()
+
+    def on_mount(self) -> None:
+        log = self.query_one(Log)
+        logger.configure(
+            handlers=[
+                {
+                    "sink": log.write,
+                    "format": "<green>{time:HH:mm:ss.SSS}</green> | <level>{message}</level>",
+                    "level": "INFO",
+                }
+            ]  # ty:ignore[invalid-argument-type]  # loguru not having runtime type
+        )
+
+
+class RootAccessMixin:
+    @property
+    def root(self: Widget) -> WinconfigApp:
+        return cast(WinconfigApp, self.app)
+
+
+class RunButton(RootAccessMixin, Button):
+    def __init__(self) -> None:
+        super().__init__(
+            "Run",
+            variant="primary",
+            flat=True,
+        )
+
+    async def on_button_pressed(self, _: Button.Pressed) -> None:
+        await self.app.push_screen(LogScreen())
+        try:
+            self.root.engine.run(reverse=False)
+        except Exception as e:
+            self.app.screen.query_one(Log).write(str(e))
 
 
 class TaskList(ListView):
