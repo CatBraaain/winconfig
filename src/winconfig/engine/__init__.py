@@ -21,13 +21,11 @@ class Engine(BaseModel):
 
     @classmethod
     def init(cls, *config_paths: Path, validate: bool = True) -> "Engine":
-        config = ModelLoader.load_config(*config_paths)
-        return cls.from_config(config, validate)
+        config = ModelLoader.load_config(*config_paths, validate=validate)
+        return cls.from_config(config)
 
     @classmethod
-    def from_config(cls, config: Config, validate: bool = True) -> "Engine":
-        if validate:
-            config.validate_action_config()
+    def from_config(cls, config: Config) -> "Engine":
         return cls(
             groups=[
                 TaskGroup(
