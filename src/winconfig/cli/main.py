@@ -32,7 +32,7 @@ def run(
     loglevel: LogLevelParam = "INFO",  # noqa: ARG001
 ) -> None:
     with handle_cli_error():
-        engine = Engine.init(*config_paths)
+        engine = Engine(*config_paths)
         if not dry_run:
             engine.run(reverse=reverse)
 
@@ -48,7 +48,7 @@ def schema(
 ) -> None:
     with handle_cli_error():
         schema_dict = generate_schema(Config)
-        engine = Engine.init(*config_paths, validate=False)
+        engine = Engine(*config_paths, validate=False)
         additional_props = not strict
         schema_dict["properties"]["Actions"] = {
             "properties": {

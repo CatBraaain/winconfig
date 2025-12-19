@@ -18,11 +18,9 @@ def ensure_sandbox():
 
 
 def generate_runtime_sets() -> list[tuple[PowershellRunspace, Task]]:
-    config_context = Engine()
+    engine = Engine()
     runspace = PowershellRunspace()
-    runtime_sets = [
-        (runspace, task) for group in config_context.groups for task in group.tasks
-    ]
+    runtime_sets = [(runspace, task) for group in engine.groups for task in group.tasks]
     return runtime_sets
 
 

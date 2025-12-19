@@ -11,42 +11,52 @@ from winconfig.dsl.definition import (
     DefinitionGroupName,
     DefinitionName,
 )
+from winconfig.resources import BUILTIN_DEFINITION_PATH
 
 from .model_loader import ModelLoader
 from .powershell import PowershellRunspace
 
 
-class Engine(BaseModel):
-    groups: list["TaskGroup"]
+class Engine:
+    config: Config
 
-    @classmethod
-    def init(cls, *config_paths: Path, validate: bool = True) -> "Engine":
-        config = ModelLoader.load_config(*config_paths, validate=validate)
-        return cls.from_config(config)
+    def __init__(self, *config_paths: Path, validate: bool = True) -> None:
+        self.config = Config()
+        self.merge_config(BUILTIN_DEFINITION_PATH)
+        self.merge_config(*config_paths)
 
-    @classmethod
-    def from_config(cls, config: Config) -> "Engine":
-        return cls(
-            groups=[
-                TaskGroup(
-                    name=definition_group_name,
-                    tasks=[
-                        Task(
-                            group_name=definition_group_name,
-                            name=definition_name,
-                            mode=(
-                                config.action_config.root.get(
-                                    definition_group_name, {}
-                                ).get(definition_name, None)
-                            ),
-                            **definition_body.model_dump(),
-                        )
-                        for definition_name, definition_body in definition_group.items()
-                    ],
-                )
-                for definition_group_name, definition_group in config.definition_config.root.items()
+        if validate:
+            self.config.validate_action_config()
+
+    def merge_config(self, *config_paths: Path) -> None:
+        self.config = Config.merge(
+            [
+                self.config,
+                *[ModelLoader.load_config(config_path) for config_path in config_paths],
             ]
         )
+
+    @property
+    def groups(self) -> list["TaskGroup"]:
+        return [
+            TaskGroup(
+                name=definition_group_name,
+                tasks=[
+                    Task(
+                        group_name=definition_group_name,
+                        name=definition_name,
+                        mode=(
+                            self.config.action_config.root.get(
+                                definition_group_name, {}
+                            ).get(definition_name, None)
+                        ),
+                        **definition_body.model_dump(),
+                    )
+                    for definition_name, definition_body in definition_group.items()
+                ],
+            )
+            for definition_group_name, definition_group in self.config.definition_config.root.items()
+        ]
 
     def run(self, reverse: bool) -> None:
         powershell = PowershellRunspace()
