@@ -12,7 +12,7 @@ from winconfig.cli.cli_utils import (
     handle_output,
 )
 from winconfig.dsl.config import Config
-from winconfig.engine.config_context import ConfigContext
+from winconfig.engine import Engine
 
 app = typer.Typer(
     no_args_is_help=True,
@@ -32,9 +32,9 @@ def run(
     loglevel: LogLevelParam = "INFO",  # noqa: ARG001
 ) -> None:
     with handle_cli_error():
-        config_context = ConfigContext.init(*config_paths)
+        engine = Engine.init(*config_paths)
         if not dry_run:
-            config_context.run(reverse=reverse)
+            engine.run(reverse=reverse)
 
 
 @app.command(
@@ -48,7 +48,7 @@ def schema(
 ) -> None:
     with handle_cli_error():
         schema_dict = generate_schema(Config)
-        config_context = ConfigContext.init(*config_paths, validate=False)
+        engine = Engine.init(*config_paths, validate=False)
         additional_props = not strict
         schema_dict["properties"]["Actions"] = {
             "properties": {
@@ -60,7 +60,7 @@ def schema(
                     },
                     "additionalProperties": additional_props,
                 }
-                for task_group in config_context.groups
+                for task_group in engine.groups
             },
             "additionalProperties": additional_props,
         }

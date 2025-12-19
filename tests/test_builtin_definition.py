@@ -5,7 +5,7 @@ from winconfig.dsl.definition import (
     ACCESS_DENIED,
     NOT_EXIST,
 )
-from winconfig.engine.config_context import Task
+from winconfig.engine import Task
 from winconfig.engine.powershell import PowershellRunspace
 
 

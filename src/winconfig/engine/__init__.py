@@ -16,16 +16,16 @@ from .model_loader import ModelLoader
 from .powershell import PowershellRunspace
 
 
-class ConfigContext(BaseModel):
+class Engine(BaseModel):
     groups: list["TaskGroup"]
 
     @classmethod
-    def init(cls, *config_paths: Path, validate: bool = True) -> "ConfigContext":
+    def init(cls, *config_paths: Path, validate: bool = True) -> "Engine":
         config = ModelLoader.load_config(*config_paths)
         return cls.from_config(config, validate)
 
     @classmethod
-    def from_config(cls, config: Config, validate: bool = True) -> "ConfigContext":
+    def from_config(cls, config: Config, validate: bool = True) -> "Engine":
         if validate:
             config.validate_action_config()
         return cls(
