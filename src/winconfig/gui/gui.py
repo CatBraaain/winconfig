@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import ClassVar
+from typing import Any, ClassVar, cast
 
 from textual.app import App, ComposeResult
 from textual.containers import Center, Container, Grid, Middle
@@ -21,6 +21,13 @@ class WinconfigApp(App):
     TITLE = "winconfig"
     CSS_PATH = "gui.tcss"
 
+    engine: Engine
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:  # noqa: ANN401
+        super().__init__(*args, **kwargs)
+        self.engine = Engine()
+        self.engine.config.merge(Path("samples/winconfig.config.yaml"))
+
     def compose(self) -> ComposeResult:
         yield Header()
         with Center():
@@ -38,11 +45,10 @@ class TaskList(ListView):
     ]
 
     def __init__(self) -> None:
-        engine = Engine(Path("samples/winconfig.config.yaml"))
         super().__init__(
             *[
                 TaskListItem(task=task)
-                for group in engine.task_groups
+                for group in cast(WinconfigApp, self.app).engine.task_groups
                 for task in group.tasks
             ],
         )
