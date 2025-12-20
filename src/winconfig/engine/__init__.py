@@ -6,11 +6,11 @@ from pydantic import BaseModel
 from winconfig.dsl.action import ActionMode, ExecutableActionMode
 from winconfig.dsl.config import Config
 from winconfig.dsl.definition import (
-    PERMISSION_DENIED,
     DefinitionBody,
     DefinitionGroupName,
     DefinitionName,
 )
+from winconfig.protocol.state_codes import PERMISSION_DENIED
 from winconfig.resources import BUILTIN_DEFINITION_PATH
 
 from .model_loader import ModelLoader

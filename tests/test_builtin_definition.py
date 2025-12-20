@@ -1,12 +1,12 @@
 import pytest
 
 from winconfig.dsl.action import ExecutableActionMode
-from winconfig.dsl.definition import (
+from winconfig.engine import Task
+from winconfig.engine.powershell import PowershellRunspace
+from winconfig.protocol.state_codes import (
     ACCESS_DENIED,
     NOT_EXIST,
 )
-from winconfig.engine import Task
-from winconfig.engine.powershell import PowershellRunspace
 
 
 def test_resitory_definition(

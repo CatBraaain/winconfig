@@ -1,10 +1,3 @@
-from .const_types import (  # noqa: F401
-    ACCESS_DENIED,
-    EXIST,
-    NOT_CHANGE,
-    NOT_EXIST,
-    PERMISSION_DENIED,
-)
 from .definition import (  # noqa: F401
     DefinitionBody,
     DefinitionConfig,
