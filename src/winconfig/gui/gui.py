@@ -60,34 +60,35 @@ class TaskList(ListView):
 
 
 class TaskListItem(ListItem):
-    task_: Task
+    winconfig_task: Task
 
     def __init__(self, task: Task) -> None:
         super().__init__(classes=f"{task.group_name} {task.name}")
-        self.task_ = task
+        self.winconfig_task = task
 
     def compose(self) -> ComposeResult:
         with Grid():
             with Middle():
-                yield TaskLabel(task=self.task_)
+                yield TaskLabel(task=self.winconfig_task)
             with Middle():
-                yield TaskSelect(task=self.task_)
+                yield TaskSelect(task=self.winconfig_task)
 
 
 class TaskLabel(Container):
-    task_: Task
+    winconfig_task: Task
 
     def __init__(self, task: Task) -> None:
         super().__init__()
-        self.task_ = task
+        self.winconfig_task = task
 
     def compose(self) -> ComposeResult:
         yield Label(
-            self.task_.full_name, classes=f"{self.task_.group_name} {self.task_.name}"
+            self.winconfig_task.full_name,
+            classes=f"{self.winconfig_task.group_name} {self.winconfig_task.name}",
         )
 
     def on_mount(self) -> None:
-        self.query_one(Label).tooltip = self.task_.description
+        self.query_one(Label).tooltip = self.winconfig_task.description
 
 
 class TaskSelect(Select):
@@ -101,11 +102,11 @@ class TaskSelect(Select):
             value=(task.mode or ActionMode.SKIP),
             allow_blank=False,
         )
-        self.task_ = task
+        self.winconfig_task = task
 
     def on_focus(self, _: Focus) -> None:
         list_item = self.screen.query_one(
-            f".{self.task_.group_name}.{self.task_.name}", ListItem
+            f".{self.winconfig_task.group_name}.{self.winconfig_task.name}", ListItem
         )
         list_view = self.screen.query_one(ListView)
         list_view.index = list_view._nodes.index(list_item)  # noqa: SLF001
