@@ -1,7 +1,7 @@
 from enum import StrEnum
 from typing import Literal, Self
 
-from pydantic import RootModel
+from pydantic import ConfigDict, RootModel
 
 
 class ActionMode(StrEnum):
@@ -27,13 +27,14 @@ type ActionGroupName = str
 class ActionConfig(RootModel):
     root: dict[ActionGroupName, dict[ActionName, ActionMode]] = {}
 
+    model_config = ConfigDict(validate_assignment=True)
+
     def merge(self, action_configs: list[Self]) -> None:
-        merged: dict[ActionGroupName, dict[ActionName, ActionMode]] = self.root.copy()
+        new_root: dict[ActionGroupName, dict[ActionName, ActionMode]] = self.root.copy()
         for action_config in action_configs:
             for group_name, group in action_config.root.items():
-                if group_name not in merged:
-                    merged[group_name] = {}
-                merged[group_name] |= group
+                if group_name not in new_root:
+                    new_root[group_name] = {}
+                new_root[group_name] |= group
 
-        validated = self.model_validate(merged)
-        self.root = validated.root
+        self.root = new_root
