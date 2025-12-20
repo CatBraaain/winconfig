@@ -26,7 +26,7 @@ class WinconfigApp(App):
     def __init__(self, *args: Any, **kwargs: Any) -> None:  # noqa: ANN401
         super().__init__(*args, **kwargs)
         self.engine = Engine()
-        self.engine.config.merge(Path("samples/winconfig.config.yaml"))
+        self.engine.config.merge_from_yaml(Path("samples/winconfig.config.yaml"))
 
     def compose(self) -> ComposeResult:
         yield Header()
