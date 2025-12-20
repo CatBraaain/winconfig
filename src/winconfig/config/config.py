@@ -1,6 +1,9 @@
+from pathlib import Path
 from typing import Self
 
-from pydantic import BaseModel, ConfigDict, Field
+import yaml
+from pydantic import BaseModel, ConfigDict, Field, ValidationError
+from yaml import YAMLError
 
 from .action import ActionConfig
 from .definition import DefinitionConfig
@@ -26,7 +29,17 @@ class Config(BaseModel):
         validate_by_alias=True,
     )
 
-    def merge(self, configs: list[Self]) -> None:
+    @classmethod
+    def load_yaml(cls, file_path: Path) -> Self:
+        try:
+            return cls.model_validate(yaml.safe_load(file_path.read_text()))
+        except YAMLError:
+            raise Exception(f"file {file_path} is invalid as yaml") from None
+        except ValidationError:
+            raise Exception(f"file {file_path} is invalid as {cls.__name__}") from None
+
+    def merge(self, *config_paths: Path) -> None:
+        configs = [Config.load_yaml(config_path) for config_path in config_paths]
         self.definition_config.merge([config.definition_config for config in configs])
         self.action_config.merge([config.action_config for config in configs])
 

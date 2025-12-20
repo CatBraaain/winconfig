@@ -13,7 +13,6 @@ from winconfig.config.definition import (
 from winconfig.protocol.state_codes import PERMISSION_DENIED
 from winconfig.resources import BUILTIN_DEFINITION_PATH
 
-from .model_loader import ModelLoader
 from .powershell import PowershellRunspace
 
 
@@ -22,19 +21,11 @@ class Engine:
 
     def __init__(self, *config_paths: Path, validate: bool = True) -> None:
         self.config = Config()
-        self.merge_config(BUILTIN_DEFINITION_PATH)
-        self.merge_config(*config_paths)
+        self.config.merge(BUILTIN_DEFINITION_PATH)
+        self.config.merge(*config_paths)
 
         if validate:
             self.config.validate_action_config()
-
-    def merge_config(self, *config_paths: Path) -> None:
-        self.config.merge(
-            [
-                self.config,
-                *[ModelLoader.load_config(config_path) for config_path in config_paths],
-            ]
-        )
 
     @property
     def groups(self) -> list["TaskGroup"]:
