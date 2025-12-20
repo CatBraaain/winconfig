@@ -30,7 +30,7 @@ class Config(BaseModel):
     )
 
     @classmethod
-    def load_yaml(cls, file_path: Path) -> Self:
+    def from_yaml(cls, file_path: Path) -> Self:
         try:
             return cls.model_validate(yaml.safe_load(file_path.read_text()))
         except YAMLError:
@@ -39,7 +39,7 @@ class Config(BaseModel):
             raise Exception(f"file {file_path} is invalid as {cls.__name__}") from None
 
     def merge(self, *config_paths: Path) -> None:
-        configs = [Config.load_yaml(config_path) for config_path in config_paths]
+        configs = [Config.from_yaml(config_path) for config_path in config_paths]
         self.definition_config.merge([config.definition_config for config in configs])
         self.action_config.merge([config.action_config for config in configs])
 
