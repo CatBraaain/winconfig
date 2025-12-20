@@ -20,13 +20,13 @@ TaskLabel {
     width: 1fr;
     padding: 0 1;
 }
-TaskListItem.apply Static#label {
+TaskSelect.apply Static#label {
     color: $text-success;
 }
-TaskListItem.revert Static#label {
+TaskSelect.revert Static#label {
     color: $text-warning;
 }
-TaskListItem.skip Static#label {
+TaskSelect.skip Static#label {
     color: $foreground-darken-3;
 }
 

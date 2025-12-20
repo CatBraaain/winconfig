@@ -110,13 +110,10 @@ class TaskSelect(Select):
         list_view.index = list_view._nodes.index(list_item)  # noqa: SLF001
 
     def watch_value(self, old_value: str, new_value: str) -> None:
-        list_item = self.screen.query_one(
-            f".{self.task_.group_name}.{self.task_.name}", ListItem
-        )
         if old_value != Select.BLANK:
-            list_item.remove_class(old_value)
+            self.remove_class(old_value)
         if new_value != Select.BLANK:
-            list_item.add_class(new_value)
+            self.add_class(new_value)
 
 
 if __name__ == "__main__":
