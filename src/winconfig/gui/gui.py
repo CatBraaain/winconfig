@@ -54,8 +54,9 @@ class TaskList(ListView):
         )
 
     def action_set_action_mode(self, mode: ActionMode) -> None:
-        selected_line = self.screen.query_one(".-highlight", ListItem)
-        selected_line.query_one(TaskSelect).value = mode
+        selected_line = self.highlighted_child
+        if selected_line:
+            selected_line.query_one(TaskSelect).value = mode
 
 
 class TaskListItem(ListItem):
