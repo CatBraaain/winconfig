@@ -11,7 +11,7 @@ from winconfig.cli.cli_utils import (
     handle_cli_error,
     handle_output,
 )
-from winconfig.dsl.config import Config
+from winconfig.config.config import Config
 from winconfig.engine import Engine
 
 app = typer.Typer(

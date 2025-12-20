@@ -4,7 +4,7 @@ import yaml
 from pydantic import BaseModel, ValidationError
 from yaml import YAMLError
 
-from winconfig.dsl.config import Config
+from winconfig.config.config import Config
 
 
 class ModelLoader:

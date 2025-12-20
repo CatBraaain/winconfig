@@ -6,7 +6,7 @@ from typing import Any, Literal, Self
 
 from pydantic import BaseModel, ConfigDict, Field, PrivateAttr, field_validator
 
-from winconfig.dsl.action import ActionMode, ExecutableActionMode
+from winconfig.config.action import ActionMode, ExecutableActionMode
 from winconfig.protocol.state_codes import (
     ACCESS_DENIED,
     EXIST,

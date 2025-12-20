@@ -8,7 +8,7 @@ from pydantic import (
     Field,
 )
 
-from winconfig.dsl.action import ActionMode, ExecutableActionMode
+from winconfig.config.action import ActionMode, ExecutableActionMode
 from winconfig.protocol.state_codes import NOT_EXIST
 
 type SchtaskState = Literal["Enabled", "Disabled"]

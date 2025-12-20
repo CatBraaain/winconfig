@@ -1,6 +1,6 @@
 import pytest
 
-from winconfig.dsl.action import ExecutableActionMode
+from winconfig.config.action import ExecutableActionMode
 from winconfig.engine import Task
 from winconfig.engine.powershell import PowershellRunspace
 from winconfig.protocol.state_codes import (

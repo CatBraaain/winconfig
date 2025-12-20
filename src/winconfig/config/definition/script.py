@@ -6,7 +6,7 @@ from pydantic import (
     Field,
 )
 
-from winconfig.dsl.action import ActionMode, ExecutableActionMode
+from winconfig.config.action import ActionMode, ExecutableActionMode
 
 
 class ScriptDefinition(BaseModel):

@@ -1,6 +1,6 @@
 import pytest
 
-from winconfig.dsl.action import ActionMode, ExecutableActionMode
+from winconfig.config.action import ActionMode, ExecutableActionMode
 from winconfig.engine import Engine, Task
 from winconfig.engine.powershell import PowershellRunspace
 

@@ -3,9 +3,9 @@ from pathlib import Path
 from loguru import logger
 from pydantic import BaseModel
 
-from winconfig.dsl.action import ActionMode, ExecutableActionMode
-from winconfig.dsl.config import Config
-from winconfig.dsl.definition import (
+from winconfig.config.action import ActionMode, ExecutableActionMode
+from winconfig.config.config import Config
+from winconfig.config.definition import (
     DefinitionBody,
     DefinitionGroupName,
     DefinitionName,
