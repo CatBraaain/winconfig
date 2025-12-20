@@ -23,7 +23,7 @@ class Engine:
             self.config.validate_action_config()
 
     @property
-    def groups(self) -> list["TaskGroup"]:
+    def task_groups(self) -> list["TaskGroup"]:
         return [
             TaskGroup(
                 name=definition_group_name,
@@ -48,7 +48,7 @@ class Engine:
         powershell = PowershellRunspace()
         logger.debug(f"Setup PowerShell: version {powershell.runspace.Version}")
 
-        for task_group in self.groups:
+        for task_group in self.task_groups:
             for task in task_group.tasks:
                 if task.mode is None:
                     logger.debug(f"NoAction: {task.full_name}")

@@ -60,7 +60,7 @@ def schema(
                     },
                     "additionalProperties": additional_props,
                 }
-                for task_group in engine.groups
+                for task_group in engine.task_groups
             },
             "additionalProperties": additional_props,
         }
