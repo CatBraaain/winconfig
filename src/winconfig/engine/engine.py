@@ -15,9 +15,9 @@ class Engine:
     config: Config
 
     def __init__(self, *config_paths: Path, validate: bool = True) -> None:
-        self.config = Config()
-        self.config.merge(BUILTIN_DEFINITION_PATH)
-        self.config.merge(*config_paths)
+        self.config = Config.from_yaml(BUILTIN_DEFINITION_PATH).merge_from_yaml(
+            *config_paths
+        )
 
         if validate:
             self.config.validate_action_config()

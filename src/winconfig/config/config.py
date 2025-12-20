@@ -38,10 +38,11 @@ class Config(BaseModel):
         except ValidationError:
             raise Exception(f"file {file_path} is invalid as {cls.__name__}") from None
 
-    def merge(self, *config_paths: Path) -> None:
+    def merge_from_yaml(self, *config_paths: Path) -> Self:
         configs = [Config.from_yaml(config_path) for config_path in config_paths]
         self.definition_config.merge([config.definition_config for config in configs])
         self.action_config.merge([config.action_config for config in configs])
+        return self
 
     def validate_action_config(self) -> None:
         for action_group_name, action_group in self.action_config.root.items():
