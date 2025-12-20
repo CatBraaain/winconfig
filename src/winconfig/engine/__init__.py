@@ -29,7 +29,7 @@ class Engine:
             self.config.validate_action_config()
 
     def merge_config(self, *config_paths: Path) -> None:
-        self.config = Config.merge(
+        self.config.merge(
             [
                 self.config,
                 *[ModelLoader.load_config(config_path) for config_path in config_paths],

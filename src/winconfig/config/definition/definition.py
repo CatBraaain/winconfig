@@ -55,13 +55,15 @@ type DefinitionName = str
 class DefinitionConfig(RootModel):
     root: dict[DefinitionGroupName, dict[DefinitionName, DefinitionBody]] = {}
 
-    @classmethod
-    def merge(cls, definition_configs: list[Self]) -> Self:
-        merged: dict[DefinitionGroupName, dict[DefinitionName, DefinitionBody]] = {}
+    def merge(self, definition_configs: list[Self]) -> None:
+        merged: dict[DefinitionGroupName, dict[DefinitionName, DefinitionBody]] = (
+            self.root.copy()
+        )
         for definition_config in definition_configs:
             for group_name, group in definition_config.root.items():
                 if group_name not in merged:
                     merged[group_name] = {}
                 merged[group_name] |= group
 
-        return cls.model_validate(merged)
+        validated = self.model_validate(merged)
+        self.root = validated.root

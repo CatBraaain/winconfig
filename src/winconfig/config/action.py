@@ -27,13 +27,13 @@ type ActionGroupName = str
 class ActionConfig(RootModel):
     root: dict[ActionGroupName, dict[ActionName, ActionMode]] = {}
 
-    @classmethod
-    def merge(cls, action_configs: list[Self]) -> Self:
-        merged: dict[ActionGroupName, dict[ActionName, ActionMode]] = {}
+    def merge(self, action_configs: list[Self]) -> None:
+        merged: dict[ActionGroupName, dict[ActionName, ActionMode]] = self.root.copy()
         for action_config in action_configs:
             for group_name, group in action_config.root.items():
                 if group_name not in merged:
                     merged[group_name] = {}
                 merged[group_name] |= group
 
-        return cls.model_validate(merged)
+        validated = self.model_validate(merged)
+        self.root = validated.root
