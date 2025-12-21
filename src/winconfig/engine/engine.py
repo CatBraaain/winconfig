@@ -60,16 +60,15 @@ class Engine:
                 script = task.generate_script(action_mode).strip()
                 try:
                     stdout = powershell.run(script)
-                    logger.info(f"Success: {task.full_name}[{action_mode}]")
                     if PERMISSION_DENIED in stdout:
                         raise Exception(
                             "Administrator privileges required for this operation"
                         )
-                except Exception as e:
-                    raise Exception(
-                        f"Failed: {task.full_name}[{action_mode}]: {e}"
-                    ) from e
-                finally:
+                    logger.info(f"Success: {task.full_name}[{action_mode}]")
                     logger.debug(
                         f"{task.full_name}[{action_mode}]:\n```powershell\n{script}\n```"
                     )
+                except Exception as e:
+                    raise Exception(
+                        f"Failed: {task.full_name}[{action_mode}]: {e}\n```powershell\n{script}\n```"
+                    ) from e
