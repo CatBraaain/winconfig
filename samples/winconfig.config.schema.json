@@ -560,6 +560,9 @@
             "OpenWithCode": {
               "$ref": "#/$defs/ActionMode"
             },
+            "EditSharexContextMenu": {
+              "$ref": "#/$defs/ActionMode"
+            },
             "EditMouseSensitivity": {
               "$ref": "#/$defs/ActionMode"
             },

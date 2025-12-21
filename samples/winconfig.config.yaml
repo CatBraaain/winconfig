@@ -88,6 +88,7 @@ Actions:
 
   Personalization:
     OpenWithCode: apply
+    EditSharexContextMenu: apply
     EditMouseSensitivity: apply
     EditWindowsPATH: apply
     SetAdvancedKeyRepeat: revert
@@ -180,6 +181,46 @@ Definitions:
               type: ExpandString
               new_value: "\"%LocalAppData%\\Programs\\Microsoft VS Code\\Code.exe\" \"%V\""
               old_value: <NotExist>
+    EditSharexContextMenu:
+      description: Edit ShareX context menu.
+      registries:
+        - path: HKCU\Software\Classes\SystemFileAssociations\image\shell\ShareXImageEditor
+          old_existence: <NotExist>
+          entries:
+            - name: (default)
+              type: String
+              new_value: Edit with ShareX
+              old_value: <NotExist>
+            - name: Icon
+              type: String
+              new_value: '"C:\Program Files\ShareX\ShareX.exe",0'
+              old_value: <NotExist>
+        - path: HKCU\Software\Classes\SystemFileAssociations\image\shell\ShareXImageEditor\command
+          old_existence: <NotExist>
+          entries:
+            - name: (default)
+              type: String
+              new_value: '"C:\Program Files\ShareX\ShareX.exe" -ImageEditor "%1"'
+              old_value: <NotExist>
+
+        - path: HKCU\Software\Classes\*\shell\ShareX
+          new_existence: <NotExist>
+          entries:
+            - name: (default)
+              type: String
+              new_value: <NotExist>
+              old_value: Upload with ShareX
+            - name: Icon
+              type: String
+              new_value: <NotExist>
+              old_value: '"C:\Program Files\ShareX\ShareX.exe",0'
+        - path: HKCU\Software\Classes\*\shell\ShareX\command
+          new_existence: <NotExist>
+          entries:
+            - name: (default)
+              type: String
+              new_value: <NotExist>
+              old_value: '"C:\Program Files\ShareX\ShareX.exe" "%1"'
     EditMouseSensitivity:
       description: Set mouse sensitivity.
       registries:
