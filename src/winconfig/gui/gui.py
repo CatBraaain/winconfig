@@ -136,7 +136,7 @@ class TaskLabel(Container):
         self.query_one(Label).tooltip = self.winconfig_task.description
 
 
-class TaskSelect(Select):
+class TaskSelect(RootAccessMixin, Select):
     winconfig_task: Task
 
     def __init__(self, task: Task) -> None:
@@ -163,6 +163,9 @@ class TaskSelect(Select):
             self.remove_class(old_value)
         if new_value != Select.BLANK:
             self.add_class(new_value)
+            self.root.engine.config.action_config.root[self.winconfig_task.group_name][
+                self.winconfig_task.name
+            ] = cast(ActionMode, new_value)
 
 
 if __name__ == "__main__":
