@@ -137,6 +137,8 @@ class TaskLabel(Container):
 
 
 class TaskSelect(Select):
+    winconfig_task: Task
+
     def __init__(self, task: Task) -> None:
         super().__init__(
             options=[
