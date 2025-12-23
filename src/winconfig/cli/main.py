@@ -13,7 +13,7 @@ from winconfig.cli.cli_utils import (
 )
 from winconfig.config.config import Config
 from winconfig.engine import Engine
-from winconfig.gui.gui import WinconfigApp
+from winconfig.gui.app import app as gui_app
 
 app = typer.Typer(
     context_settings={"help_option_names": ["-h", "--help"]},
@@ -32,7 +32,7 @@ def callback(ctx: typer.Context) -> None:
     help="Open the GUI.",
 )
 def gui() -> None:
-    WinconfigApp().run()
+    gui_app.run()
 
 
 @app.command(

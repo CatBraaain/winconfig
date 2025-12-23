@@ -1,86 +1,22 @@
-from pathlib import Path
-from typing import Any, ClassVar, cast
+from typing import ClassVar, cast
 
-from loguru import logger
-from textual.app import App, ComposeResult
-from textual.containers import Center, Container, Grid, Middle
+from textual.app import ComposeResult
+from textual.containers import Container, Grid, Middle
 from textual.events import Focus
-from textual.screen import Screen
-from textual.widget import Widget
 from textual.widgets import (
-    Button,
-    Footer,
-    Header,
     Label,
     ListItem,
     ListView,
-    Log,
     Select,
 )
 
 from winconfig.config.action import ActionMode
-from winconfig.engine import Engine, Task
+from winconfig.engine import Task
+
+from .root_access_mixin import RootAccessMixin
 
 
-class WinconfigApp(App):
-    TITLE = "winconfig"
-    CSS_PATH = "gui.tcss"
-
-    engine: Engine
-
-    def __init__(self, *args: Any, **kwargs: Any) -> None:  # noqa: ANN401
-        super().__init__(*args, **kwargs)
-        self.engine = Engine()
-        self.engine.config.merge_from_yaml(Path("samples/winconfig.config.yaml"))
-
-    def compose(self) -> ComposeResult:
-        yield Header()
-        with Center():
-            yield RunButton()
-            yield TaskList()
-        yield Footer()
-
-
-class LogScreen(Screen):
-    def compose(self) -> ComposeResult:
-        yield Log()
-
-    def on_mount(self) -> None:
-        log = self.query_one(Log)
-        logger.configure(
-            handlers=[
-                {
-                    "sink": log.write,
-                    "format": "<green>{time:HH:mm:ss.SSS}</green> | <level>{message}</level>",
-                    "level": "INFO",
-                }
-            ]  # ty:ignore[invalid-argument-type]  # loguru not having runtime type
-        )
-
-
-class RootAccessMixin:
-    @property
-    def root(self: Widget) -> WinconfigApp:
-        return cast("WinconfigApp", self.app)
-
-
-class RunButton(RootAccessMixin, Button):
-    def __init__(self) -> None:
-        super().__init__(
-            "Run",
-            variant="primary",
-            flat=True,
-        )
-
-    async def on_button_pressed(self, _: Button.Pressed) -> None:
-        await self.app.push_screen(LogScreen())
-        try:
-            self.root.engine.run(reverse=False)
-        except Exception as e:  # noqa: BLE001
-            self.app.screen.query_one(Log).write(str(e))
-
-
-class TaskList(ListView):
+class TaskList(ListView, RootAccessMixin):
     BORDER_TITLE = "TaskList"
 
     BINDINGS: ClassVar = [
@@ -93,7 +29,7 @@ class TaskList(ListView):
         super().__init__(
             *[
                 TaskListItem(task=task)
-                for group in cast("WinconfigApp", self.app).engine.task_groups
+                for group in self.root.engine.task_groups
                 for task in group.tasks
             ],
         )
@@ -166,7 +102,3 @@ class TaskSelect(RootAccessMixin, Select):
             self.root.engine.config.action_config.root[self.winconfig_task.group_name][
                 self.winconfig_task.name
             ] = cast("ActionMode", new_value)
-
-
-if __name__ == "__main__":
-    WinconfigApp().run()
