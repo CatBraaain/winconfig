@@ -1,4 +1,5 @@
 from textwrap import dedent
+from typing import assert_never
 
 from pydantic import (
     BaseModel,
@@ -30,7 +31,7 @@ class ScriptDefinition(BaseModel):
             case ActionMode.REVERT:
                 return self.revert
             case _:
-                raise ValueError(f"Invalid mode: {mode}")
+                assert_never(mode)
 
     def generate_set_script(self, mode: ExecutableActionMode) -> str:
         return dedent(self.resolve_value(mode))

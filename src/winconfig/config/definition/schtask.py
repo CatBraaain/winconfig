@@ -1,6 +1,6 @@
 from pathlib import Path
 from textwrap import dedent, indent
-from typing import Literal
+from typing import Literal, assert_never
 
 from pydantic import (
     BaseModel,
@@ -46,7 +46,7 @@ class SchtaskDefinition(BaseModel):
             case ActionMode.REVERT:
                 return self.old_state
             case _:
-                raise ValueError(f"Invalid mode: {mode}")
+                assert_never(mode)
 
     def with_error_handler(self, script: str) -> str:
         return f"""

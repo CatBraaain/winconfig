@@ -1,5 +1,5 @@
 from textwrap import dedent, indent
-from typing import Literal
+from typing import Literal, assert_never
 
 from pydantic import (
     BaseModel,
@@ -39,7 +39,7 @@ class ServiceDefinition(BaseModel):
             case ActionMode.REVERT:
                 return self.old_startup
             case _:
-                raise ValueError(f"Invalid mode: {mode}")
+                assert_never(mode)
 
     def with_error_handler(self, script: str) -> str:
         return f"""

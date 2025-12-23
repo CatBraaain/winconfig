@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import re
 from textwrap import dedent, indent
-from typing import Any, Literal, Self
+from typing import Any, Literal, Self, assert_never
 
 from pydantic import BaseModel, ConfigDict, Field, PrivateAttr, field_validator
 
@@ -92,7 +92,7 @@ class RegistryPathDefinition(BaseModel):
             case ActionMode.REVERT:
                 return self.old_existence
             case _:
-                raise ValueError(f"Invalid mode: {mode}")
+                assert_never(mode)
 
     def generate_set_script(self, mode: ActionMode) -> str:
         if mode == ActionMode.SKIP:
@@ -116,7 +116,7 @@ class RegistryPathDefinition(BaseModel):
         elif value == NOT_CHANGE:
             script = ""
         else:
-            raise ValueError(f"Invalid value: {value}")
+            assert_never(value)
 
         return dedent(script)
 
@@ -162,7 +162,7 @@ class RegistryEntryDefinition(BaseModel):
             case ActionMode.REVERT:
                 return self.old_value
             case _:
-                raise ValueError(f"Invalid mode: {mode}")
+                assert_never(mode)
 
     def with_error_handler(self, script: str) -> str:
         return f"""
