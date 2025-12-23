@@ -27,6 +27,7 @@ app = typer.Typer(
 )
 def run(
     config_paths: ConfigPathsParam,
+    *,
     reverse: bool = False,
     dry_run: DryRunParam = False,
     loglevel: LogLevelParam = "INFO",  # noqa: ARG001
@@ -42,6 +43,7 @@ def run(
 )
 def schema(
     config_paths: ConfigPathsParam,
+    *,
     output: OutputParam = None,
     strict: bool = False,
     loglevel: LogLevelParam = "INFO",  # noqa: ARG001

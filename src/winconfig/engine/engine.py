@@ -44,7 +44,7 @@ class Engine:
             for definition_group_name, definition_group in self.config.definition_config.root.items()
         ]
 
-    def run(self, reverse: bool) -> None:
+    def run(self, *, reverse: bool) -> None:
         powershell = PowershellRunspace()
         logger.debug(f"Setup PowerShell: version {powershell.runspace.Version}")
 
@@ -53,7 +53,7 @@ class Engine:
                 if task.mode is None:
                     logger.debug(f"NoAction: {task.full_name}")
                     continue
-                action_mode = task.mode.resolve(reverse)
+                action_mode = task.mode.resolve(reverse=reverse)
                 if action_mode == ActionMode.SKIP:
                     logger.info(f"Skipped: {task.full_name}[{action_mode}]")
                     continue

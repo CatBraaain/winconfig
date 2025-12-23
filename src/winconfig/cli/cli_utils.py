@@ -68,7 +68,7 @@ LogLevelParam = Annotated[
 def handle_cli_error() -> Generator[None, Any, None]:
     try:
         yield
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         logger.error(str(e))
 
 

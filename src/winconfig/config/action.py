@@ -9,7 +9,7 @@ class ActionMode(StrEnum):
     REVERT = "revert"
     SKIP = "skip"
 
-    def resolve(self, reverse: bool) -> "ActionMode":
+    def resolve(self, *, reverse: bool) -> "ActionMode":
         if reverse:
             if self == ActionMode.APPLY:
                 return ActionMode.REVERT

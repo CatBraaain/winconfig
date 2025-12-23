@@ -32,11 +32,7 @@ docstring-code-format = true
 select = [ "ALL" ]
 ignore = [
     "ERA",    # eradicate[comment-out-code]
-    "S110",   # flake8-bandit[try-except-pass]
-    "S112",   # flake8-bandit[try-except-continue]
-    "S6",     # flake8-bandit[subprocess]
-    "BLE",    # flake8-blind-except[bare-exception]
-    "FBT",    # flake8-boolean-trap
+    "S607",   # flake8-bandit[start-process-with-partial-path]
     "COM",    # flake8-commas[trailing-comma]
     "DTZ",    # flake8-datetimez
     "EM",     # flake8-errmsg
@@ -44,8 +40,6 @@ ignore = [
     "RET",    # flake8-return
     "E501",   # pycodestyle[line-too-long]
     "D",      # pydocstyle
-    "TC006",  # runtime-cast-value
-    "TRY",    # tryceratops
     "RUF001", # Ruff[unicode-character-in-string]
     "RUF002", # Ruff[unicode-character-in-docstring]
     "RUF003", # Ruff[unicode-character-in-comment]
