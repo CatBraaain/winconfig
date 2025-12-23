@@ -61,7 +61,7 @@ class LogScreen(Screen):
 class RootAccessMixin:
     @property
     def root(self: Widget) -> WinconfigApp:
-        return cast(WinconfigApp, self.app)
+        return cast("WinconfigApp", self.app)
 
 
 class RunButton(RootAccessMixin, Button):
@@ -76,7 +76,7 @@ class RunButton(RootAccessMixin, Button):
         await self.app.push_screen(LogScreen())
         try:
             self.root.engine.run(reverse=False)
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             self.app.screen.query_one(Log).write(str(e))
 
 
@@ -93,7 +93,7 @@ class TaskList(ListView):
         super().__init__(
             *[
                 TaskListItem(task=task)
-                for group in cast(WinconfigApp, self.app).engine.task_groups
+                for group in cast("WinconfigApp", self.app).engine.task_groups
                 for task in group.tasks
             ],
         )
@@ -165,7 +165,7 @@ class TaskSelect(RootAccessMixin, Select):
             self.add_class(new_value)
             self.root.engine.config.action_config.root[self.winconfig_task.group_name][
                 self.winconfig_task.name
-            ] = cast(ActionMode, new_value)
+            ] = cast("ActionMode", new_value)
 
 
 if __name__ == "__main__":
