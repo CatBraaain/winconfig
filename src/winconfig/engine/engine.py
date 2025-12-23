@@ -4,7 +4,7 @@ from loguru import logger
 
 from winconfig.config.action import ActionMode
 from winconfig.config.config import Config
-from winconfig.protocol.state_codes import PERMISSION_DENIED
+from winconfig.exceptions import TaskError
 from winconfig.resources import BUILTIN_DEFINITION_PATH
 
 from .powershell import PowershellRunspace
@@ -59,16 +59,15 @@ class Engine:
                     continue
                 script = task.generate_script(action_mode).strip()
                 try:
-                    stdout = powershell.run(script)
-                    if PERMISSION_DENIED in stdout:
-                        raise Exception(
-                            "Administrator privileges required for this operation"
-                        )
+                    powershell.run(script)
                     logger.info(f"Success: {task.full_name}[{action_mode}]")
                     logger.debug(
                         f"{task.full_name}[{action_mode}]:\n```powershell\n{script}\n```"
                     )
                 except Exception as e:
-                    raise Exception(
-                        f"Failed: {task.full_name}[{action_mode}]: {e}\n```powershell\n{script}\n```"
+                    raise TaskError(
+                        task_name=task.full_name,
+                        action_mode=action_mode,
+                        script=script,
+                        exception=e,
                     ) from e

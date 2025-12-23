@@ -1,5 +1,8 @@
 import clr
 
+from winconfig.exceptions import PowerShellAdminRequiredError, PowerShellError
+from winconfig.protocol.state_codes import PERMISSION_DENIED
+
 dll_path = r"C:\Windows\Microsoft.NET\assembly\GAC_MSIL\System.Management.Automation\v4.0_3.0.0.0__31bf3856ad364e35\System.Management.Automation.dll"
 clr.AddReference(dll_path)  # ty:ignore[unresolved-attribute]
 from Microsoft.PowerShell import (  # ty:ignore[unresolved-import]  # noqa: E402
@@ -31,7 +34,10 @@ class PowershellRunspace:
             stdouts = process.Invoke()
             if process.Streams.Error.Count > 0:
                 stderrs = "\n".join(map(str, process.Streams.Error)).strip()
-                raise Exception(stderrs)
+                raise PowerShellError(stderrs)
+
+            if PERMISSION_DENIED in stdouts:
+                raise PowerShellAdminRequiredError
 
             output = "\n".join(map(str, stdouts)).strip()
             return output

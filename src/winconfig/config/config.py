@@ -5,6 +5,13 @@ import yaml
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 from yaml import YAMLError
 
+from winconfig.exceptions import (
+    ConfigValidationError,
+    ConfigYamlError,
+    DefinitionGroupNotFoundError,
+    DefinitionNotFoundError,
+)
+
 from .action import ActionConfig
 from .definition import DefinitionConfig
 
@@ -34,9 +41,9 @@ class Config(BaseModel):
         try:
             return cls.model_validate(yaml.safe_load(file_path.read_text()))
         except YAMLError:
-            raise Exception(f"file {file_path} is invalid as yaml") from None
+            raise ConfigYamlError(file_path) from None
         except ValidationError:
-            raise Exception(f"file {file_path} is invalid as {cls.__name__}") from None
+            raise ConfigValidationError(file_path) from None
 
     def merge_from_yaml(self, *config_paths: Path) -> Self:
         configs = [Config.from_yaml(config_path) for config_path in config_paths]
@@ -49,11 +56,7 @@ class Config(BaseModel):
             for action_name in action_group:
                 definition_group = self.definition_config.root.get(action_group_name)
                 if definition_group is None:
-                    raise ValueError(
-                        f'Definition Group "{action_group_name}" not found'
-                    )
+                    raise DefinitionGroupNotFoundError(action_group_name)
                 definition_body = definition_group.get(action_name)
                 if definition_body is None:
-                    raise ValueError(
-                        f'Definition "{action_name}" not found in Definition Group "{action_group_name}"'
-                    )
+                    raise DefinitionNotFoundError(action_group_name, action_name)
