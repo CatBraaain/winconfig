@@ -27,7 +27,8 @@ class WinconfigApp(App):
 
     def compose(self) -> ComposeResult:
         yield Header()
-        yield Body()
+        with Center():
+            yield Body()
         yield Footer()
 
     def watch_running(self, _: bool, new_value: bool) -> None:  # noqa: FBT001

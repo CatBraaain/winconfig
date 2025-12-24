@@ -7,7 +7,7 @@ from textwrap import dedent
 from typing import TYPE_CHECKING
 
 import yaml
-from textual.containers import HorizontalGroup
+from textual.containers import HorizontalGroup, Right
 from textual.message import Message
 from textual.widgets import Button, Log
 
@@ -21,14 +21,16 @@ if TYPE_CHECKING:
 
 class TaskListController(HorizontalGroup):
     def compose(self) -> ComposeResult:
-        yield RunButton()
         yield ImportButton()
         yield ExportButton()
+        with Right():
+            yield RunButton()
 
 
 class LogListController(HorizontalGroup):
     def compose(self) -> ComposeResult:
-        yield BackButton()
+        with Right():
+            yield BackButton()
 
 
 class RunButton(Button, RootAccessMixin):

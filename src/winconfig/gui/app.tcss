@@ -1,8 +1,10 @@
 Button {
     margin: 0 1;
 }
-TaskList, LogList {
+Body {
     max-width: 100;
+}
+TaskList, LogList {
     border: wide $surface-lighten-3;
 
     border-title-align: center;
