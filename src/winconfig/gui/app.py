@@ -4,7 +4,7 @@ from typing import Any
 from loguru import logger
 from textual.app import App, ComposeResult
 from textual.containers import Center
-from textual.screen import Screen
+from textual.reactive import reactive
 from textual.widgets import (
     Button,
     Footer,
@@ -23,6 +23,7 @@ class WinconfigApp(App):
     CSS_PATH = "app.tcss"
 
     engine: Engine
+    running: reactive[bool] = reactive(default=False)
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:  # noqa: ANN401
         super().__init__(*args, **kwargs)
@@ -31,10 +32,36 @@ class WinconfigApp(App):
 
     def compose(self) -> ComposeResult:
         yield Header()
-        with Center():
-            yield RunButton()
-            yield TaskList()
+        yield Body()
         yield Footer()
+
+    def watch_running(self, _: bool, new_value: bool) -> None:  # noqa: FBT001
+        is_running = new_value is True
+        body = self.query_one(Body)
+        if is_running:
+            body.mount_log()
+        else:
+            body.mount_task_list()
+
+
+class Body(Center):
+    def compose(self) -> ComposeResult:
+        yield RunButton()
+        yield TaskList()
+
+    def mount_task_list(self) -> None:
+        self.remove_children()
+        self.mount(
+            RunButton(),
+            TaskList(),
+        )
+
+    def mount_log(self) -> None:
+        self.remove_children()
+        self.mount(
+            BackButton(),
+            LogList(),
+        )
 
 
 class RunButton(Button, RootAccessMixin):
@@ -46,23 +73,33 @@ class RunButton(Button, RootAccessMixin):
         )
 
     async def on_button_pressed(self, _: Button.Pressed) -> None:
-        await self.app.push_screen(LogScreen())
+        self.root.running = True
         try:
             self.root.engine.run(reverse=False)
         except Exception as e:  # noqa: BLE001
             self.app.screen.query_one(Log).write(str(e))
 
 
-class LogScreen(Screen):
-    def compose(self) -> ComposeResult:
-        yield Log()
+class BackButton(Button, RootAccessMixin):
+    def __init__(self) -> None:
+        super().__init__(
+            "Back",
+            variant="primary",
+            flat=True,
+        )
+
+    def on_button_pressed(self, _: Button.Pressed) -> None:
+        self.root.running = False
+
+
+class LogList(Log):
+    BORDER_TITLE = "LogList"
 
     def on_mount(self) -> None:
-        log = self.query_one(Log)
         logger.configure(
             handlers=[
                 {
-                    "sink": log.write,
+                    "sink": self.write,
                     "format": "<green>{time:HH:mm:ss.SSS}</green> | <level>{message}</level>",
                     "level": "INFO",
                 }

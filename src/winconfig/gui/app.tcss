@@ -1,4 +1,4 @@
-TaskList {
+TaskList, LogList {
     max-width: 100;
     border: wide $surface-lighten-3;
 
