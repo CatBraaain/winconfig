@@ -1,3 +1,6 @@
+Button {
+    margin: 0 1;
+}
 TaskList, LogList {
     max-width: 100;
     border: wide $surface-lighten-3;
@@ -30,6 +33,9 @@ TaskSelect.skip Static#label {
 }
 
 # adjust defaults
+HorizontalGroup {
+    width: auto;
+}
 ListView {
     &:focus {
         background-tint: $surface;

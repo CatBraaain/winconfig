@@ -1,5 +1,6 @@
 from typing import ClassVar, cast
 
+from loguru import logger
 from textual.app import ComposeResult
 from textual.containers import Container, Grid, Middle
 from textual.events import Focus
@@ -7,6 +8,7 @@ from textual.widgets import (
     Label,
     ListItem,
     ListView,
+    Log,
     Select,
 )
 
@@ -14,6 +16,21 @@ from winconfig.config.action import ActionMode
 from winconfig.engine import Task
 
 from .root_access_mixin import RootAccessMixin
+
+
+class LogList(Log):
+    BORDER_TITLE = "LogList"
+
+    def on_mount(self) -> None:
+        logger.configure(
+            handlers=[
+                {
+                    "sink": self.write,
+                    "format": "<green>{time:HH:mm:ss.SSS}</green> | <level>{message}</level>",
+                    "level": "INFO",
+                }
+            ]  # ty:ignore[invalid-argument-type]  # loguru not having runtime type
+        )
 
 
 class TaskList(ListView, RootAccessMixin):
