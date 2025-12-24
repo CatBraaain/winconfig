@@ -37,6 +37,22 @@ class WinconfigApp(App):
         yield Footer()
 
 
+class RunButton(Button, RootAccessMixin):
+    def __init__(self) -> None:
+        super().__init__(
+            "Run",
+            variant="primary",
+            flat=True,
+        )
+
+    async def on_button_pressed(self, _: Button.Pressed) -> None:
+        await self.app.push_screen(LogScreen())
+        try:
+            self.root.engine.run(reverse=False)
+        except Exception as e:  # noqa: BLE001
+            self.app.screen.query_one(Log).write(str(e))
+
+
 class LogScreen(Screen):
     def compose(self) -> ComposeResult:
         yield Log()
@@ -52,22 +68,6 @@ class LogScreen(Screen):
                 }
             ]  # ty:ignore[invalid-argument-type]  # loguru not having runtime type
         )
-
-
-class RunButton(Button, RootAccessMixin):
-    def __init__(self) -> None:
-        super().__init__(
-            "Run",
-            variant="primary",
-            flat=True,
-        )
-
-    async def on_button_pressed(self, _: Button.Pressed) -> None:
-        await self.app.push_screen(LogScreen())
-        try:
-            self.root.engine.run(reverse=False)
-        except Exception as e:  # noqa: BLE001
-            self.app.screen.query_one(Log).write(str(e))
 
 
 app = WinconfigApp()
