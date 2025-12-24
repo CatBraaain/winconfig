@@ -44,18 +44,6 @@ class RunButton(Button, RootAccessMixin):
             self.app.screen.query_one(Log).write(str(e))
 
 
-class BackButton(Button, RootAccessMixin):
-    def __init__(self) -> None:
-        super().__init__(
-            "Back",
-            variant="primary",
-            flat=True,
-        )
-
-    def on_button_pressed(self, _: Button.Pressed) -> None:
-        self.root.running = False
-
-
 class ImportButton(Button, RootAccessMixin):
     def __init__(self) -> None:
         super().__init__(
@@ -99,3 +87,15 @@ class ImportButton(Button, RootAccessMixin):
         self.root.engine = Engine()
         self.root.engine.config.merge_from_yaml(Path(path))
         self.post_message(self.Imported())
+
+
+class BackButton(Button, RootAccessMixin):
+    def __init__(self) -> None:
+        super().__init__(
+            "Back",
+            variant="primary",
+            flat=True,
+        )
+
+    def on_button_pressed(self, _: Button.Pressed) -> None:
+        self.root.running = False
