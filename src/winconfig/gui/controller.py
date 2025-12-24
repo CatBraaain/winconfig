@@ -37,7 +37,7 @@ class RunButton(Button, RootAccessMixin):
     def __init__(self) -> None:
         super().__init__(
             "Run",
-            variant="primary",
+            variant="default",
             flat=True,
         )
 
@@ -53,7 +53,7 @@ class ImportButton(Button, RootAccessMixin):
     def __init__(self) -> None:
         super().__init__(
             "Import",
-            variant="primary",
+            variant="default",
             flat=True,
         )
 
@@ -100,7 +100,7 @@ class ExportButton(Button, RootAccessMixin):
     def __init__(self) -> None:
         super().__init__(
             "Export",
-            variant="primary",
+            variant="default",
             flat=True,
         )
 
