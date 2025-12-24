@@ -31,7 +31,7 @@ class PowershellRunspace:
         process.AddScript(script, useLocalScope=True)
 
         try:
-            stdouts = process.Invoke()
+            stdouts = [str(e) for e in process.Invoke()]
             if process.Streams.Error.Count > 0:
                 stderrs = "\n".join(map(str, process.Streams.Error)).strip()
                 raise PowerShellError(stderrs)
@@ -39,7 +39,7 @@ class PowershellRunspace:
             if PERMISSION_DENIED in stdouts:
                 raise PowerShellAdminRequiredError
 
-            output = "\n".join(map(str, stdouts)).strip()
+            output = "\n".join(stdouts).strip()
             return output
         finally:
             process.Dispose()
