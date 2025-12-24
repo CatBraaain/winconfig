@@ -12,7 +12,7 @@ from winconfig.exceptions import (
     DefinitionNotFoundError,
 )
 
-from .action import ActionConfig
+from .action import ActionConfig, ActionMode
 from .definition import DefinitionConfig
 
 
@@ -53,10 +53,17 @@ class Config(BaseModel):
 
     def validate_action_config(self) -> None:
         for action_group_name, action_group in self.action_config.root.items():
+            if action_group_name not in self.definition_config.root:
+                raise DefinitionGroupNotFoundError(action_group_name)
             for action_name in action_group:
-                definition_group = self.definition_config.root.get(action_group_name)
-                if definition_group is None:
-                    raise DefinitionGroupNotFoundError(action_group_name)
-                definition_body = definition_group.get(action_name)
-                if definition_body is None:
+                if action_name not in self.definition_config.root[action_group_name]:
                     raise DefinitionNotFoundError(action_group_name, action_name)
+
+        for def_group_name, def_group in self.definition_config.root.items():
+            if def_group_name not in self.action_config.root:
+                self.action_config.root[def_group_name] = {}
+            for definition_name in def_group:
+                if definition_name not in self.action_config.root[def_group_name]:
+                    self.action_config.root[def_group_name][definition_name] = (
+                        ActionMode.SKIP
+                    )
