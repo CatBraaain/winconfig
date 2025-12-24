@@ -76,8 +76,10 @@ class ImportButton(Button, RootAccessMixin):
                     Add-Type -AssemblyName System.Windows.Forms
                     $dialog = New-Object System.Windows.Forms.OpenFileDialog
                     $dialog.Filter = 'yaml files (*.yaml)|*.yaml|All files (*.*)|*.*'
-                    $dialog.ShowDialog() | Out-Null
-                    $dialog.FileName
+                    @{
+                        "success" = if ($dialog.ShowDialog() -eq "OK") { $true }else { $false }
+                        "path"   = $dialog.FileName
+                    } | ConvertTo-Json
                     """
                 ),
             ],
@@ -85,11 +87,11 @@ class ImportButton(Button, RootAccessMixin):
             capture_output=True,
             text=True,
         )
-        path = result.stdout.strip()
-
-        self.root.engine = Engine()
-        self.root.engine.config.merge_from_yaml(Path(path))
-        self.post_message(self.Imported())
+        ps_result = json.loads(result.stdout.strip())
+        if ps_result["success"]:
+            self.root.engine = Engine()
+            self.root.engine.config.merge_from_yaml(Path(ps_result["path"]))
+            self.post_message(self.Imported())
 
 
 class ExportButton(Button, RootAccessMixin):
@@ -119,8 +121,10 @@ class ExportButton(Button, RootAccessMixin):
                     $dialog = New-Object System.Windows.Forms.SaveFileDialog
                     $dialog.Filter = 'yaml files (*.yaml)|*.yaml|All files (*.*)|*.*'
                     $dialog.FileName = 'winconfig.config.yaml'
-                    $dialog.ShowDialog() | Out-Null
-                    $dialog.FileName
+                    @{
+                        "success" = if ($dialog.ShowDialog() -eq "OK") { $true }else { $false }
+                        "path"   = $dialog.FileName
+                    } | ConvertTo-Json
                     """
                 ),
             ],
@@ -128,11 +132,11 @@ class ExportButton(Button, RootAccessMixin):
             capture_output=True,
             text=True,
         )
-        path = result.stdout.strip()
-
-        Path(path).write_text(
-            yaml.safe_dump(json.loads(self.root.engine.config.model_dump_json()))
-        )
+        ps_result = json.loads(result.stdout.strip())
+        if ps_result["success"]:
+            Path(ps_result["path"]).write_text(
+                yaml.safe_dump(json.loads(self.root.engine.config.model_dump_json()))
+            )
 
 
 class BackButton(Button, RootAccessMixin):
