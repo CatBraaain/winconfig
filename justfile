@@ -20,6 +20,7 @@ pyinstaller:
   uv run pyinstaller \
     --onefile src/winconfig/cli/main.py \
     --add-data "src/winconfig/resources:winconfig/resources" \
+    --add-data "src/winconfig/gui/app.tcss:winconfig/gui" \
     -n winconfig --workpath dist --uac-admin --noconfirm
 
 nuitka:
