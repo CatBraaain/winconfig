@@ -570,6 +570,18 @@ Definitions:
               type: String
               new_value: ""
               old_value: <NotExist>
+        - path: HKCR\Folder\shell\pintohome
+          entries:
+            - name: ProgrammaticAccessOnly
+              type: String
+              new_value: ""
+              old_value: <NotExist>
+        - path: HKCR\Drive\shell\pintohome
+          entries:
+            - name: ProgrammaticAccessOnly
+              type: String
+              new_value: ""
+              old_value: <NotExist>
     HidePreviousVersions:
       description: Hide "Previous Versions" item in Context menu.
       registries:
